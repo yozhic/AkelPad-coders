@@ -1,0 +1,248 @@
+﻿;=================== This file must be encoded in UTF-16 LE ===================;
+;------------------------------------------------------------------------------;
+;                           CODER PLUGIN SYNTAX FILE                           ;
+;             for comfort file viewing/editing set TAB size to 8               ;
+;------------------------------------------------------------------------------;
+; Target.....: Markdown (another one)                                          ;
+; Version....: 2.1                                                             ;
+; Author.....: cuprum (?)                                                      ;
+; Created....: 05.02.2015 (?)                                                  ;
+; Forked by..: yozhic                                                          ;
+; Modified...: 21.09.2025                                                      ;
+; Source.....: https://github.com/cuprum/AkelPad_coders/blob/master/md.coder   ;
+;------------------------------------------------------------------------------;
+
+
+Files:
+;==========
+;File types
+;==========
+*.md
+*.mkdn
+*.mdown
+*.markdown
+
+
+;----------------------------------------------;
+;                  HighLight                   ;
+;----------------------------------------------;
+
+
+Font:
+;=================================================================
+;FontStyle             FontSize              FaceName
+;=================================================================
+${HighLight_FontStyle} ${HighLight_FontSize} ${HighLight_FaceName}
+
+
+Colors:
+;=============================================================================================================================================================================================================================================================================================================================================================================================================================
+;BasicTextColor             BasicBkColor              SelTextColor              SelBkColor              LineTextColor              LineBkColor              LineBorderColor              AltTextColor              AltBkColor              AltBorderColor              ColumnColor              MarkerColor              CaretColor              UrlColor              ActiveUrlColor              VisitUrlColor
+;=============================================================================================================================================================================================================================================================================================================================================================================================================================
+${HighLight_BasicTextColor} ${HighLight_BasicBkColor} ${HighLight_SelTextColor} ${HighLight_SelBkColor} ${HighLight_LineTextColor} ${HighLight_LineBkColor} ${HighLight_LineBorderColor} ${HighLight_AltTextColor} ${HighLight_AltBkColor} ${HighLight_AltBorderColor} ${HighLight_ColumnColor} ${HighLight_MarkerColor} ${HighLight_CaretColor} ${HighLight_UrlColor} ${HighLight_ActiveUrlColor} ${HighLight_VisitUrlColor}
+
+
+BkImage:
+;==================================================
+;BkImageFile              BkImageAlpha
+;==================================================
+${HighLight_BkImageFile}  ${HighLight_BkImageAlpha}
+
+
+AutoMark:
+;====================================================================================================================
+;AutoMarkFlags             AutoMarkFontStyle              AutoMarkTextColor              AutoMarkBkColor
+;====================================================================================================================
+${HighLight_AutoMarkFlags} ${HighLight_AutoMarkFontStyle} ${HighLight_AutoMarkTextColor} ${HighLight_AutoMarkBkColor}
+
+
+Quotes:
+;======================================================================================
+;Flags  Font    Color   Color   Quote   Quote   Escape  Quote    Quote    Parent  Rule
+;       style   text    bkgrnd  start   end     char    include  exclude  ID      ID  
+;======================================================================================
+;--Inline code: don't highlight empty quotes--
+32773	0	0	0	"`"	"`"	""	""	""
+;--Inline code--
+5	1	${DEL1}	0	"`"	"`"	""	""	""
+;--Headers--
+517	2	${OP}	0	"#"	""	""	""	""
+;--Strikethrough: don't highlight empty quotes--
+32773	0	0	0	"~~"	"~~"	""	""	""
+32773	0	0	0	"=="	"=="	""	""	""
+;--Strikethrough--
+5	1	${STR}	0	"~~"	"~~"	""	""	""
+5	1	${AREA}	0	"=="	"=="	""	""	""
+;--Blockquotes--
+513	1	${STR}	0	">"	""	""	""	""	0	10
+0	3	0	0	"_"	"_"	"\"	""	""	10
+;--Tables--
+261	1	${DEL1}	0	"|"	"|"	""	"-: "	""
+16385	1	${DEL1}	0	"|"	"|"	""	""	""
+;--HTML tags--
+389	0	0	0	"</"	">"	""	""	""	0	11
+389	0	0	0	"<"	">"	""	""	""	0	11
+;--Pop-up Tips в Images--
+1	0	${STR}	0	'"'	'"'	''	''	''	20
+
+
+QuotesRE:
+;=========================================================================================
+;Flags  Pattern                        \BackRef=(FontStyle,ColorText,ColorBk) \BackRef=...
+;=========================================================================================
+;--Images--
+0	"(\[)(!\[.*?\])(\(.+?\))(\])(\(.+?\))"     "\1=(0,${OP},0) \2=(0,${OP},0) \3=(0,${VAR},0) \4=(0,${OP},0) \5=(0,${VAR},0)"
+0	"(!)(\[.*?\])(\()(.+?)(\))"                "\1=(2,${OP},${CodeFold_TagMarkBkColor}) \2=(0,${OP},${CodeFold_TagMarkBkColor}) \3=(0,${DEL1},0) \4=(0,${VAR},0) \5=(0,${DEL1},0)"	0	20
+0	"(!)(\[.*?\])(\[)(.+?)(\])"                "\1=(2,${OP},${CodeFold_TagMarkBkColor}) \2=(0,${OP},${CodeFold_TagMarkBkColor}) \3=(0,${DEL1},0) \4=(0,${VAR},0) \5=(0,${DEL1},0)"	0	20
+;--Links--
+0	"(\[[^\[\]]+?\])(\([^\(\)]+?\))"           "\1=(0,${OP},0) \2=(0,${VAR},0)"
+0	"(\[[^\[\]]+?\])(\[[^\[\]]+?\])"           "\1=(0,${OP},0) \2=(0,${VAR},0)"
+0	"(\[[^\[\]]+?\])(:)"                       "\1=(0,${OP},0) \2=(0,${TYPE},0)"
+;--Ordered list--
+0	"^\s*(\d+\.)\s"                            "\1=(0,${STR},0)"
+;--Unordered List--
+0	"^\s*(\*)\s"                               "\1=(0,${STR},0)"
+0	"^\s*(\-)\s"                               "\1=(0,${STR},0)"
+;--Bold--
+0	"((\*\*|__)(?!\s)(?!(\2)).+?(?<!\s)(\2))"  "\1=(2,0,0)"
+;--Italic--
+0	"((\*|_)(?!\s)(?!(\2)).+?(?<!\s)(\2))"     "\1=(3,0,0)"
+;--Horizontal Rule--
+0	"^\s*(_{3,})\s*$"                          "\1=(0,${VAR},0)"
+0	"^\s*(\-{3,})\s*$"                         "\1=(0,${VAR},0)"
+0	"^\s*(\*{3,})\s*$"                         "\1=(0,${VAR},0)"
+;--Trailing Whitespaces--
+;0	"(\x20\x20)$"                              "\1=(0,0,0)"
+;--Lexer Name--
+0	"(?<=```)[a-z]++"                          "\0=(0,${AREA},0)"	30
+;--inside HTML--
+0	"br|kbd"                                   "\0=(2,${TAG},0)"	11
+0	"[^<>]"                                    "\0=(0,${TAG},0)"	11
+
+
+Delimiters:
+;======================================
+;Flags  Font    Color   Color   Char(s)
+;       style   text    bkgrnd
+;======================================
+0	0	0	0	" "
+0	0	0	0	"	"
+0	0	0	0	.
+0	0	0	0	,
+0	0	0	0	`
+1	0	${DEL1}	0	</	0
+1	0	${DEL1}	0	/>	0
+1	0	${DEL1}	0	<	0
+1	0	${DEL1}	0	>	0
+
+
+Words:
+;===================================
+;Flags  Font    Color   Color   Word
+;       style   text    bkgrnd
+;===================================
+
+
+;----------------------------------------------;
+;                   CodeFold                   ;
+;----------------------------------------------;
+
+
+FoldPanel:
+;=================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+;PanelFirstBkColor            PanelSecondBkColor             PanelNormalFoldColor             PanelActiveFoldColor             PanelNormalNodeOpenBkColor             PanelNormalNodeCloseBkColor             PanelActiveNodeOpenBkColor             PanelActiveNodeCloseBkColor             PanelNormalNodeOpenSignColor             PanelNormalNodeCloseSignColor             PanelActiveNodeOpenSignColor             PanelActiveNodeCloseSignColor
+;=================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+${CodeFold_PanelFirstBkColor} ${CodeFold_PanelSecondBkColor} ${CodeFold_PanelNormalFoldColor} ${CodeFold_PanelActiveFoldColor} ${CodeFold_PanelNormalNodeOpenBkColor} ${CodeFold_PanelNormalNodeCloseBkColor} ${CodeFold_PanelActiveNodeOpenBkColor} ${CodeFold_PanelActiveNodeCloseBkColor} ${CodeFold_PanelNormalNodeOpenSignColor} ${CodeFold_PanelNormalNodeCloseSignColor} ${CodeFold_PanelActiveNodeOpenSignColor} ${CodeFold_PanelActiveNodeCloseSignColor}
+
+
+FoldList:
+;================================================
+;ListTextColor            ListBkColor
+;================================================
+${CodeFold_ListTextColor} ${CodeFold_ListBkColor}
+
+
+TagMark:
+;============================================================================================================
+;TagMarkFlags            TagMarkFontStyle             TagMarkTextColor             TagMarkBkColor
+;============================================================================================================
+${CodeFold_TagMarkFlags} ${CodeFold_TagMarkFontStyle} ${CodeFold_TagMarkTextColor} ${CodeFold_TagMarkBkColor}
+
+
+Skips:
+;=============================
+;Flags  Skip    Skip    Escape
+;       start   end     char
+;=============================
+
+
+Folds:
+;==============================================================
+;Flags  Font    Color   Color   Fold       Fold      Delimiters
+;       style   text    bkgrnd  start      end
+;==============================================================
+;--Multiline code--
+262761	1	${VAR}	0	"```"	"```"	""	0	30
+;--Inline code--
+;262657	1	${VAR}	0	"```"	"```"	""	0
+;--Headers--
+;425	0	0	0	"# "	"# "	""	0
+173	0	0	0	"#"	"#"	""	0
+
+
+;----------------------------------------------;
+;                 AutoComplete                 ;
+;----------------------------------------------;
+
+
+CompleteList:
+;=====================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+;ListFontStyle                ListFontSize                 ListFaceName                 ListLineGap                 ListBlockIcon                 ListBlockIconMargins "left;right"    ListHlBaseIcon                 ListHlBaseIconMargins "left;right"    ListDocWordIcon                 ListDocWordIconMargins "left;right"    ListBasicTextColor                 ListBasicBkColor                 ListSelTextColor                 ListSelBkColor
+;=====================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+${AutoComplete_ListFontStyle} ${AutoComplete_ListFontSize} ${AutoComplete_ListFaceName} ${AutoComplete_ListLineGap} ${AutoComplete_ListBlockIcon} ${AutoComplete_ListBlockIconMargins} ${AutoComplete_ListHlBaseIcon} ${AutoComplete_ListHlBaseIconMargins} ${AutoComplete_ListDocWordIcon} ${AutoComplete_ListDocWordIconMargins} ${AutoComplete_ListBasicTextColor} ${AutoComplete_ListBasicBkColor} ${AutoComplete_ListSelTextColor} ${AutoComplete_ListSelBkColor}
+
+
+Blocks:
+;========================
+;Abbreviations and blocks
+;========================
+
+$~md_br $~мд_br $~br
+<br>
+$~md_footnote $~мд_footnote $~footnote
+[^$[1]]: $[footnote]
+
+$~md_footnote_link $~мд_footnote_link $~footnote_link
+[^$[1]]
+
+$~md_image $~мд_image $~image
+![$[description]$\]($[image.ext] "$[pop-up tip]")$[]
+
+$~md_html_definition_list $~html_definition_list $~list_definitions $~dl $~мд_dl
+<dl>
+<dt>$[]</dt>
+  <dd>$[]</dd>
+</dl>
+$[]
+
+$~md_html_definition_term $~html_definition_term $~list_definitions_term $~dt $~мд_dt
+<dt>$[]</dt>
+  <dd>$[]</dd>
+$[]
+
+$~md_html_kbd $~html_kbd $~kbd $~мд_kbd
+<kbd>$[]</kbd>$[]
+$~emo_📝_memo, $~эм_📝_memo, $~__📝_memo
+📝
+$~emo_💡_bulb, $~эм_💡_bulb, $~__💡_bulb
+💡
+$~emo_⚠_warning, $~эм_⚠_warning, $~__⚠_warning
+⚠
+$~emo_✋_raised_hand, $~эм_✋_raised_hand, $~__✋_raised_hand
+✋
+$~emo_👉_index_point, $~эм_👉_index_point, $~__👉_index_point
+👉
+$~emo_👍_thumbs_up, $~эм_👍_thumbs_up, $~__👍_thumbs_up
+👍
+$~emo_✓_check_up, $~эм_✓_check_up, $~__✓_check_up
+✓

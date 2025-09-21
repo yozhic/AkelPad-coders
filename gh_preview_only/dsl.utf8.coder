@@ -1,0 +1,903 @@
+﻿;=================== This file must be encoded in UTF-16 LE ===================;
+;------------------------------------------------------------------------------;
+;                           CODER PLUGIN SYNTAX FILE                           ;
+;             for comfort file viewing/editing set TAB size to 8               ;
+;------------------------------------------------------------------------------;
+; Target.....: Dictionary Specification Language (построчная обработка)        ;
+; Version....: 3.0.6                                                           ;
+; Author.....: yozhic                                                          ;
+; Created....: 26.12.2015                                                      ;
+; Modified...: 21.09.2025                                                      ;
+;------------------------------------------------------------------------------;
+
+
+Files:
+;==========
+;File types
+;==========
+*.dsl
+
+
+;----------------------------------------------;
+;                  HighLight                   ;
+;----------------------------------------------;
+
+Font:
+;=================================================================
+;FontStyle	FontSize	FaceName
+;=================================================================
+${HighLight_FontStyle}	${HighLight_FontSize}	${HighLight_FaceName}
+
+
+Colors:
+;=============================================================================================================================================================================================================================================================================================================================================================================================================================
+;BasicTextColor	BasicBkColor	SelTextColor	SelBkColor	LineTextColor	LineBkColor	LineBorderColor	AltTextColor	AltBkColor	AltBorderColor	ColumnColor	MarkerColor	CaretColor	UrlColor	ActiveUrlColor	VisitUrlColor
+;=============================================================================================================================================================================================================================================================================================================================================================================================================================
+${HighLight_BasicTextColor}	${HighLight_BasicBkColor}	${HighLight_SelTextColor}	${HighLight_SelBkColor}	${HighLight_LineTextColor}	${HighLight_LineBkColor}	${HighLight_LineBorderColor}	${HighLight_AltTextColor}	${HighLight_AltBkColor}	${HighLight_AltBorderColor}	${HighLight_ColumnColor}	${HighLight_MarkerColor}	${HighLight_CaretColor}	${HighLight_UrlColor}	${HighLight_ActiveUrlColor}	${HighLight_VisitUrlColor}
+
+
+BkImage:
+;==================================================
+;BkImageFile	BkImageAlpha
+;==================================================
+${HighLight_BkImageFile}	${HighLight_BkImageAlpha}
+
+
+AutoMark:
+;====================================================================================================================
+;AutoMarkFlags	AutoMarkFontStyle	AutoMarkTextColor	AutoMarkBkColor
+;====================================================================================================================
+${HighLight_AutoMarkFlags}	${HighLight_AutoMarkFontStyle}	${HighLight_AutoMarkTextColor}	${HighLight_AutoMarkBkColor}
+
+
+Quotes:
+;===================================================================================
+;Flags  Font    Color   Color   Quote   Quote   Escape  Quote   Quote   Parent  Rule
+;       style   text    bkgrnd  start   end     char    include exclude ID      ID
+;===================================================================================
+;5=1+4                => регистр + обязательный конец
+;513=1+512            => регистр + в начале строки
+;16389=1+4+16384      => регистр + обязательный конец + захват только начала
+;16897=1+512+16384    => регистр + в начале строки + захват только начала
+5	3	${COMM}	${HighLight_BasicBkColor}	"{{"	"}}"	"\"	""	""	-1	0
+5	3	${COMM}	${HighLight_BasicBkColor}	"{{"	"}}"	"\"	""	""	-2	0
+5	0	#FF0000	0	"[']"	"[/']"	"\"	""	""	-1	0
+5	0	#FF0000	0	"[']"	"[/']"	"\"	""	""	-2	0
+513	1	${VAR}	0	"#NAME"	""	""	""	""	0	0
+513	1	${VAR}	0	"#INDEX_LANGUAGE"	""	""	""	""	0	0
+513	1	${VAR}	0	"#CONTENTS_LANGUAGE"	""	""	""	""	0	0
+513	1	${VAR}	0	"#SOURCE_CODE_PAGE"	""	""	""	""	0	0
+513	1	${VAR}	0	"#INCLUDE"	""	""	""	""	0	0
+513	1	${VAR}	0	"#ICON_FILE"	""	""	""	""	0	0
+16897	4	#777777	#F4F4FF	"	[m]"	"[/m]"	"\"	""	""	0	0
+16897	4	#777777	#F4F4FF	"	[m0]"	"[/m]"	"\"	""	""	0	0
+16897	4	#777777	#DDDDFF	"	[m1]"	"[/m]"	"\"	""	""	0	0
+16897	4	#777777	#C4C4FF	"	[m2]"	"[/m]"	"\"	""	""	0	0
+16897	4	#777777	#AAAAFF	"	[m3]"	"[/m]"	"\"	""	""	0	0
+16897	4	#D8D8D8	#9191FF	"	[m4]"	"[/m]"	"\"	""	""	0	0
+16897	4	#D8D8D8	#8282FF	"	[m5]"	"[/m]"	"\"	""	""	0	0
+16897	4	#D8D8D8	#6F6FFF	"	[m6]"	"[/m]"	"\"	""	""	0	0
+16897	4	#F7F7F7	#5E5EFF	"	[m7]"	"[/m]"	"\"	""	""	0	0
+16897	4	#F9F9F9	#4848FF	"	[m8]"	"[/m]"	"\"	""	""	0	0
+16897	4	#FFFFFF	#3737FF	"	[m9]"	"[/m]"	"\"	""	""	0	0
+16897	4	#777777	#F4F4FF	" [m]"	"[/m]"	"\"	""	""	0	0
+16897	4	#777777	#F4F4FF	" [m0]"	"[/m]"	"\"	""	""	0	0
+16897	4	#777777	#DDDDFF	" [m1]"	"[/m]"	"\"	""	""	0	0
+16897	4	#777777	#C4C4FF	" [m2]"	"[/m]"	"\"	""	""	0	0
+16897	4	#777777	#AAAAFF	" [m3]"	"[/m]"	"\"	""	""	0	0
+16897	4	#D8D8D8	#9191FF	" [m4]"	"[/m]"	"\"	""	""	0	0
+16897	4	#D8D8D8	#8282FF	" [m5]"	"[/m]"	"\"	""	""	0	0
+16897	4	#D8D8D8	#6F6FFF	" [m6]"	"[/m]"	"\"	""	""	0	0
+16897	4	#F7F7F7	#5E5EFF	" [m7]"	"[/m]"	"\"	""	""	0	0
+16897	4	#F9F9F9	#4848FF	" [m8]"	"[/m]"	"\"	""	""	0	0
+16897	4	#FFFFFF	#3737FF	" [m9]"	"[/m]"	"\"	""	""	0	0
+16897	2	#CC00CC	#FFE1FF	"	@"	""	"\"	""	""	0	0
+16897	2	#CC00CC	#FFE1FF	" @"	""	"\"	""	""	0	0
+5	2	0	0	"[b]"	"[/b]"	"\"	""	""	0	61
+5	3	0	0	"[i]"	"[/i]"	"\"	""	""	0	62
+5	4	0	0	"[b]"	"[/b]"	"\"	""	""	62	63
+5	4	0	0	"[i]"	"[/i]"	"\"	""	""	61	63
+;--ошибки синтаксиса >>>> начало--
+16389	2	#FFFFFF	#FF0000	'[*]'	'[*]'	'\'	''	''	-3	0
+16389	2	#9B9B9B	0	'[*]'	'[/*]'	'\'	''	''	-3	0
+16389	2	#FFFFFF	#FF0000	'[com]'	'[com]'	'\'	''	''	-3	0
+16389	3	#777777	#DDFFFF	'[com]'	'[/com]'	'\'	''	''	-3	0
+16389	2	#FFFFFF	#FF0000	'[ex]'	'[ex]'	'\'	''	''	-3	0
+16389	3	#777777	#DDFFFF	'[ex]'	'[/ex]'	'\'	''	''	-3	0
+16389	2	#FFFFFF	#FF0000	'[trn]'	'[trn]'	'\'	''	''	-3	0
+16389	3	#777777	#DDFFFF	'[trn]'	'[/trn]'	'\'	''	''	-3	0
+16389	2	#FFFFFF	#FF0000	'[lang '	'[lang '	'\'	''	''	-3	0
+16389	3	#777777	#DDFFFF	'[lang '	'[/lang]'	'\'	''	''	-3	0
+16389	2	#FFFFFF	#FF0000	"[c "	"[c "	"\"	""	""	-3	1
+16389	2	#475263	#BADCDC	"[c "	"[/c]"	"\"	""	""	-3	1
+16389	2	#FFFFFF	#FF0000	"[c]"	"[c]"	"\"	""	""	-3	1
+16389	2	#475263	#BADCDC	"[c]"	"[/c]"	"\"	""	""	-3	1
+16389	2	#FFFFFF	#FF0000	"[u]"	"[u]"	"\"	""	""	-3	0
+16389	2	#94C9C9	0	"[u]"	"[/u]"	"\"	""	""	-3	0
+16389	2	#FFFFFF	#FF0000	"[sub]"	"[sub]"	"\"	""	""	-3	0
+16389	2	#94C9C9	0	"[sub]"	"[/sub]"	"\"	""	""	-3	0
+16389	2	#FFFFFF	#FF0000	"[sup]"	"[sup]"	"\"	""	""	-3	0
+16389	2	#94C9C9	0	"[sup]"	"[/sup]"	"\"	""	""	-3	0
+;--ошибки синтаксиса <<<< конец--
+5	3	#008000	#CCFF99	"[p]"	"[/p]"	"\"	""	"[]{}"	-1	0
+5	3	#008000	#CCFF99	"[p]"	"[/p]"	"\"	""	"[]{}"	-2	0
+5	3	#0044FF	#CCFFFF	"[ref]"	"[/ref]"	"\"	""	"[]{}"	-1	0
+5	3	#0044FF	#CCFFFF	"[ref]"	"[/ref]"	"\"	""	"[]{}"	-2	0
+5	3	#0044FF	#CCFFFF	"<<"	">>"	"\"	""	"[]{}"	-1	0
+5	3	#0044FF	#CCFFFF	"<<"	">>"	"\"	""	"[]{}"	-2	0
+5	0	#0000FF	0	"[url]"	"[/url]"	"\"	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-._~:/?#@!$&'()*+,;=%"	""	-1	0
+5	0	#0000FF	0	"[url]"	"[/url]"	"\"	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-._~:/?#@!$&'()*+,;=%"	""	-2	0
+5	0	#6500D5	#F2E6FF	"[s]"	"[/s]"	"\"	""	"[]{}()"	-1	0
+5	0	#6500D5	#F2E6FF	"[video]"	"[/video]"	"\"	""	"[]{}()"	-1	0
+5	0	#6500D5	#F2E6FF	"[s]"	"[/s]"	"\"	""	"[]{}()"	-2	0
+5	0	#6500D5	#F2E6FF	"[video]"	"[/video]"	"\"	""	"[]{}()"	-2	0
+5	0	#834141	#FFEBE1	"[t]"	"[/t]"	"\"	""	""	0	0
+5	2	#834141	#FFEBE1	"[t]"	"[/t]"	"\"	""	""	61	0
+5	3	#834141	#FFEBE1	"[t]"	"[/t]"	"\"	""	""	62	0
+
+
+QuotesRE:
+;========================================================================================================
+;Flags  Pattern                      \BackRef=(FontStyle,ColorText,ColorBk) \BackRef=...  ParentID RuleID
+;========================================================================================================
+;0	"#[A-F\d]{6}"  "\0=(0,\0,0)"
+;--заголовки--
+1	'(?-s)^[^\t\n#\x20].*$'	'\0=(2,#FFFFFF,#8F9EA7)'	0	1
+;--в заголовках: круглые и фигурные скобки--
+1	'[\x28\x29\x7B\x7D]'	'\0=(1,#DBE1E3,#8F9EA7)'	1
+;--в заголовках: тэги--
+1	'\[/?(c( \w++)?|br|p)\]'	'\0=(1,#5F6F78,#8F9EA7)'	1
+;
+1	'(?<=\[)(br)(?=\])'	'\1=(4,0,#80BFFF)'	-3	0
+1	'(?<=\[lang\x20)(name=\x22[A-Za-z\x20]++\x22|id=\d++)\]'	'\0=(3,#777777,#DDFFFF)'	-3	0
+1	'\[ref dict="[^"\n]++"\][^\[\]\{\}]+?\[/ref\]'	'\0=(3,#0044FF,#CCFFFF)'	-3	0
+;--родительское для тэгов цвета--
+1	'(?<=\[c\x20)(?<!\\\[c\x20)[a-z]++(?=\])'	'\0=(0,0,0)'	-3	71
+;--притушить окончания тэгов--
+1	'(\[/)(c)(\])'	'\1=(1,${DEL1},0) \2=(3,#B9B9B9,0) \3=(1,${DEL1},0)'	-3	0
+1	'(\[/)(m)(\])'	'\1=(1,${DEL1},0) \2=(3,#B9B9B9,0) \3=(1,${DEL1},0)'	-3	0
+1	'(\[/)(u)(\])'	'\1=(1,${DEL1},0) \2=(3,#B9B9B9,0) \3=(1,${DEL1},0)'	-3	0
+1	'(\[/)(\*)(\])'	'\1=(1,${DEL1},0) \2=(3,#B9B9B9,0) \3=(1,${DEL1},0)'	-3	0
+1	'(\[/)(ex)(\])'	'\1=(1,${DEL1},0) \2=(3,#B9B9B9,0) \3=(1,${DEL1},0)'	-3	0
+1	'(\[/)(com)(\])'	'\1=(1,${DEL1},0) \2=(3,#B9B9B9,0) \3=(1,${DEL1},0)'	-3	0
+1	'(\[/)(sub)(\])'	'\1=(1,${DEL1},0) \2=(3,#B9B9B9,0) \3=(1,${DEL1},0)'	-3	0
+1	'(\[/)(sup)(\])'	'\1=(1,${DEL1},0) \2=(3,#B9B9B9,0) \3=(1,${DEL1},0)'	-3	0
+1	'(\[/)(trn)(\])'	'\1=(1,${DEL1},0) \2=(3,#B9B9B9,0) \3=(1,${DEL1},0)'	-3	0
+1	'(\[/)(lang)(\])'	'\1=(1,${DEL1},0) \2=(3,#B9B9B9,0) \3=(1,${DEL1},0)'	-3	0
+;--ошибки синтаксиса--
+1	'(?<!\\)\[b\]'	'\0=(2,#FFFFFF,#FF0000)'	0	0
+1	'(?<!\\)\[i\]'	'\0=(2,#FFFFFF,#FF0000)'	0	0
+;--одиночные отступы в середине строки--
+1	'(?<!\\)\[m\]'	'\0=(4,#777777,#F4F4FF)'	0	0
+1	'(?<!\\)\[m0\]'	'\0=(4,#777777,#F4F4FF)'	0	0
+1	'(?<!\\)\[m1\]'	'\0=(4,#777777,#DDDDFF)'	0	0
+1	'(?<!\\)\[m2\]'	'\0=(4,#777777,#C4C4FF)'	0	0
+1	'(?<!\\)\[m3\]'	'\0=(4,#777777,#AAAAFF)'	0	0
+1	'(?<!\\)\[m4\]'	'\0=(4,#D8D8D8,#9191FF)'	0	0
+1	'(?<!\\)\[m5\]'	'\0=(4,#D8D8D8,#8282FF)'	0	0
+1	'(?<!\\)\[m6\]'	'\0=(4,#D8D8D8,#6F6FFF)'	0	0
+1	'(?<!\\)\[m7\]'	'\0=(4,#F7F7F7,#5E5EFF)'	0	0
+1	'(?<!\\)\[m8\]'	'\0=(4,#F9F9F9,#4848FF)'	0	0
+1	'(?<!\\)\[m9\]'	'\0=(4,#FFFFFF,#3737FF)'	0	0
+;--ссылки с атрибутом--
+1	'\[ref target="[^"\n]++"\][^\[\]\n]++\[/ref\]'	'\0=(3,#0044FF,#CCFFFF)'	-1	1
+1	'\[ref target="[^"\n]++"\][^\[\]\n]++\[/ref\]'	'\0=(3,#0044FF,#CCFFFF)'	-2	1
+1	'\[url target="(www|http)[A-z0-9\-\x27\x5C\.\?\!\$\(\)\*\+/&_~:#@,;=%]++"\][^\[\]\n]++\[/url\]'	'\0=(0,#0000FF,0)'	-1	1
+1	'\[url target="(www|http)[A-z0-9\-\x27\x5C\.\?\!\$\(\)\*\+/&_~:#@,;=%]++"\][^\[\]\n]++\[/url\]'	'\0=(0,#0000FF,0)'	-2	1
+1	'\[url target="mailto:[A-z0-9\-\x27\._]+@[A-z0-9\-\x27\._\?=]++"\][^\[\]\n]++\[/url\]'	'\0=(0,#0000FF,0)'	-1	1
+1	'\[url target="mailto:[A-z0-9\-\x27\._]+@[A-z0-9\-\x27\._\?=]++"\][^\[\]\n]++\[/url\]'	'\0=(0,#0000FF,0)'	-2	1
+;--ссылки с атрибутами--
+1	'\[ref dict="[^"\n]++" target="[^"\n]++"\][^\[\]\n]++\[/ref\]'	'\0=(3,#0044FF,#CCFFFF)'	-1	1
+1	'\[ref target="[^"\n]++" dict="[^"\n]++"\][^\[\]\n]++\[/ref\]'	'\0=(3,#0044FF,#CCFFFF)'	-1	1
+1	'\[ref dict="[^"\n]++" target="[^"\n]++"\][^\[\]\n]++\[/ref\]'	'\0=(3,#0044FF,#CCFFFF)'	-2	1
+1	'\[ref target="[^"\n]++" dict="[^"\n]++"\][^\[\]\n]++\[/ref\]'	'\0=(3,#0044FF,#CCFFFF)'	-2	1
+
+Delimiters:
+;===============================================
+;Flags  Font    Color   Color   Char(s)   Parent
+;       style   text    bkgrnd            ID
+;===============================================
+1	0	0	0	" "
+1	0	0	0	" "
+1	0	0	0	"	"
+1	0	${DEL2}	0	.
+1	0	${DEL2}	0	,
+1	0	${DEL2}	0	:
+1	0	${DEL2}	0	;
+1	0	${DEL2}	0	(
+1	0	${DEL2}	0	)
+1	0	${DEL1}	0	{
+1	0	${DEL1}	0	}
+1	0	${DEL1}	0	[
+1	0	${DEL1}	0	]
+1	0	${DEL2}	0	<
+1	0	${DEL2}	0	>
+1	0	${DEL1}	0	\
+1	0	${DEL2}	0	?
+1	0	${DEL1}	0	~
+1	0	${DEL2}	0	=
+1	0	${DEL2}	0	-
+1	0	${DEL1}	0	–
+1	0	${DEL1}	0	—
+1	0	${DEL2}	0	+
+1	0	${DEL2}	0	&
+1	0	${DEL2}	0	^
+1	0	${DEL2}	0	%
+1	0	${DEL2}	0	"
+1	0	${DEL2}	0	«
+1	0	${DEL2}	0	»
+1	0	${DEL2}	0	‘
+1	0	${DEL2}	0	’
+1	0	${DEL2}	0	‚
+1	0	${DEL2}	0	‛
+1	0	${DEL2}	0	“
+1	0	${DEL2}	0	”
+1	0	${DEL2}	0	„
+1	0	${DEL2}	0	‟
+0	0	${DEL1}	0	·
+1	0	${DEL1}	0	•
+0	0	${DEL1}	0	·
+0	0	${DEL1}	0	…
+;1	0	${DEL1}	0	/
+;1	0	${DEL2}	0	|
+;1	0	${DEL2}	0	!
+;1	0	${DEL2}	0	*
+
+Words:
+;===========================================
+;Flags  Font    Color   Color   Word  Parent
+;       style   text    bkgrnd        ID
+;===========================================
+2	0	${NUM}	0	"0123456789⁰¹²³⁴⁵⁶⁷⁸⁹₀₁₂₃₄₅₆₇₈₉"
+1	4	0	#FFFF9D	'!trs'	0
+1	4	0	#FFFF9D	'/!trs'	0
+;
+;--COLORS (см. родительское в QuotesRE)--
+1	4	#F0F8FF	#CCCCCC	aliceblue	71
+1	4	#FAEBD7	0	antiquewhite	71
+1	4	#00FFFF	0	aqua	71
+1	4	#7FFFD4	0	aquamarine	71
+1	4	#F0FFFF	#CCCCCC	azure	71
+1	4	#F5F5DC	0	beige	71
+1	4	#FFE4C4	0	bisque	71
+1	4	#FFEBCD	0	blanchedalmond	71
+1	4	#0000FF	0	blue	71
+1	4	#8A2BE2	0	blueviolet	71
+1	4	#A52A2A	0	brown	71
+1	4	#DEB887	0	burlywood	71
+1	4	#5F9EA0	0	cadetblue	71
+1	4	#7FFF00	0	chartreuse	71
+1	4	#D2691E	0	chocolate	71
+1	4	#FF7F50	0	coral	71
+1	4	#6495ED	0	cornflower	71
+1	4	#FFF8DC	#CCCCCC	cornsilk	71
+1	4	#DC143C	0	crimson	71
+1	4	#00FFFF	0	cyan	71
+1	4	#00008B	0	darkblue	71
+1	4	#008B8B	0	darkcyan	71
+1	4	#B8860B	0	darkgoldenrod	71
+1	4	#A9A9A9	0	darkgray	71
+1	4	#006400	0	darkgreen	71
+1	4	#BDB76B	0	darkkhaki	71
+1	4	#8B008B	0	darkmagenta	71
+1	4	#556B2F	0	darkolivegreen	71
+1	4	#FF8C00	0	darkorange	71
+1	4	#9932CC	0	darkorchid	71
+1	4	#8B0000	0	darkred	71
+1	4	#E9967A	0	darksalmon	71
+1	4	#8FBC8B	0	darkseagreen	71
+1	4	#483D8B	0	darkslateblue	71
+1	4	#2F4F4F	0	darkslategray	71
+1	4	#00CED1	0	darkturquoise	71
+1	4	#9400D3	0	darkviolet	71
+1	4	#FF1493	0	deeppink	71
+1	4	#00BFFF	0	deepskyblue	71
+1	4	#696969	0	dimgray	71
+1	4	#1E90FF	0	dodgerblue	71
+1	4	#B22222	0	firebrick	71
+1	4	#FFFAF0	#CCCCCC	floralwhite	71
+1	4	#228B22	0	forestgreen	71
+1	4	#FF00FF	0	fuchsia	71
+1	4	#DCDCDC	0	gainsboro	71
+1	4	#F8F8FF	#CCCCCC	ghostwhite	71
+1	4	#FFD700	0	gold	71
+1	4	#DAA520	0	goldenrod	71
+1	4	#808080	0	gray	71
+1	4	#008000	0	green	71
+1	4	#ADFF2F	0	greenyellow	71
+1	4	#F0FFF0	#CCCCCC	honeydew	71
+1	4	#FF69B4	0	hotpink	71
+1	4	#CD5C5C	0	indianred	71
+1	4	#4B0082	0	indigo	71
+1	4	#FFFFF0	#CCCCCC	ivory	71
+1	4	#F0E68C	0	khaki	71
+1	4	#E6E6FA	0	lavender	71
+1	4	#FFF0F5	#CCCCCC	lavenderblush	71
+1	4	#7CFC00	0	lawngreen	71
+1	4	#FFFACD	0	lemonchiffon	71
+1	4	#ADD8E6	0	lightblue	71
+1	4	#F08080	0	lightcoral	71
+1	4	#E0FFFF	0	lightcyan	71
+1	4	#FAFAD2	0	lightgoldenrodyellow	71
+1	4	#90EE90	0	lightgreen	71
+1	4	#D3D3D3	0	lightgray	71
+1	4	#FFB6C1	0	lightpink	71
+1	4	#FFA07A	0	lightsalmon	71
+1	4	#20B2AA	0	lightseagreen	71
+1	4	#87CEFA	0	lightskyblue	71
+1	4	#778899	0	lightslategray	71
+1	4	#B0C4DE	0	lightsteelblue	71
+1	4	#FFFFE0	#CCCCCC	lightyellow	71
+1	4	#00FF00	0	lime	71
+1	4	#32CD32	0	limegreen	71
+1	4	#FAF0E6	#CCCCCC	linen	71
+1	4	#FF00FF	0	magenta	71
+1	4	#800000	0	maroon	71
+1	4	#66CDAA	0	mediumaquamarine	71
+1	4	#0000CD	0	mediumblue	71
+1	4	#BA55D3	0	mediumorchid	71
+1	4	#9370DB	0	mediumpurple	71
+1	4	#3CB371	0	mediumseagreen	71
+1	4	#7B68EE	0	mediumslateblue	71
+1	4	#00FA9A	0	mediumspringgreen	71
+1	4	#48D1CC	0	mediumturquoise	71
+1	4	#C71585	0	mediumvioletred	71
+1	4	#191970	0	midnightblue	71
+1	4	#F5FFFA	#CCCCCC	mintcream	71
+1	4	#FFE4E1	0	mistyrose	71
+1	4	#FFE4B5	0	moccasin	71
+1	4	#FFDEAD	0	navajowhite	71
+1	4	#000080	0	navy	71
+1	4	#FDF5E6	#CCCCCC	oldlace	71
+1	4	#808000	0	olive	71
+1	4	#6B8E23	0	olivedrab	71
+1	4	#FFA500	0	orange	71
+1	4	#FF4500	0	orangered	71
+1	4	#DA70D6	0	orchid	71
+1	4	#EEE8AA	0	palegoldenrod	71
+1	4	#98FB98	0	palegreen	71
+1	4	#AFEEEE	0	paleturquoise	71
+1	4	#DB7093	0	palevioletred	71
+1	4	#FFEFD5	0	papayawhip	71
+1	4	#FFDAB9	0	peachpuff	71
+1	4	#CD853F	0	peru	71
+1	4	#FFC0CB	0	pink	71
+1	4	#DDA0DD	0	plum	71
+1	4	#B0E0E6	0	powderblue	71
+1	4	#800080	0	purple	71
+1	4	#FF0000	0	red	71
+1	4	#BC8F8F	0	rosybrown	71
+1	4	#4169E1	0	royalblue	71
+1	4	#8B4513	0	saddlebrown	71
+1	4	#FA8072	0	salmon	71
+1	4	#F4A460	0	sandybrown	71
+1	4	#2E8B57	0	seagreen	71
+1	4	#FFF5EE	#CCCCCC	seashell	71
+1	4	#A0522D	0	sienna	71
+1	4	#C0C0C0	0	silver	71
+1	4	#87CEEB	0	skyblue	71
+1	4	#6A5ACD	0	slateblue	71
+1	4	#708090	0	slategray	71
+1	4	#FFFAFA	#CCCCCC	snow	71
+1	4	#00FF7F	0	springgreen	71
+1	4	#4682B4	0	steelblue	71
+1	4	#D2B48C	0	tan	71
+1	4	#008080	0	teal	71
+1	4	#D8BFD8	0	thistle	71
+1	4	#FF6347	0	tomato	71
+1	4	#40E0D0	0	turquoise	71
+1	4	#EE82EE	0	violet	71
+1	4	#F5DEB3	0	wheat	71
+1	4	0	#CCCCCC	white	71
+1	4	#F5F5F5	#CCCCCC	whitesmoke	71
+1	4	#FFFF00	0	yellow	71
+1	4	#9ACD32	0	yellowgreen	71
+
+
+;----------------------------------------------;
+;                   CodeFold                   ;
+;----------------------------------------------;
+
+
+FoldPanel:
+;=====================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+;PanelFirstBkColor	PanelSecondBkColor	PanelNormalFoldColor	PanelActiveFoldColor	PanelNormalNodeOpenBkColor	PanelNormalNodeCloseBkColor	PanelActiveNodeOpenBkColor	PanelActiveNodeCloseBkColor	PanelNormalNodeOpenSignColor	PanelNormalNodeCloseSignColor	PanelActiveNodeOpenSignColor	PanelActiveNodeCloseSignColor
+;=====================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+${CodeFold_PanelFirstBkColor}	${CodeFold_PanelSecondBkColor}	${CodeFold_PanelNormalFoldColor}	${CodeFold_PanelActiveFoldColor}	${CodeFold_PanelNormalNodeOpenBkColor}	${CodeFold_PanelNormalNodeCloseBkColor}	${CodeFold_PanelActiveNodeOpenBkColor}	${CodeFold_PanelActiveNodeCloseBkColor}	${CodeFold_PanelNormalNodeOpenSignColor}	${CodeFold_PanelNormalNodeCloseSignColor}	${CodeFold_PanelActiveNodeOpenSignColor}	${CodeFold_PanelActiveNodeCloseSignColor}
+
+
+FoldList:
+;===================================================
+;ListTextColor	ListBkColor
+;===================================================
+${CodeFold_ListTextColor}	${CodeFold_ListBkColor}
+
+
+TagMark:
+;=======================================================================================================================================
+;TagMarkFlags	TagMarkFontStyle	TagMarkTextColor	TagMarkBkColor
+;=======================================================================================================================================
+${CodeFold_TagMarkFlags}	${CodeFold_TagMarkFontStyle}	${CodeFold_TagMarkTextColor}	${CodeFold_TagMarkBkColor}
+
+
+Skips:
+;=============================
+;Flags	Skip	Skip	Escape
+;	start	end	char
+;=============================
+
+
+Folds:
+;===================================================================================================
+;Flags  Font    Color   Color   Fold            Fold            Deli            Parent  Rule    Rule
+;       style   text    bkgrnd  start           end             miters          ID      ID      file
+;===================================================================================================
+; 3407873	3	#9B9B9B	0	'(?<!\\)\[\*\]'	'(?<!\\)\[/\*\]'	''	62	0
+;--для отображения самопальных «закладок» в списке CodeFold--
+72	0	0	0	'{{ →'	'}}'	''
+
+
+;----------------------------------------------;
+;                 AutoComplete                 ;
+;----------------------------------------------;
+
+
+CompleteList:
+;=====================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+;ListFontStyle                ListFontSize                 ListFaceName                 ListLineGap                 ListBlockIcon `"C:\1.dll", 0` ListBlockIconMargins "left;right"    ListHlBaseIcon `"C:\1.dll", 0` ListHlBaseIconMargins "left;right"    ListDocWordIcon `"C:\1.dll", 0` ListDocWordIconMargins "left;right"    ListBasicTextColor                 ListBasicBkColor                 ListSelTextColor                 ListSelBkColor
+;=====================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+${AutoComplete_ListFontStyle} ${AutoComplete_ListFontSize} ${AutoComplete_ListFaceName} ${AutoComplete_ListLineGap} ${AutoComplete_ListBlockIcon} ${AutoComplete_ListBlockIconMargins} ${AutoComplete_ListHlBaseIcon} ${AutoComplete_ListHlBaseIconMargins} ${AutoComplete_ListDocWordIcon} ${AutoComplete_ListDocWordIconMargins} ${AutoComplete_ListBasicTextColor} ${AutoComplete_ListBasicBkColor} ${AutoComplete_ListSelTextColor} ${AutoComplete_ListSelBkColor}
+
+
+Blocks:
+;========================
+;Abbreviations and blocks
+;========================
+$;
+$;----------------------------------------------------------------------------------------------------
+$;  TEMPORARIES
+$;----------------------------------------------------------------------------------------------------
+$;
+$~temp::Χρηστικό::▸ $~__::Χρηστικό::▸
+[c slategray][i]{{▸}}
+$;
+$;----------------------------------------------------------------------------------------------------
+$;  BASICS
+$;----------------------------------------------------------------------------------------------------
+$;
+$~name $~имя $~шапка
+#NAME	"$[]"
+#INDEX_LANGUAGE	"$[]"
+#CONTENTS_LANGUAGE	"$[]"
+
+
+$~name_temp $~имя_temp $~шапка_temp
+#NAME	"$[Temp Dict]"
+#INDEX_LANGUAGE	"$[Russian]"
+#CONTENTS_LANGUAGE	"$[Russian]"
+
+
+$~dsl_version $~version $~дсл_версия $~версия
+{{ DSL version: $[0].$[0].$[0] }}
+
+
+$~delim::space-sub $~empty_line-sub $~отбивка::пустая_строка-sub $~пустая_строка-sub
+	[m0][sub] [/sub][/m]
+
+
+$~delim::space-sup $~empty_line-sup $~отбивка::пустая_строка-sup $~пустая_строка-sup
+	[m0][sup] [/sup][/m]
+
+
+$~delim::space $~empty_line $~отбивка::пустая_строка $~пустая_строка
+	[m0] [/m]
+
+
+$~delim::line $~отбивка::линия
+	[m0][c lightslategray]——————[/c][/m]
+
+
+$~delim::bullet $~отбивка::троеточие
+	[m0][c lightslategray]• • •[/c][/m]
+
+
+$;
+$;----------------------------------------------------------------------------------------------------
+$;  TAGS
+$;----------------------------------------------------------------------------------------------------
+$;
+$~{{?:}} $~comment_in_code $~комментарий_в_коде
+{{?:$[]}}
+$~формат::жирное $~жирное::тэг $~тэг::жирное $~болд $~bb $~bold $~format::bold
+[b]$[][/b]$[]
+$~формат::наклонное $~наклонное::тэг $~тэг::наклонное $~курсив $~италик $~ii $~italic $~format::italic
+[i]$[][/i]$[]
+$~формат::подчёркнутое $~подчёркнутое::тэг $~тэг::подчёркнутое $~uu $~underlined $~format::underlined
+[u]$[][/u]$[]
+$~формат::цвет $~цвет::тэг $~тэг::цвет $~cc $~color::tag $~format::color
+[c]$[][/c]$[]
+$~формат::подстрочник $~подстрочник::тэг $~тэг::подстрочник $~sub $~subscript $~format::subscript
+[sub]$[][/sub]$[]
+$~формат::надстрочник $~надстрочник::тэг $~тэг::надстрочник $~sup $~superscript $~format::subscript
+[sup]$[][/sup]$[]
+$~формат::ударение $~ударение::тэг $~тэг::ударение $~'' $~stress $~format::stress
+[']$[][/']$[]
+$~структура::помета $~помета::тэг $~тэг::помета $~pp $~label $~structure::label
+[p]$[][/p]$[]
+$~структура::транскрипция $~транскрипция::тэг $~тэг::транскрипция $~tt $~transcriptions $~structure::transcriptions
+[t]$[][/t]$[]
+$~структура::факультатив $~структура::необязательная_часть $~факультатив::тэг $~необязательная_часть::тэг $~астериск::тэг $~тэг::астериск $~тэг::факультатив $~** $~optional $~structure::optional
+[*]$[][/*]$[]
+$~зона::пример $~примеры::тэг $~тэг::примеры $~ex $~examples::tag $~zone::examples
+[ex]$[][/ex]$[]
+$~зона::комментарий $~комментарии::тэг $~тэг::комментарии $~com $~comments::tag $~zone::comments
+[com]$[][/com]$[]
+$~зона::перевод $~перевод::тэг $~тэг::перевод $~trn $~translations $~zone::translations
+[trn]$[][/trn]$[]
+$~зона::исключение $~исключение::тэг $~тэг::исключение $~trs $~trash $~zone::trash
+[!trs]$[][/!trs]$[]
+$~зона::язык::имя $~язык::имя $~lang::name
+[lang name="$[]"]$[][/lang]$[]
+$~зона::язык::id $~язык::id $~lang::id
+[lang id=$[]]$[][/lang]$[]
+$~зона::язык::Ц_Слав $~язык::Ц_Слав $~lang::CU
+[lang name="Church Slavic"]$[][/lang]$[]
+$~зона::язык::Евр $~язык::Евр $~lang::HE
+[lang name="Hebrew"]$[][/lang]$[]
+$~медиа::тэг $~аудио::тэг $~видео::тэг $~тэг::медиа $~тэг::аудио $~тэг::видео $~ss $~media
+[s]$[][/s]$[]
+$~ссылка::<> $~ref<> $~link::<>
+<<$[]>>$[]
+$~ссылка::ref $~ref $~link::ref
+[ref]$[][/ref]$[]
+$~ссылка::target $~target $~link::target
+target="$[]"
+$~ссылка::ref_target $~ref_target $~link::ref_target $~target_ref
+[ref target="$[]"]$[][/ref]$[]
+$~ссылка::url $~url $~link::url
+[url]$[][/url]$[]
+$~ссылка::url_target $~url_target $~link::url_target $~target_url
+[url target="$[]"]$[][/url]$[]
+$~отступ0 $~формат::отступ0 $~m0 $~margin0 $~format::margin0
+	[m0]$[][/m]
+$~отступ1 $~формат::отступ1 $~m1 $~margin1 $~format::margin1
+	[m1]$[][/m]
+$~m2 $~отступ2 $~формат::отступ2 $~margin2 $~format::margin2
+	[m2]$[][/m]
+$~m3 $~отступ3 $~формат::отступ3 $~margin3 $~format::margin3
+	[m3]$[][/m]
+$~m4 $~отступ4 $~формат::отступ4 $~margin4 $~format::margin4
+	[m4]$[][/m]
+$~m5 $~отступ5 $~формат::отступ5 $~margin5 $~format::margin5
+	[m5]$[][/m]
+$~m6 $~отступ6 $~формат::отступ6 $~margin6 $~format::margin6
+	[m6]$[][/m]
+$~m7 $~отступ7 $~формат::отступ7 $~margin7 $~format::margin7
+	[m7]$[][/m]
+$~m8 $~отступ8 $~формат::отступ8 $~margin8 $~format::margin8
+	[m8]$[][/m]
+$~m9 $~отступ9 $~формат::отступ9 $~margin9 $~format::margin9
+	[m9]$[][/m]
+$~/m1
+[/m]
+[m1]
+$~/m2
+[/m]
+[m2]
+$~/m3
+[/m]
+[m3]
+$~/m4
+[/m]
+[m4]
+$~/m5
+[/m]
+[m5]
+$~/m6
+[/m]
+[m6]
+$~/m7
+[/m]
+[m7]
+$~/m8
+[/m]
+[m8]
+$~/m9
+[/m]
+[m9]
+$;
+$;----------------------------------------------------------------------------------------------------
+$;  EXTRA
+$;----------------------------------------------------------------------------------------------------
+$;
+$~ссылка::библиографическая::url $~url::bibliography $~link::bibliography::url
+— URL: [url]$[][/url] (дата обращения: $[]).
+$~смотри $~see
+[p]см.[/p]
+$~смотри_также $~see_also
+[p]см.[/p] [c][i]также[/i][/c]
+$~смотри_тж $~see_al
+[p]см. тж.[/p]
+$;
+$;----------------------------------------------------------------------------------------------------
+$;  COLORS ENGLISH
+$;----------------------------------------------------------------------------------------------------
+$;
+$~aliceblue
+[c aliceblue]$[][/c]$[]
+$~antiquewhite
+[c antiquewhite]$[][/c]$[]
+$~aqua
+[c aqua]$[][/c]$[]
+$~aquamarine
+[c aquamarine]$[][/c]$[]
+$~azure
+[c azure]$[][/c]$[]
+$~beige
+[c beige]$[][/c]$[]
+$~bisque
+[c bisque]$[][/c]$[]
+$~blanchedalmond
+[c blanchedalmond]$[][/c]$[]
+$~blue
+[c blue]$[][/c]$[]
+$~blueviolet
+[c blueviolet]$[][/c]$[]
+$~brown
+[c brown]$[][/c]$[]
+$~burlywood
+[c burlywood]$[][/c]$[]
+$~cadetblue
+[c cadetblue]$[][/c]$[]
+$~chartreuse
+[c chartreuse]$[][/c]$[]
+$~chocolate
+[c chocolate]$[][/c]$[]
+$~coral
+[c coral]$[][/c]$[]
+$~cornflower
+[c cornflower]$[][/c]$[]
+$~cornsilk
+[c cornsilk]$[][/c]$[]
+$~crimson
+[c crimson]$[][/c]$[]
+$~cyan
+[c cyan]$[][/c]$[]
+$~darkblue
+[c darkblue]$[][/c]$[]
+$~darkcyan
+[c darkcyan]$[][/c]$[]
+$~darkgoldenrod
+[c darkgoldenrod]$[][/c]$[]
+$~darkgray
+[c darkgray]$[][/c]$[]
+$~darkgreen
+[c darkgreen]$[][/c]$[]
+$~darkkhaki
+[c darkkhaki]$[][/c]$[]
+$~darkmagenta
+[c darkmagenta]$[][/c]$[]
+$~darkolivegreen
+[c darkolivegreen]$[][/c]$[]
+$~darkorange
+[c darkorange]$[][/c]$[]
+$~darkorchid
+[c darkorchid]$[][/c]$[]
+$~darkred
+[c darkred]$[][/c]$[]
+$~darksalmon
+[c darksalmon]$[][/c]$[]
+$~darkseagreen
+[c darkseagreen]$[][/c]$[]
+$~darkslateblue
+[c darkslateblue]$[][/c]$[]
+$~darkslategray
+[c darkslategray]$[][/c]$[]
+$~darkturquoise
+[c darkturquoise]$[][/c]$[]
+$~darkviolet
+[c darkviolet]$[][/c]$[]
+$~deeppink
+[c deeppink]$[][/c]$[]
+$~deepskyblue
+[c deepskyblue]$[][/c]$[]
+$~dimgray
+[c dimgray]$[][/c]$[]
+$~dodgerblue
+[c dodgerblue]$[][/c]$[]
+$~firebrick
+[c firebrick]$[][/c]$[]
+$~floralwhite
+[c floralwhite]$[][/c]$[]
+$~forestgreen
+[c forestgreen]$[][/c]$[]
+$~fuchsia
+[c fuchsia]$[][/c]$[]
+$~gainsboro
+[c gainsboro]$[][/c]$[]
+$~ghostwhite
+[c ghostwhite]$[][/c]$[]
+$~gold
+[c gold]$[][/c]$[]
+$~goldenrod
+[c goldenrod]$[][/c]$[]
+$~gray
+[c gray]$[][/c]$[]
+$~green
+[c green]$[][/c]$[]
+$~greenyellow
+[c greenyellow]$[][/c]$[]
+$~honeydew
+[c honeydew]$[][/c]$[]
+$~hotpink
+[c hotpink]$[][/c]$[]
+$~indianred
+[c indianred]$[][/c]$[]
+$~indigo
+[c indigo]$[][/c]$[]
+$~ivory
+[c ivory]$[][/c]$[]
+$~khaki
+[c khaki]$[][/c]$[]
+$~lavender
+[c lavender]$[][/c]$[]
+$~lavenderblush
+[c lavenderblush]$[][/c]$[]
+$~lawngreen
+[c lawngreen]$[][/c]$[]
+$~lemonchiffon
+[c lemonchiffon]$[][/c]$[]
+$~lightblue
+[c lightblue]$[][/c]$[]
+$~lightcoral
+[c lightcoral]$[][/c]$[]
+$~lightcyan
+[c lightcyan]$[][/c]$[]
+$~lightgoldenrodyellow
+[c lightgoldenrodyellow]$[][/c]$[]
+$~lightgreen
+[c lightgreen]$[][/c]$[]
+$~lightgray
+[c lightgray]$[][/c]$[]
+$~lightpink
+[c lightpink]$[][/c]$[]
+$~lightsalmon
+[c lightsalmon]$[][/c]$[]
+$~lightseagreen
+[c lightseagreen]$[][/c]$[]
+$~lightskyblue
+[c lightskyblue]$[][/c]$[]
+$~lightslategray
+[c lightslategray]$[][/c]$[]
+$~lightsteelblue
+[c lightsteelblue]$[][/c]$[]
+$~lightyellow
+[c lightyellow]$[][/c]$[]
+$~lime
+[c lime]$[][/c]$[]
+$~limegreen
+[c limegreen]$[][/c]$[]
+$~linen
+[c linen]$[][/c]$[]
+$~magenta
+[c magenta]$[][/c]$[]
+$~maroon
+[c maroon]$[][/c]$[]
+$~mediumaquamarine
+[c mediumaquamarine]$[][/c]$[]
+$~mediumblue
+[c mediumblue]$[][/c]$[]
+$~mediumorchid
+[c mediumorchid]$[][/c]$[]
+$~mediumpurple
+[c mediumpurple]$[][/c]$[]
+$~mediumseagreen
+[c mediumseagreen]$[][/c]$[]
+$~mediumslateblue
+[c mediumslateblue]$[][/c]$[]
+$~mediumspringgreen
+[c mediumspringgreen]$[][/c]$[]
+$~mediumturquoise
+[c mediumturquoise]$[][/c]$[]
+$~mediumvioletred
+[c mediumvioletred]$[][/c]$[]
+$~midnightblue
+[c midnightblue]$[][/c]$[]
+$~mintcream
+[c mintcream]$[][/c]$[]
+$~mistyrose
+[c mistyrose]$[][/c]$[]
+$~moccasin
+[c moccasin]$[][/c]$[]
+$~navajowhite
+[c navajowhite]$[][/c]$[]
+$~navy
+[c navy]$[][/c]$[]
+$~oldlace
+[c oldlace]$[][/c]$[]
+$~olive
+[c olive]$[][/c]$[]
+$~olivedrab
+[c olivedrab]$[][/c]$[]
+$~orange
+[c orange]$[][/c]$[]
+$~orangered
+[c orangered]$[][/c]$[]
+$~orchid
+[c orchid]$[][/c]$[]
+$~palegoldenrod
+[c palegoldenrod]$[][/c]$[]
+$~palegreen
+[c palegreen]$[][/c]$[]
+$~paleturquoise
+[c paleturquoise]$[][/c]$[]
+$~palevioletred
+[c palevioletred]$[][/c]$[]
+$~papayawhip
+[c papayawhip]$[][/c]$[]
+$~peachpuff
+[c peachpuff]$[][/c]$[]
+$~peru
+[c peru]$[][/c]$[]
+$~pink
+[c pink]$[][/c]$[]
+$~plum
+[c plum]$[][/c]$[]
+$~powderblue
+[c powderblue]$[][/c]$[]
+$~purple
+[c purple]$[][/c]$[]
+$~red
+[c red]$[][/c]$[]
+$~rosybrown
+[c rosybrown]$[][/c]$[]
+$~royalblue
+[c royalblue]$[][/c]$[]
+$~saddlebrown
+[c saddlebrown]$[][/c]$[]
+$~salmon
+[c salmon]$[][/c]$[]
+$~sandybrown
+[c sandybrown]$[][/c]$[]
+$~seagreen
+[c seagreen]$[][/c]$[]
+$~seashell
+[c seashell]$[][/c]$[]
+$~sienna
+[c sienna]$[][/c]$[]
+$~silver
+[c silver]$[][/c]$[]
+$~skyblue
+[c skyblue]$[][/c]$[]
+$~slateblue
+[c slateblue]$[][/c]$[]
+$~slategray
+[c slategray]$[][/c]$[]
+$~snow
+[c snow]$[][/c]$[]
+$~springgreen
+[c springgreen]$[][/c]$[]
+$~steelblue
+[c steelblue]$[][/c]$[]
+$~tan
+[c tan]$[][/c]$[]
+$~teal
+[c teal]$[][/c]$[]
+$~thistle
+[c thistle]$[][/c]$[]
+$~tomato
+[c tomato]$[][/c]$[]
+$~turquoise
+[c turquoise]$[][/c]$[]
+$~violet
+[c violet]$[][/c]$[]
+$~wheat
+[c wheat]$[][/c]$[]
+$~white
+[c white]$[][/c]$[]
+$~whitesmoke
+[c whitesmoke]$[][/c]$[]
+$~yellow
+[c yellow]$[][/c]$[]
+$~yellowgreen
+[c yellowgreen]$[][/c]$[]

@@ -1,0 +1,2594 @@
+﻿;=================== This file must be encoded in UTF-16 LE ===================;
+;------------------------------------------------------------------------------;
+;                           CODER PLUGIN SYNTAX FILE                           ;
+;             for comfort file viewing/editing set TAB size to 8               ;
+;------------------------------------------------------------------------------;
+; Target.....: autorun.wdx configuration files (Total Commander plugin)        ;
+; Version....: 0.14.0                                                          ;
+; Author.....: yozhic                                                          ;
+; Created....: 27.09.2022                                                      ;
+; Modified...: 20.09.2025                                                      ;
+; Credits....: Loopback                                                        ;
+;------------------------------------------------------------------------------;
+
+
+Files:
+;==========
+;File types
+;==========
+*.aucfg
+autorun.cfg
+
+
+;----------------------------------------------;
+;                  HighLight                   ;
+;----------------------------------------------;
+
+
+Font:
+;=================================================================
+;FontStyle             FontSize              FaceName
+;=================================================================
+${HighLight_FontStyle} ${HighLight_FontSize} ${HighLight_FaceName}
+
+
+Colors:
+;=============================================================================================================================================================================================================================================================================================================================================================================================================================
+;BasicTextColor             BasicBkColor              SelTextColor              SelBkColor              LineTextColor              LineBkColor              LineBorderColor              AltTextColor              AltBkColor              AltBorderColor              ColumnColor              MarkerColor              CaretColor              UrlColor              ActiveUrlColor              VisitUrlColor
+;=============================================================================================================================================================================================================================================================================================================================================================================================================================
+${HighLight_BasicTextColor} ${HighLight_BasicBkColor} ${HighLight_SelTextColor} ${HighLight_SelBkColor} ${HighLight_LineTextColor} ${HighLight_LineBkColor} ${HighLight_LineBorderColor} ${HighLight_AltTextColor} ${HighLight_AltBkColor} ${HighLight_AltBorderColor} ${HighLight_ColumnColor} ${HighLight_MarkerColor} ${HighLight_CaretColor} ${HighLight_UrlColor} ${HighLight_ActiveUrlColor} ${HighLight_VisitUrlColor}
+
+
+BkImage:
+;==================================================
+;BkImageFile              BkImageAlpha
+;==================================================
+${HighLight_BkImageFile}  ${HighLight_BkImageAlpha}
+
+
+AutoMark:
+;====================================================================================================================
+;AutoMarkFlags             AutoMarkFontStyle              AutoMarkTextColor              AutoMarkBkColor
+;====================================================================================================================
+${HighLight_AutoMarkFlags} ${HighLight_AutoMarkFontStyle} ${HighLight_AutoMarkTextColor} ${HighLight_AutoMarkBkColor}
+
+
+QuotesRE:
+;==========================================================================================================
+;Flags  Pattern                        \BackRef=(FontStyle,ColorText,ColorBk) \BackRef=...  ParentID RuleID
+;==========================================================================================================
+;0	`(")([^"\\]*(\\.[^"\\]*)*)(")` `\1=(0,${DEL1},0) \2=(3,${STR},0) \4=(0,${DEL1},0)`  0        0
+;--родительское для Директив--
+0	`Pragma \w+`    `\0=(0,0,0)`	0	10
+;--язык в директиве AutorunLanguage--
+0	`(?<=Pragma AutorunLanguage )[a-z]{2,3}`    `\0=(0,${ATTR},0)`
+;--пути без кавычек в Include, LoadLibrary, LoadFont--
+0	`((?<=Pragma Include )|(?<=LoadLibrary )|(?<=LoadLibrary /U )|(?<=LoadFont )|(?<=LoadFont /N ))[^"'\n\x20]++[\x20\t]*$`    `\0=(0,0,0)`	0	15
+;--параметры в командах--
+0	`(/[CH]:)([a-z0-9]+)`         `\1=(0,${ATTR},0) \2=(0,${DEL1},0)`
+0	`(/K:)(X[12])`                `\1=(0,${ATTR},0) \2=(0,${DEL1},0)`
+0	`(/X[12]:?)([a-z]*)`          `\1=(0,${ATTR},0) \2=(0,${DEL1},0)`
+0	`(/[a-z_]+[\-:]?)([a-z]*)`    `\1=(0,${ATTR},0) \2=(0,${DEL1},0)`
+;  минусовые значения в командах
+0	`(?<=/[XYWH]:)-(?=\d)`    `\0=(0,${NUM},0)`
+;--команды Total Commander--
+1	`cm_[A-Za-z0-9_]+`    `\0=(3,${OP},0)`
+;--команды Total Commander пользовательские--
+1	`em_[A-Za-z0-9_]+`    `\0=(3,${TAG},0)`
+;--указатель после имени типа в параметрах DllCall (может встретиться только в кавычках)--
+0 `((?<=char)|(?<=byte)|(?<=uchar)|(?<=boolean)|(?<=short)|(?<=ushort)|(?<=wchar)|(?<=word)|(?<=int)|(?<=long)|(?<=bool)|(?<=hresult)|(?<=uint)|(?<=ulong)|(?<=dword)|(?<=int64)|(?<=uint64)|(?<=ptr)|(?<=hwnd)|(?<=handle)|(?<=int_ptr)|(?<=long_ptr)|(?<=lparam)|(?<=lresult)|(?<=uint_ptr)|(?<=ulong_ptr)|(?<=dword_ptr)|(?<=wparam))\*`    `\0=(2,${OP},0)`	20
+;--указатель после str/wstr в параметрах DllCall не поддерживается--
+0	`((?<=str)|(?<=wstr))\*`    `\0=(2,#FFFFFF,#FF0000)`	20
+;--обозначение переменных в заковыченных блоках--
+;  переменные полностью пока не хочется подсвечивать
+;  это правило блокирует правило переменных в Quotes
+0	`%`    `\0=(4,0,0)`	20
+;--Func: открытый список параметров--
+0	`(?<=\()\x2E\x2E\x2E(?=\))`    `\0=(2,${ATTR},0)`
+;--Func: подсветка имён и параметров--
+0	`(?<=Func )\w+\([\w,\x20]*\)`    `\0=(0,0,0)`	0	14
+0	`\w+`    `\0=(0,${OP},0)`	14
+;--ф-ции: изменение переменной в параметре (DllCall)--
+0	`(@)(\w+)`    `\1=(2,${VAR},0) \2=(0,${VAR},0)`
+;--перенос строк--
+0	`(?m)\x20(_)\x20*$`    `\1=(2,${OP},0)`
+;--запрет комментария после переноса строк--
+0	`(?m)\x20(_)\x20*(#.*)$`    `\1=(0,#FFFFFF,#FF0000) \2=(3,#FF0000,0)`
+;--десятичный разделитель в числах--
+1	`(?<=\d)[\.\,](?=\d)`   `\0=(0,${NUM},0)`
+;--шестнадцатеричные числа--
+1	`0x[0-9A-Fa-f]{2,8}`    `\0=(0,${NUM},0)`
+;--встроенные константы и макросы--
+0 `%?AUTORUN_(CFG|ISADMIN|OSARCH|PATH|RESTARTCOUNT|SUBPROCESS|TCARCH|TCCMDLINE|TCHANDLE|TCLANG|TCLANGFILE|TCPID|THREADID|UTCDIFF|WINDOW)%?` `\0=(0,${TYPE},0)`	0	11
+0 `%?(ERROR|EXTENDED|SYSERROR|SYSERRORTEXT)%?`    `\0=(2,${VAR},0)`	0	11
+;--встроенные переменные плагинов--
+0 `%?PROCESS_(USERISADMIN|RUNASADMIN|ISELEVATED|INTEGRITYLEVEL)%?`    `\0=(0,${TYPE},0)`	0	11
+0 `%?SYSINFO_(OSARCH|OSVERSION|OSSERVICEPACK|DESKTOPWIDTH|DESKTOPHEIGHT|DESKTOPDEPTH|USERLANG)%?`    `\0=(0,${TYPE},0)`	0	11
+;--стандартные переменные Total Commander--
+0 `%?COMMANDER_(DRIVE|EXE|INI_PATH|INI|PATH|INSTANCE|SESSIONNAME|OPEN)%?`    `\0=(0,${VAR},0)`	0	11
+;--объекты--
+0 `(?<!\\)(?<!\w)(\w++)(\.)(?=\w)`   `\1=(2,${AREA},0) \2=(1,${AREA},0)`
+;--методы объектов--
+0 `(?<=\w\.)[a-z_]+\x20*(?=\x28)`   `\0=(0,0,0)`	0	13
+;--свойства объектов--
+0 `(?<=\w\.)[a-z_]+`   `\0=(0,0,0)`	0	12
+;--сигнализация на забытый знак процента во встроенных переменных--
+0 `(%)AUTORUN_(CFG|ISADMIN|OSARCH|PATH|RESTARTCOUNT|SUBPROCESS|TCARCH|TCCMDLINE|TCHANDLE|TCLANG|TCLANGFILE|TCPID|THREADID|UTCDIFF|WINDOW)(?!%)`  `\1=(2,#FFFFFF,#FF0000)`	11
+0 `(?<!%)AUTORUN_(CFG|ISADMIN|OSARCH|PATH|RESTARTCOUNT|SUBPROCESS|TCARCH|TCCMDLINE|TCHANDLE|TCLANG|TCLANGFILE|TCPID|THREADID|UTCDIFF|WINDOW)(%)` `\2=(2,#FFFFFF,#FF0000)`	11
+0 `(%)PROCESS_(USERISADMIN|RUNASADMIN|ISELEVATED|INTEGRITYLEVEL)(?!%)`            `\1=(2,#FFFFFF,#FF0000)`	11
+0 `(?<!%)PROCESS_(USERISADMIN|RUNASADMIN|ISELEVATED|INTEGRITYLEVEL)(%)`           `\2=(2,#FFFFFF,#FF0000)`	11
+0 `(%)SYSINFO_(OSARCH|OSVERSION|OSSERVICEPACK|DESKTOPWIDTH|DESKTOPHEIGHT|DESKTOPDEPTH|USERLANG)(?!%)`     `\1=(2,#FFFFFF,#FF0000)`	11
+0 `(?<!%)SYSINFO_(OSARCH|OSVERSION|OSSERVICEPACK|DESKTOPWIDTH|DESKTOPHEIGHT|DESKTOPDEPTH|USERLANG)(%)`    `\2=(2,#FFFFFF,#FF0000)`	11
+0 `(%)(ERROR|EXTENDED|SYSERROR|SYSERRORTEXT)(?!%)`      `\1=(2,#FFFFFF,#FF0000)`	11
+0 `(?<!%)(ERROR|EXTENDED|SYSERROR|SYSERRORTEXT)(%)`     `\2=(2,#FFFFFF,#FF0000)`	11
+;--то же для переменных Total Commander--
+0 `(%)COMMANDER_(DRIVE|EXE|INI_PATH|INI|PATH|INSTANCE|SESSIONNAME|OPEN)(?!%)`      `\1=(2,#FFFFFF,#FF0000)`	11
+0 `(?<!%)COMMANDER_(DRIVE|EXE|INI_PATH|INI|PATH|INSTANCE|SESSIONNAME|OPEN)(%)`     `\2=(2,#FFFFFF,#FF0000)`	11
+;--названия диалогов в плагине AddDialog--
+0	`DIALOG_COPYMOVE(_(POST|PINNED))?`    `\0=(0,${OP},0)`
+;--оформление для Include, LoadLibrary, LoadFont (см. выше)--
+;  переменные
+0	`(?<!\\)%\w++%`    `\0=(3,${VAR},0)`	15
+;  всё остальное
+0	`[\w\\\.\-]+`    `\0=(3,${STR},0)`	15
+;--подсветка пользовательских функций (моя самодеятельность)
+;0	"\b(fn)(_[a-z0-9_]++)(?=\s*\()"	"\1=(3,#790079,0) \2=(0,#790079,0)"	0	0
+
+
+Quotes:
+;===================================================================================
+;Flags  Font    Color   Color   Quote   Quote   Escape  Quote   Quote   Parent  Rule
+;       style   text    bkgrnd  start   end     char    include exclude ID      ID
+;===================================================================================
+;--строчные комментарии--
+1	3	${COMM}	0	"#"	""	""	""	""	0	0
+;--вычисляемые строки в параметрах при КЗ, в кавычках--
+5	1	${TAG}	0	`%"`	`"`	``	""	""	0	21
+5	1	${TAG}	0	`%'`	`'`	``	""	""	0	22
+;--переключатели в ФЗ, в кавычках--
+5	1	${ATTR}	0	`"~/`	`"`	``	""	""	-3	0
+5	1	${ATTR}	0	`'~/`	`'`	``	""	""	-3	0
+;--строки в кавычках--
+5	3	${STR}	0	`"`	`"`	``	""	""	0	20
+5	3	${STR}	0	`'`	`'`	``	""	""	0	20
+;--строки в кавычках в КЗ--
+5	3	0	0	`'`	`'`	``	""	""	21	0
+5	3	0	0	`"`	`"`	``	""	""	22	0
+;--переменные--
+5	0	${VAR}	0	"%"	"%"	"\"	""	`"'=`	0	0
+
+
+Delimiters:
+;===============================================
+;Flags  Font    Color   Color   Char(s)   Parent
+;       style   text    bkgrnd            ID
+;===============================================
+1	0	0	0	" "
+1	0	0	0	"	"
+1	0	${DEL1}	0	(
+1	0	${DEL1}	0	)
+1	0	${DEL1}	0	[
+1	0	${DEL1}	0	]
+1	0	${DEL1}	0	,
+;--арифметические операторы--
+1	0	${DEL1}	0	+
+1	0	${DEL1}	0	-
+1	0	${DEL1}	0	*
+1	0	${DEL1}	0	/
+;--оператор конкатенации--
+1	0	${DEL1}	0	&
+;--операторы сравнения--
+1	0	${DEL1}	0	=
+1	0	${DEL1}	0	<
+1	0	${DEL1}	0	>
+;--тернарный оператор--
+1	2	${DEL1}	0	?
+1	2	${DEL1}	0	:
+;
+1	0	${DEL2}	0	{
+1	0	${DEL2}	0	}
+1	0	${DEL2}	0	%
+1	0	${DEL2}	0	.
+1	0	${DEL2}	0	;
+1	0	${DEL2}	0	!
+1	0	${DEL2}	0	~
+1	0	${DEL2}	0	|
+1	0	${DEL2}	0	^
+1	0	${DEL2}	0	`"`
+
+
+Words:
+;===========================================
+;Flags  Font    Color   Color   Word  Parent
+;       style   text    bkgrnd        ID
+;===========================================
+;  неоформленные оформляются в QuotesRE, а здесь перечисляются для отображения в AutoComplete
+;--ЧИСЛА--
+2	0	${NUM}	0	"0123456789"
+;--ДИРЕКТИВЫ--
+;  подсвечиваются только в одной строке с Pragma (см. QuotesRE)
+0	1	${ATTR}	0	AutorunFinalizeSection	10
+0	1	${ATTR}	0	AutorunBlockUnload	10
+0	1	${ATTR}	0	AutorunLanguage	10
+0	1	${ATTR}	0	AutorunLoadInSubprocess	10
+0	1	${ATTR}	0	Include	10
+0	1	${ATTR}	0	IncludeOnce	10
+0	1	${ATTR}	0	AutorunPluginFields	10
+0	1	${ATTR}	0	AutorunErrorBoxSimple	10
+0	1	${ATTR}	0	AutorunErrorBoxEditor	10
+0	1	${ATTR}	0	AutorunErrorBoxFont	10
+0	1	${ATTR}	0	AutorunWindow	10
+;--КОНСТАНТЫ--
+;  -> инфа о TC
+0	0	0	0	AUTORUN_OSARCH
+0	0	0	0	AUTORUN_TCHANDLE
+0	0	0	0	AUTORUN_TCPID
+0	0	0	0	AUTORUN_ISADMIN
+0	0	0	0	AUTORUN_TCARCH
+0	0	0	0	AUTORUN_TCCMDLINE
+0	0	0	0	AUTORUN_SUBPROCESS
+0	0	0	0	AUTORUN_RESTARTCOUNT
+;  -> инфа об Autorun
+0	0	0	0	AUTORUN_PATH
+0	0	0	0	AUTORUN_CFG
+;  -> спец-символы
+0	1	${VAR}	0	auCRLF
+0	1	${VAR}	0	auCR
+0	1	${VAR}	0	auLF
+0	1	${VAR}	0	auTAB
+;  -> другие
+0	1	${VAR}	0	auPtrSize
+0	1	${VAR}	0	auX64
+;--МАКРОСЫ--
+0	0	0	0	AUTORUN_TCLANG
+0	0	0	0	AUTORUN_TCLANGFILE
+0	0	0	0	AUTORUN_THREADID
+0	0	0	0	AUTORUN_WINDOW
+0	0	0	0	AUTORUN_UTCDIFF
+0	0	0	0	SYSERROR
+0	0	0	0	SYSERRORTEXT
+;  -> специальные
+0	0	0	0	ERROR
+0	0	0	0	EXTENDED
+;--УСЛОВИЯ--
+0	2	${IF}	0	If
+0	2	${IF}	0	Then
+0	2	${IF}	0	ElseIf
+0	2	${IF}	0	Else
+0	2	${IF}	0	EndIf
+0	2	${IF}	0	Switch
+0	2	${IF}	0	Case
+0	2	${IF}	0	EndSwitch
+;--ЦИКЛЫ--
+0	2	${IF}	0	Do
+0	2	${IF}	0	For
+0	2	${IF}	0	In
+0	2	${IF}	0	Next
+0	2	${IF}	0	Step
+0	2	${IF}	0	To
+0	2	${IF}	0	Until
+0	2	${IF}	0	WEnd
+0	2	${IF}	0	While
+;--ОПЕРАТОРЫ--
+0	2	${OP}	0	Func
+0	2	${OP}	0	EndFunc
+0	2	${OP}	0	Global
+0	2	${OP}	0	Local
+0	2	${OP}	0	Static
+0	2	${OP}	0	Exit
+0	2	${TAG}	0	Pragma
+0	1	${OP}	0	AND
+0	1	${OP}	0	NOT
+0	1	${OP}	0	OR
+;--КЛЮЧЕВЫЕ СЛОВА--
+0	2	${TYPE}	0	Break
+0	2	${TYPE}	0	ByRef
+0	2	${TYPE}	0	Const
+0	2	${TYPE}	0	Continue
+0	2	${TYPE}	0	Return
+0	2	${TYPE}	0	True
+0	2	${TYPE}	0	False
+;--КОМАНДЫ И ФУНКЦИИ--
+;  Args подсвечивается только в Func..EndFunc
+0	2	${OP}	0	Args	30
+0	2	${OP}	0	Asc
+0	2	${OP}	0	Call
+0	2	${OP}	0	Chr
+0	2	${OP}	0	DllCall
+0	2	${OP}	0	CommandExec
+0	2	${OP}	0	Eval
+0	2	${OP}	0	IsInt
+0	2	${OP}	0	IsFloat
+0	2	${OP}	0	IsNumber
+0	2	${OP}	0	IsObject
+0	2	${OP}	0	GetEnv
+0	2	${OP}	0	Hex
+0	2	${OP}	0	LoadFont
+0	2	${OP}	0	LoadLibrary
+0	2	${OP}	0	MakeInt
+0	2	${OP}	0	RegisterCommand
+0	2	${OP}	0	RunThread
+0	2	${OP}	0	SendCommand
+0	2	${OP}	0	Set
+0	2	${OP}	0	SetEnv
+0	2	${OP}	0	SetError
+0	2	${OP}	0	SetExtended
+0	2	${OP}	0	SetFieldsParam
+0	2	${OP}	0	SizeFormat
+0	2	${OP}	0	Sleep
+0	2	${OP}	0	ShellExec
+;     ->-> системные константы ShellExec
+0	0	0	0	SW_HIDE
+0	0	0	0	SW_SHOWNORMAL
+0	0	0	0	SW_MINIMIZE
+0	0	0	0	SW_MAXIMIZE
+;  -> Работа с файлами
+0	2	${OP}	0	DirCopy
+0	2	${OP}	0	DirCreate
+0	2	${OP}	0	DirDelete
+0	2	${OP}	0	DirMove
+0	2	${OP}	0	FileAppend
+0	2	${OP}	0	FileExist
+0	2	${OP}	0	FileGetAttr
+0	2	${OP}	0	FileGetSize
+0	2	${OP}	0	FileGetTime
+0	2	${OP}	0	FileGetVersion
+0	2	${OP}	0	FileRead
+0	2	${OP}	0	FileSetAttr
+0	2	${OP}	0	FileSetTime
+0	2	${OP}	0	FileWrite
+0	2	${OP}	0	FileCopy
+0	2	${OP}	0	FileDelete
+0	2	${OP}	0	FileMove
+0	2	${OP}	0	FileFind
+0	2	${OP}	0	FileFindEv
+0	2	${OP}	0	IniDelete
+0	2	${OP}	0	IniGetSectionLocation
+0	2	${OP}	0	IniRead
+0	2	${OP}	0	IniReadSection
+0	2	${OP}	0	IniReadSectionNames
+0	2	${OP}	0	IniRenameSection
+0	2	${OP}	0	IniWrite
+0	2	${OP}	0	IniWriteSection
+0	2	${OP}	0	LngRead
+;     ->-> info FileGetVersion
+0	0	0	0	FFileVersion
+0	0	0	0	FProductVersion
+0	0	0	0	FPrivateBuild
+0	0	0	0	FSpecialBuild
+0	0	0	0	FDebugBuild
+0	0	0	0	FPrereleaseBuild
+0	0	0	0	CompanyName
+0	0	0	0	FileDescription
+0	0	0	0	FileVersion
+0	0	0	0	InternalName
+0	0	0	0	LegalCopyright
+0	0	0	0	LegalTradeMark
+0	0	0	0	OriginalFileName
+0	0	0	0	ProductName
+0	0	0	0	ProductVersion
+0	0	0	0	Comments
+0	0	0	0	PrivateBuild
+0	0	0	0	SpecialBuild
+;     ->-> режимы (mode) FileFind и FileFindEv
+0	0	0	0	PathList
+0	0	0	0	NameList
+0	0	0	0	IsFound
+0	0	0	0	TotalCount
+0	0	0	0	FileCount
+0	0	0	0	DirCount
+0	0	0	0	TotalSize
+0	0	0	0	MinSize
+0	0	0	0	MaxSize
+0	0	0	0	MinTime
+0	0	0	0	MaxTime
+0	0	0	0	CustomList
+0	0	0	0	CustomValue
+;  -> Работа с именами файлов
+0	2	${OP}	0	FileChangeExt
+0	2	${OP}	0	FileGetBaseName
+0	2	${OP}	0	FileGetDir
+0	2	${OP}	0	FileGetExt
+0	2	${OP}	0	FileGetName
+0	2	${OP}	0	FileMatchMask
+0	2	${OP}	0	JoinPath
+;  -> Работа с реестром
+0	2	${OP}	0	RegRead
+0	2	${OP}	0	RegWrite
+0	2	${OP}	0	RegDelete
+;     ->-> типы значений RegWrite
+0	1	${TYPE}	0	REG_DWORD
+0	1	${TYPE}	0	REG_SZ
+0	1	${TYPE}	0	REG_EXPAND_SZ
+0	1	${TYPE}	0	REG_MULTI_SZ
+0	1	${TYPE}	0	REG_BINARY
+;  -> Дата и время
+0	2	${OP}	0	Date
+0	2	${OP}	0	GetUptime
+0	2	${OP}	0	Now
+0	2	${OP}	0	Time
+0	2	${OP}	0	ToDateTime
+;  -> Математические
+0	2	${OP}	0	Abs
+0	2	${OP}	0	BitAND
+0	2	${OP}	0	BitNOT
+0	2	${OP}	0	BitOR
+0	2	${OP}	0	BitShift
+0	2	${OP}	0	BitXOR
+0	2	${OP}	0	Ceil
+0	2	${OP}	0	Floor
+0	2	${OP}	0	Mod
+0	2	${OP}	0	Random
+0	2	${OP}	0	Round
+;  -> Строчные
+0	2	${OP}	0	StrCompare
+0	2	${OP}	0	StrFormat
+0	2	${OP}	0	StrLeft
+0	2	${OP}	0	StrLen
+0	2	${OP}	0	StrLower
+0	2	${OP}	0	StrMid
+0	2	${OP}	0	StrPart
+0	2	${OP}	0	StrPos
+0	2	${OP}	0	StrRepeat
+0	2	${OP}	0	StrReplace
+0	2	${OP}	0	StrReverse
+0	2	${OP}	0	StrRight
+0	2	${OP}	0	StrTrim
+0	2	${OP}	0	StrUpper
+;  -> Отладка
+0	2	${OP}	0	GetState
+0	2	${OP}	0	MsgBox
+0	2	${OP}	0	OutputDebugString
+0	2	${OP}	0	RestartScript
+;  -> Внешнее взаимодействие
+0	2	${OP}	0	ExecFunc
+0	2	${OP}	0	EvalExpr
+0	2	${OP}	0	GetVar
+0	2	${OP}	0	SetVar
+0	2	${OP}	0	SetTitle
+;--ОБЪЕКТЫ--
+0	2	${AREA}	0	BinaryFile
+0	2	${AREA}	0	Buffer
+0	2	${AREA}	0	Callback
+0	2	${AREA}	0	List
+0	2	${AREA}	0	Map
+0	2	${AREA}	0	Plugin
+0	2	${AREA}	0	TextFile
+;  не объект, но освобождает объекты: поэтому добавляем к жирному наклонный
+0	4	${AREA}	0	Free
+;  -> BinaryFile: свойства
+0	0	${AREA}	0	Size	12
+0	0	${AREA}	0	Pos	12
+;  -> BinaryFile: методы
+0	2	${AREA}	0	ReadNum	13
+0	2	${AREA}	0	ReadRaw	13
+0	2	${AREA}	0	ReadStr	13
+0	2	${AREA}	0	Seek	13
+0	2	${AREA}	0	WriteNum	13
+0	2	${AREA}	0	WriteRaw	13
+0	2	${AREA}	0	WriteStr	13
+;  -> Buffer: свойства
+;0	0	${AREA}	0	Size	12
+0	0	${AREA}	0	Ptr	12
+;  -> Buffer: методы
+0	2	${AREA}	0	GetNum	13
+0	2	${AREA}	0	SetNum	13
+0	2	${AREA}	0	GetStr	13
+0	2	${AREA}	0	SetStr	13
+0	2	${AREA}	0	GetRaw	13
+0	2	${AREA}	0	SetRaw	13
+0	2	${AREA}	0	Zero	13
+;  -> Callback: свойства
+;0	0	${AREA}	0	Ptr	12
+;  -> List: свойства
+0	0	${AREA}	0	Count	12
+0	0	${AREA}	0	SortMethod	12
+0	0	${AREA}	0	Text	12
+0	0	${AREA}	0	_Item	12
+;  -> List: методы
+0	2	${AREA}	0	Add	13
+0	2	${AREA}	0	Clone	13
+0	2	${AREA}	0	Insert	13
+0	2	${AREA}	0	Remove	13
+0	2	${AREA}	0	Pop	13
+0	2	${AREA}	0	Split	13
+0	2	${AREA}	0	Join	13
+0	2	${AREA}	0	Sort	13
+0	2	${AREA}	0	Reverse	13
+0	2	${AREA}	0	IndexOf	13
+0	2	${AREA}	0	LoadFromFile	13
+0	2	${AREA}	0	SaveToFile	13
+;  -> Map: свойства
+0	0	${AREA}	0	CaseSense	12
+;0	0	${AREA}	0	_Item	12
+;  -> Map: методы
+0	2	${AREA}	0	Clear	13
+0	2	${AREA}	0	Get	13
+0	2	${AREA}	0	Keys	13
+0	2	${AREA}	0	Has	13
+;0	2	${AREA}	0	Remove	13
+0	2	${AREA}	0	Set	13
+;  -> Plugin: свойства
+0	0	${AREA}	0	FieldCount	12
+0	0	${AREA}	0	UnitCount	12
+0	0	${AREA}	0	FileName	12
+;  -> Plugin: методы
+0	2	${AREA}	0	GetValue	13
+0	2	${AREA}	0	FieldName	13
+0	2	${AREA}	0	FieldType	13
+0	2	${AREA}	0	UnitName	13
+0	2	${AREA}	0	IndexOfField	13
+0	2	${AREA}	0	IndexOfUnit	13
+;  -> TextFile: свойства
+0	0	${AREA}	0	AtEOF	12
+0	0	${AREA}	0	Encoding	12
+0	0	${AREA}	0	HasBOM	12
+0	0	${AREA}	0	NewLine	12
+;  -> TextFile: методы
+0	2	${AREA}	0	Begin	13
+0	2	${AREA}	0	End	13
+0	2	${AREA}	0	Read	13
+0	2	${AREA}	0	ReadLine	13
+0	2	${AREA}	0	Trim	13
+0	2	${AREA}	0	Write	13
+0	2	${AREA}	0	WriteLine	13
+;  -> FileFind: свойства (в ф-ции обратного вызова)
+0	0	${AREA}	0	Attr	12
+0	0	${AREA}	0	AttrNum	12
+0	0	${AREA}	0	BaseName	12
+0	0	${AREA}	0	Data	12
+0	0	${AREA}	0	Dir	12
+0	0	${AREA}	0	Ext	12
+0	0	${AREA}	0	FindIndex	12
+0	0	${AREA}	0	FullPath	12
+0	0	${AREA}	0	IsDir	12
+0	0	${AREA}	0	Name	12
+0	0	${AREA}	0	Result	12
+0	0	${AREA}	0	ShortName	12
+;0	0	${AREA}	0	Size	12
+0	0	${AREA}	0	TimeAccessed	12
+0	0	${AREA}	0	TimeCreated	12
+0	0	${AREA}	0	TimeModified	12
+;--ПЛАГИНЫ--
+;--ModifyDialogs--
+;  -> функции
+0	2	${OP}	0	AddDialog
+0	2	${OP}	0	AddCondition
+0	2	${OP}	0	AddControl
+0	2	${OP}	0	ModifyDialogs
+;  -> названия диалогов в AddDialog
+0	0	0	0	DIALOG_COPYMOVE
+0	0	0	0	DIALOG_COPYMOVE_POST
+0	0	0	0	DIALOG_COPYMOVE_PINNED
+;--SysInfo--
+;  -> переменные
+0	0	0	0	SYSINFO_OSARCH
+0	0	0	0	SYSINFO_OSVERSION
+0	0	0	0	SYSINFO_OSSERVICEPACK
+0	0	0	0	SYSINFO_USERLANG
+;  -> макросы
+0	0	0	0	SYSINFO_DESKTOPWIDTH
+0	0	0	0	SYSINFO_DESKTOPHEIGHT
+0	0	0	0	SYSINFO_DESKTOPDEPTH
+0	0	0	0	SYSINFO_DESKTOPDPI
+;  -> функции
+0	2	${OP}	0	GetCPUInfo
+0	2	${OP}	0	GetCPUUsage
+0	2	${OP}	0	GetDriveSpace
+0	2	${OP}	0	GetKnownFolderPath
+0	2	${OP}	0	GetMemStats
+0	2	${OP}	0	GetNetInterface
+0	2	${OP}	0	GetNetInterfaceInfo
+0	2	${OP}	0	GetSysColor
+0	2	${OP}	0	GetSystemMetrics
+0	2	${OP}	0	SystemParametersInfo
+0	2	${OP}	0	GetWMIValue
+;     ->-> требует стороннюю утилиту
+0	1	${OP}	0	GetCoreTempInfo
+;  -> объекты
+0	2	${AREA}	0	WMIQuery
+;     ->-> WMIQuery: cвойства
+;0	0	${AREA}	0	Count	12
+0	0	${AREA}	0	Index	12
+0	0	${AREA}	0	Namespace	12
+0	0	${AREA}	0	State	12
+;     ->-> WMIQuery: методы
+0	0	${AREA}	0	Query	13
+;0	0	${AREA}	0	GetValue	13
+0	0	${AREA}	0	Next	13
+0	0	${AREA}	0	Reset	13
+0	0	${AREA}	0	Last	13
+;--Process--
+;  -> переменные
+0	0	0	0	PROCESS_USERISADMIN
+0	0	0	0	PROCESS_RUNASADMIN
+0	0	0	0	PROCESS_ISELEVATED
+0	0	0	0	PROCESS_INTEGRITYLEVEL
+;  -> функции
+0	2	${OP}	0	ProcessCount
+0	2	${OP}	0	ProcessExecGetOutput
+0	2	${OP}	0	ProcessGetPath
+0	2	${OP}	0	ProcessGetId
+0	2	${OP}	0	ProcessExist
+0	2	${OP}	0	ProcessTerminate
+;--Tweaks--
+;  -> макросы
+0	0	0	0	LAST_HINT_WINDOW
+;  -> функции
+0	2	${OP}	0	ControlSetHint
+0	2	${OP}	0	ControlSetMouseAction
+0	2	${OP}	0	DisableMarkedMenuItems
+0	2	${OP}	0	SetHotkeyAction
+0	2	${OP}	0	SetMessageAction
+0	2	${OP}	0	ShowPopupMenu
+0	2	${OP}	0	ShowHint
+0	2	${OP}	0	SetHintParam
+;--RegExp--
+;  -> функции
+0	2	${OP}	0	RegExpGet
+0	2	${OP}	0	RegExpPos
+0	2	${OP}	0	RegExpReplace
+;  -> объекты
+0	2	${AREA}	0	RegExp
+;     ->-> RegExp: cвойства
+0	0	${AREA}	0	Expr	12
+;0	0	${AREA}	0	Text	12
+0	0	${AREA}	0	GroupCount	12
+0	0	${AREA}	0	Match	12
+0	0	${AREA}	0	MatchPos	12
+0	0	${AREA}	0	MatchLen	12
+;     ->-> RegExp: методы
+0	0	${AREA}	0	Exec	13
+0	0	${AREA}	0	ExecPos	13
+0	0	${AREA}	0	ExecNext	13
+0	0	${AREA}	0	GroupIndexByName	13
+0	0	${AREA}	0	Substitute	13
+;--Runtime--
+;  -> макросы
+0	0	0	0	ACTIVE_WINDOW
+;  -> функции
+0	2	${OP}	0	ClipGet
+0	2	${OP}	0	ClipPut
+0	2	${OP}	0	GetCurrentItem
+0	2	${OP}	0	GetCurrentPath
+0	2	${OP}	0	GetSelectedItems
+0	2	${OP}	0	IsPressed
+0	2	${OP}	0	MouseClick
+0	2	${OP}	0	MouseGetPos
+0	2	${OP}	0	MouseSetPos
+0	2	${OP}	0	ItemAtCursor
+0	2	${OP}	0	RequestInfo
+0	2	${OP}	0	RequestCopyDataInfo
+;     ->-> Работа с окнами
+0	2	${OP}	0	SendMessage
+0	2	${OP}	0	PostMessage
+0	2	${OP}	0	WinAlign
+0	2	${OP}	0	WinFind
+0	2	${OP}	0	WinFromPoint
+0	2	${OP}	0	WinGetClass
+0	2	${OP}	0	WinGetFocusedCtrl
+0	2	${OP}	0	WinGetHandleByPID
+0	2	${OP}	0	WinGetPID
+0	2	${OP}	0	WinGetPos
+0	2	${OP}	0	WinGetState
+0	2	${OP}	0	WinGetStyle
+0	2	${OP}	0	WinGetText
+0	2	${OP}	0	WinHasStyle
+0	2	${OP}	0	WinRedraw
+0	2	${OP}	0	WinSetCtrlFocus
+0	2	${OP}	0	WinSetPos
+0	2	${OP}	0	WinSetState
+0	2	${OP}	0	WinSetStyle
+0	2	${OP}	0	WinSetText
+;--КЛАССЫ ВСЕХ ДИАЛОГОВ TOTAL COMMANDER--
+1	1	${TYPE}	0	TASSOCIATEDLG
+1	1	${TYPE}	0	TATTRIBDLG
+1	1	${TYPE}	0	TBUTTONCHANGEDLG
+1	1	${TYPE}	0	TBUTTONEDITBOX
+1	1	${TYPE}	0	TCHANGETREEDLG
+1	1	${TYPE}	0	TCHECKCOMBOBOX
+1	1	${TYPE}	0	TCHECKEDITBOX
+1	1	${TYPE}	0	TCHECKMSGBOX
+1	1	${TYPE}	0	TCHMODFORM
+1	1	${TYPE}	0	TCHOOSEENCODINGFORM
+1	1	${TYPE}	0	TCHOOSEICON
+1	1	${TYPE}	0	TCMDSELFORM
+1	1	${TYPE}	0	TCMPFORM
+1	1	${TYPE}	0	TCMTEDITFORM
+1	1	${TYPE}	0	TCOMBOINPUT
+1	1	${TYPE}	0	TCONNECT
+1	1	${TYPE}	0	TCRCFORM
+1	1	${TYPE}	0	TCRYPTOPTIONS
+1	1	${TYPE}	0	TCUSTOMCOLUMNFORM
+1	1	${TYPE}	0	TDATETIMEPICKFORM
+1	1	${TYPE}	0	TDETAILS
+1	1	${TYPE}	0	TDLG2FILEACTIONMIN
+1	1	${TYPE}	0	TDLGCONFIGALL
+1	1	${TYPE}	0	TDLGCUSTOMCOLORS
+1	1	${TYPE}	0	TDLGPACKERINFO
+1	1	${TYPE}	0	TDLGUNZIP
+1	1	${TYPE}	0	TDLGUNZIPALL
+1	1	${TYPE}	0	TDLGZIP
+1	1	${TYPE}	0	TDRIVEDLG
+1	1	${TYPE}	0	TDRIVESELBOX
+1	1	${TYPE}	0	TDRIVETIP
+1	1	${TYPE}	0	TDUPESELFORM
+1	1	${TYPE}	0	TEDACTIONFORM
+1	1	${TYPE}	0	TEDITTYPEFORM
+1	1	${TYPE}	0	TENCODEEDITBOX
+1	1	${TYPE}	0	TEXTMSGFORM
+1	1	${TYPE}	0	TFILECOMPFORM
+1	1	${TYPE}	0	TFINDFILE
+1	1	${TYPE}	0	TFIREWALLDLG
+1	1	${TYPE}	0	TFSPLUGINCONFIGFORM
+1	1	${TYPE}	0	THISTORYFORM
+1	1	${TYPE}	0	THOSTDEFINEDLG
+1	1	${TYPE}	0	TICONLIBCHANGEDLG
+1	1	${TYPE}	0	TINFODLG
+1	1	${TYPE}	0	TINPCOMBODLG
+1	1	${TYPE}	0	TLISTCONF
+1	1	${TYPE}	0	TLISTER
+1	1	${TYPE}	0	TMARGINSDLG
+1	1	${TYPE}	0	TMULTIRENAME
+1	1	${TYPE}	0	TNASTYNAGSCREEN
+1	1	${TYPE}	0	TNEWCONNDLG
+1	1	${TYPE}	0	TONEBUTTONCHANGEDLG
+1	1	${TYPE}	0	TOVERWRITEFORM
+1	1	${TYPE}	0	TPASSFORM
+1	1	${TYPE}	0	TPATHSELFORM
+1	1	${TYPE}	0	TPLUGINSELFORM
+1	1	${TYPE}	0	TPRINTCONFDLG
+1	1	${TYPE}	0	TPRINTDLG
+1	1	${TYPE}	0	TPRINTFORM
+1	1	${TYPE}	0	TPROGRESSDIALOG
+1	1	${TYPE}	0	TQUICKSEARCH
+1	1	${TYPE}	0	TSEARCHTEXT
+1	1	${TYPE}	0	TSHELLEXTFORM
+1	1	${TYPE}	0	TSPLITEDITBOX
+1	1	${TYPE}	0	TSTDTREEDLG
+1	1	${TYPE}	0	TSYNCEXTINPUT
+1	1	${TYPE}	0	TSYNCSTARTFORM
+1	1	${TYPE}	0	TTABICONDIALOG
+1	1	${TYPE}	0	TTOTAL_CMD
+1	1	${TYPE}	0	TUSERMENUCHANGE
+1	1	${TYPE}	0	TVERSIONINFODLG
+1	1	${TYPE}	0	TVOLLABELDLG
+
+
+;----------------------------------------------;
+;                   CodeFold                   ;
+;----------------------------------------------;
+
+
+FoldPanel:
+;=================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+;PanelFirstBkColor            PanelSecondBkColor             PanelNormalFoldColor             PanelActiveFoldColor             PanelNormalNodeOpenBkColor             PanelNormalNodeCloseBkColor             PanelActiveNodeOpenBkColor             PanelActiveNodeCloseBkColor             PanelNormalNodeOpenSignColor             PanelNormalNodeCloseSignColor             PanelActiveNodeOpenSignColor             PanelActiveNodeCloseSignColor
+;=================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+${CodeFold_PanelFirstBkColor} ${CodeFold_PanelSecondBkColor} ${CodeFold_PanelNormalFoldColor} ${CodeFold_PanelActiveFoldColor} ${CodeFold_PanelNormalNodeOpenBkColor} ${CodeFold_PanelNormalNodeCloseBkColor} ${CodeFold_PanelActiveNodeOpenBkColor} ${CodeFold_PanelActiveNodeCloseBkColor} ${CodeFold_PanelNormalNodeOpenSignColor} ${CodeFold_PanelNormalNodeCloseSignColor} ${CodeFold_PanelActiveNodeOpenSignColor} ${CodeFold_PanelActiveNodeCloseSignColor}
+
+
+FoldList:
+;================================================
+;ListTextColor            ListBkColor
+;================================================
+${CodeFold_ListTextColor} ${CodeFold_ListBkColor}
+
+
+TagMark:
+;============================================================================================================
+;TagMarkFlags            TagMarkFontStyle             TagMarkTextColor             TagMarkBkColor
+;============================================================================================================
+${CodeFold_TagMarkFlags} ${CodeFold_TagMarkFontStyle} ${CodeFold_TagMarkTextColor} ${CodeFold_TagMarkBkColor}
+
+
+Skips:
+;=============================
+;Flags  Skip    Skip    Escape
+;       start   end     char
+;=============================
+;1	`"`	`"`	"\"
+;1	`'`	`'`	"\"
+
+
+Folds:
+;===================================================================================
+;Flags  Font    Color   Color   Fold      Fold      Deli        Parent  Rule    Rule
+;       style   text    bkgrnd  start     end       miters      ID      ID      file
+;===================================================================================
+;--многострочные комменты: начало и конец в началах строк
+;  надо ещё проверять, но пока точно — если конец на той же строке, код не обрабатывается
+553	3	${COMM}	0	"#{"      "#}"         " 	"
+40	0	0	0	"Do"      "Until"      " 	"
+40	0	0	0	"For"     "Next"       " 	"
+40	0	0	0	"While"   "WEnd"       " 	"
+40	0	0	0	"Func"    "EndFunc"    " 	"	0	30
+;--Switch...Case...EndSwitch--
+40	0	0	0	"Switch"  "EndSwitch"  " 	"
+424	0	0	0	"Case"    "Case"       " 	"
+424	0	0	0	"Case"    "Else"       " 	"
+424	0	0	0	"Case"    "EndSwitch"  " 	"
+424	0	0	0	"Else"    "EndSwitch"  " 	"
+;--If...Else...EndIf--
+2120	0	0	0	"If"      "Then"       " 	"
+8	0	0	0	"If"      "Then"       " 	"
+40	0	0	0	"If"      "EndIf"      " 	"
+424	0	0	0	"If"      "ElseIf"     " 	"
+424	0	0	0	"If"      "Else"       " 	"
+424	0	0	0	"ElseIf"  "EndIf"      " 	"
+424	0	0	0	"ElseIf"  "ElseIf"     " 	"
+424	0	0	0	"ElseIf"  "Else"       " 	"
+424	0	0	0	"Else"    "EndIf"      " 	"
+
+
+;----------------------------------------------;
+;                 AutoComplete                 ;
+;----------------------------------------------;
+
+
+CompleteList:
+;=====================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+;ListFontStyle                ListFontSize                 ListFaceName                 ListLineGap                 ListBlockIcon `"C:\1.dll", 0` ListBlockIconMargins "left;right"    ListHlBaseIcon `"C:\1.dll", 0` ListHlBaseIconMargins "left;right"    ListDocWordIcon `"C:\1.dll", 0` ListDocWordIconMargins "left;right"    ListBasicTextColor                 ListBasicBkColor                 ListSelTextColor                 ListSelBkColor
+;=====================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+${AutoComplete_ListFontStyle} ${AutoComplete_ListFontSize} ${AutoComplete_ListFaceName} ${AutoComplete_ListLineGap} ${AutoComplete_ListBlockIcon} ${AutoComplete_ListBlockIconMargins} ${AutoComplete_ListHlBaseIcon} ${AutoComplete_ListHlBaseIconMargins} ${AutoComplete_ListDocWordIcon} ${AutoComplete_ListDocWordIconMargins} ${AutoComplete_ListBasicTextColor} ${AutoComplete_ListBasicBkColor} ${AutoComplete_ListSelTextColor} ${AutoComplete_ListSelBkColor}
+
+
+Blocks:
+;========================
+;Abbreviations and blocks
+;========================
+$;--директивы--
+$~Pragma_AutorunFinalizeSection
+Pragma AutorunFinalizeSection
+$[]
+
+$~Pragma_AutorunBlockUnload
+Pragma AutorunBlockUnload
+$[]
+
+$~Pragma_AutorunLanguage
+Pragma AutorunLanguage $[<ID>]
+$[]
+
+$~Pragma_AutorunLoadInSubprocess
+Pragma AutorunLoadInSubprocess
+$[]
+
+$~Pragma_Include
+Pragma Include $[<filename>]
+$[]
+
+$~Pragma_IncludeOnce
+Pragma IncludeOnce
+$[]
+
+$~Pragma_AutorunPluginFields
+Pragma AutorunPluginFields "$[Field1]" "$[FieldN]"
+$[]
+
+$~Pragma_AutorunErrorBoxSimple
+Pragma AutorunErrorBoxSimple
+$[]
+
+$~Pragma_AutorunErrorBoxEditor
+Pragma AutorunErrorBoxEditor "$[editor path]"
+$[]
+
+$~Pragma_AutorunErrorBoxFont
+Pragma AutorunErrorBoxFont "$[<size>]" "$[<fontface>]"
+$[]
+
+$~Pragma_AutorunWindow
+Pragma AutorunWindow $[[<title_template>$\]]
+$[]
+
+$;--условия и циклы--
+$~If...Then
+If $[] Then $[]
+
+$~If...Then...EndIf
+If $[] Then
+${AutoComplete_Indent}$[]
+EndIf
+
+$~If...Else...EndIf
+If $[] Then
+${AutoComplete_Indent}$[]
+Else
+${AutoComplete_Indent}$[]
+EndIf
+
+$~If...ElseIf...EndIf
+If $[] Then
+${AutoComplete_Indent}$[]
+ElseIf $[] Then
+${AutoComplete_Indent}$[]
+EndIf
+
+$~If...ElseIf...Else...EndIf
+If $[] Then
+${AutoComplete_Indent}$[]
+ElseIf $[] Then
+${AutoComplete_Indent}$[]
+Else
+${AutoComplete_Indent}$[]
+EndIf
+
+$~Switch...Case...Else...EndSwitch
+Switch $[]
+${AutoComplete_Indent}Case $[]
+${AutoComplete_Indent}${AutoComplete_Indent}$[]
+${AutoComplete_Indent}Else
+${AutoComplete_Indent}${AutoComplete_Indent}$[]
+EndSwitch
+
+$~Switch...Case...To...Else...EndSwitch
+Switch $[]
+${AutoComplete_Indent}Case $[] To $[]
+${AutoComplete_Indent}${AutoComplete_Indent}$[]
+${AutoComplete_Indent}Else
+${AutoComplete_Indent}${AutoComplete_Indent}$[]
+EndSwitch
+
+$~Do...Until
+Do
+${AutoComplete_Indent}$[]
+Until $[]
+
+$~For...In...Next
+For $[] In $[]
+${AutoComplete_Indent}$[]
+Next
+
+$~For...To...Next
+For $[] To $[]
+${AutoComplete_Indent}$[]
+Next
+
+$~For...To...Step...Next
+For $[] To $[] Step $[]
+${AutoComplete_Indent}$[]
+Next
+
+$~Func...EndFunc
+Func $[functionname]()
+${AutoComplete_Indent}$[]
+EndFunc # -- $[functionname]
+
+$~While...WEnd
+While $[]
+${AutoComplete_Indent}$[]
+WEnd
+
+$;--функции в функциональной записи--
+$~Abs()
+Abs($[<value>])$[]
+
+$~AddCondition()
+AddCondition($[["~[/PARENT$\]",$\] ]$[<ConditionType>], $[<class>], $[<instance>]$[[, <searchtext>$\]])$[]
+
+$~AddControl()
+AddControl($[["~[/X:value$\] [/Y:value$\] [/W:value$\] [/H:value$\] [/I:nn$\]",$\] ]$[<class>], $[<instance>]$[[, <text/icon>$\]])$[]
+
+$~AddDialog()
+AddDialog($[["~[/NOSCALE$\] [/X:value$\] [/Y:value$\] [/W:value$\] [/H:value$\] [/SAVE:value$\] [/CENTER:value$\] [/WAIT:value$\]",$\] ]$[<name/class>]$[[, <text>$\]])$[]
+
+$~Args()
+Args($[[<index>$\]])$[]
+
+$~Asc()
+Asc($[<symbol>])$[]
+
+$~BitAND()
+BitAND($[<value1>], $[<value2>]$[[, <valueN>$\]])$[]
+
+$~BitNOT()
+BitNOT($[<value>])$[]
+
+$~BitOR()
+BitOR($[<value1>], $[<value2>]$[[, <valueN>$\]])$[]
+
+$~BitShift()
+BitShift($[<value>], $[<shift>])$[]
+
+$~BitXOR()
+BitXOR($[<value1>], $[<value2>]$[[, <valueN>$\]])$[]
+
+$~Call()
+Call("$[FuncName]"$[[, <param1>[, <param2>, .. [, <paramN>$\]$\]$\]])$[]
+
+$~Ceil()
+Ceil($[<value>])$[]
+
+$~Chr()
+Chr($[<code>])$[]
+
+$~ClipGet()
+ClipGet()$[]
+
+$~ClipPut()
+ClipPut($[<text>])$[]
+
+$~CommandExec()
+CommandExec($[<command>]$[[, <params>$\]])$[]
+
+$~CommandExec()paths
+CommandExec($["~/CD[:{T|S|TS}$\]"], $[<path1>]$[[, <path2>$\]])$[]
+
+$~ControlSetHint()
+ControlSetHint($[["~[/B:<1..7>$\] [/H:<area>$\] [/F$\] [/O$\] [/R$\] [/D:nnnn$\]",$\] ]$[<controlid>], $[<hint>])$[]
+
+$~ControlSetMouseAction()controlid
+ControlSetMouseAction("~$[</R[:U|:D$\]|/M[:U|:D$\]|/L[:U|:D$\]|/W[:F|:B$\]|/X1[:U|:D$\]|/X2[:U|:D$\]>] $[[/K:<S|C|A|R|M|L|X1|X2>$\]] $[[/B:button$\]] $[[/CM$\]] /H:$[<area>]", $[<controlid>]$[[, "<funcname>"[, <param1> .. [, <paramN>$\]$\]$\]])$[]
+
+$~ControlSetMouseAction()instance
+ControlSetMouseAction("~$[</R[:U|:D$\]|/M[:U|:D$\]|/L[:U|:D$\]|/W[:F|:B$\]|/X1[:U|:D$\]|/X2[:U|:D$\]>] $[[/K:<S|C|A|R|M|L|X1|X2>$\]] $[[/B:button$\]] $[[/CM$\]] /C:$[<class>]", $[<instance>]$[[, "<funcname>"[, <param1> .. [, <paramN>$\]$\]$\]])$[]
+
+$~Date()
+Date($[[<format>[, <datetime>$\]$\]])$[]
+
+$~DirCopy()
+DirCopy($[<source>], $[<dest>]$[[, <overwrite>$\]])$[]
+
+$~DirCreate()
+DirCreate($[<dirname>])$[]
+
+$~DirDelete()
+DirDelete($[<dir>]$[[, <recursive>$\]])$[]
+
+$~DirMove()
+DirMove($[<source>], $[<dest>]$[[, <overwrite>$\]])$[]
+
+$~DisableMarkedMenuItems()
+DisableMarkedMenuItems($[<marker>])$[]
+
+$~DllCall()
+DllCall("$[[Lib\$\]Func]"$[[, <Type1>, <Param1>[, <TypeN>, <ParamN>[, <ResultType[:cdecl$\]>$\]$\]$\]])$[]
+
+$~DllCall()Address
+DllCall($[<Address>]$[[, <Type1>, <Param1>[, <TypeN>, <ParamN>[, <ResultType[:cdecl$\]>$\]$\]$\]])$[]
+
+$~Eval()
+Eval($[<expression>])$[]
+
+$~FileAppend()
+FileAppend($[<filename>], $[<data>]$[[, <encoding>$\]])$[]
+
+$~FileChangeExt()
+FileChangeExt($[<filepath>], $[<newext>])$[]
+
+$~FileCopy()
+FileCopy($[<source>], $[<dest>]$[[, <overwrite>$\]])$[]
+
+$~FileDelete()
+FileDelete($[<path>])$[]
+
+$~FileExist()
+FileExist($[<file>])$[]
+
+$~FileFind()
+FileFind($[<path>]$[[, <pattern>[, <recurse>[, <type>[, <mode>[, <option1>..<optionN>$\]$\]$\]$\]$\]])$[]
+
+$~FileFindEv()
+FileFindEv($[<query>]$[[, <mode>[, <option1>..<optionN>$\]$\]$\]$\]])$[]
+
+$~FileGetAttr()
+FileGetAttr($[<file>])$[]
+
+$~FileGetBaseName()
+FileGetBaseName($[<filepath>])$[]
+
+$~FileGetDir()
+FileGetDir($[<filepath>])$[]
+
+$~FileGetExt()
+FileGetExt($[<filepath>])$[]
+
+$~FileGetName()
+FileGetName($[<filepath>])$[]
+
+$~FileGetSize()
+FileGetSize($[<file>])$[]
+
+$~FileGetTime()
+FileGetTime($[<file>]$[[, <kind>$\]])$[]
+
+$~FileGetVersion()
+FileGetVersion($[<file>]$[[, <info>$\]])$[]
+
+$~FileMatchMask()
+FileMatchMask($[<filename>], $[<pattern>])$[]
+
+$~FileMove()
+FileMove($[<source>], $[<dest>]$[[, <overwrite>$\]])$[]
+
+$~FileRead()
+FileRead($[<filename>]$[[, <count>[, <encoding>$\]$\]])$[]
+
+$~FileSetAttr()
+FileSetAttr($[<pattern>], $[<newattr>]$[[, mode$\]])$[]
+
+$~FileSetTime()
+FileSetTime($[<pattern>], $[<newdatetime>]$[[, <kind>[, <mode>$\]$\]])$[]
+
+$~FileWrite()
+FileWrite($[<filename>], $[<data>]$[[, <encoding>$\]])$[]
+
+$~Floor()
+Floor($[<value>])$[]
+
+$~Free()
+Free($[<obj1>]$[[, <obj2>[, <objN>$\]$\]])$[]
+
+$~GetCoreTempInfo()
+GetCoreTempInfo($[<id>]$[[, <index>$\]])$[]
+
+$~GetCPUInfo()
+GetCPUInfo($[["~/S",$\] ]$[<id>]$[[, <index>$\]])$[]
+
+$~GetCPUUsage()
+GetCPUUsage()$[]
+
+$~GetCurrentItem()
+GetCurrentItem($[[<panel>[, <id>$\]$\]])$[]
+
+$~GetCurrentPath()
+GetCurrentPath($[[<panel>[, <id>$\]$\]])$[]
+
+$~GetDriveSpace()
+GetDriveSpace($[<path>]$[[, <flag>$\]])$[]
+
+$~GetEnv()
+GetEnv($[<envvar>])$[]
+
+$~GetKnownFolderPath()
+GetKnownFolderPath($[<folderid>]$[[, <flags>$\]])$[]
+
+$~GetMemStats()
+GetMemStats($[[<flag>$\]])$[]
+
+$~GetNetInterface()
+GetNetInterface($[[<MAC>$\]])$[]
+
+$~GetNetInterfaceInfo()
+GetNetInterfaceInfo($[<interface>], $[<id>])$[]
+
+$~GetSelectedItems()
+GetSelectedItems($[[<panel>[, <info>$\]$\]])$[]
+
+$~GetState()
+GetState($[<info>]$[[, <flags>$\]])$[]
+
+$~GetSysColor()
+GetSysColor($[<colorindex>])$[]
+
+$~GetSystemMetrics()
+GetSystemMetrics($[<index>])$[]
+
+$~GetUptime()
+GetUptime()$[]
+
+$~GetWMIValue()
+GetWMIValue($[<name>], $[<request>]$[[, <namespace>[, <index>[, <arrayindex>$\]$\]$\]])$[]
+
+$~Hex()
+Hex($[<number>]$[[, <minlen>$\]])$[]
+
+$~IniDelete()
+IniDelete($[["~[/R$\]",$\] ]$[<ini>], $[<section>]$[[, <key>$\]])$[]
+
+$~IniGetSectionLocation()
+IniGetSectionLocation($[<ini>], $[<section>])$[]
+
+$~IniRead()
+IniRead($[["~[/R$\]",$\] ]$[<ini>], $[<section>], $[<key>]$[[, <default>$\]])$[]
+
+$~IniReadSection()
+IniReadSection($[["~[/R$\]",$\] ]$[<ini>], $[<section>])$[]
+
+$~IniReadSectionNames()
+IniReadSectionNames($[<ini>])$[]
+
+$~IniRenameSection()
+IniRenameSection($[<ini>], $[<section>], $[<newsection>])$[]
+
+$~IniWrite()
+IniWrite($[["~[/R$\]",$\] ]$[<ini>], $[<section>], $[<key>]$[[, <value>$\]])$[]
+
+$~IniWriteSection()
+IniWriteSection($[["~[/R$\]",$\] ]$[<ini>], $[<section>]$[[, <data>$\]])$[]
+
+$~IsFloat()
+IsFloat($[<value>])$[]
+
+$~IsInt()
+IsInt($[<value>])$[]
+
+$~IsNumber()
+IsNumber($[<value>])$[]
+
+$~IsObject()
+IsObject($[<value>])$[]
+
+$~IsPressed()
+IsPressed($[<vkey>])$[]
+
+$~ItemAtCursor()
+ItemAtCursor($[<infotype>])$[]
+
+$~JoinPath()
+JoinPath($[<part1>]$[[, <part2>[, <partN>$\]$\]])$[]
+
+$~LngRead()
+LngRead($[<ident>]$[[, <filename>$\]])$[]
+
+$~LoadFont()
+LoadFont($[["~[/N$\]",$\] ]$[<font>])$[]
+
+$~LoadLibrary()
+LoadLibrary($[["~[/U$\]",$\] ]$[<dll>]$[[, <function>$\]])$[]
+
+$~MakeInt()
+MakeInt($[<L>], $[<H>]$[[, <type>$\]])$[]
+
+$~Mod()
+Mod($[<value1>], $[<value2>])$[]
+
+$~ModifyDialogs()
+ModifyDialogs($[["~/VER:version"$\]])$[]
+
+$~MouseClick()
+MouseClick($[[<button>[, <clicks>$\]$\]])$[]
+
+$~MouseGetPos()
+MouseGetPos($[[<X>[, <Y>$\]$\]])$[]
+
+$~MouseSetPos()
+MouseSetPos($[<x>], $[<y>])$[]
+
+$~MsgBox()
+MsgBox($[<text>]$[[, <title>[, <flags>$\]$\]])$[]
+
+$~Now()
+Now()$[]
+
+$~OutputDebugString()
+OutputDebugString($[<text>])$[]
+
+$~PostMessage()
+PostMessage($[<hwnd>], $[<msg>]$[[, <wparam>[, <lparam>[, <retindex>$\]$\]$\]])$[]
+
+$~ProcessCount()
+ProcessCount($[["~[/F$\]",$\] ]$[<process>])$[]
+
+$~ProcessExecGetOutput()
+ProcessExecGetOutput($[["[/OEM$\] [/C:nnnn$\]",$\] ]$[<file>]$[[, <params>[, <path>$\]$\]])$[]
+
+$~ProcessExist()
+ProcessExist($[["~[/F$\]",$\] ]$[<process>])$[]
+
+$~ProcessGetId()
+ProcessGetId($[["~[/F$\]",$\] ]$[<process>]$[[, <index>$\]])$[]
+
+$~ProcessGetPath()
+ProcessGetPath($[<process>])$[]
+
+$~ProcessTerminate()
+ProcessTerminate($[["~[/F$\] [/TT$\] [/A$\] [/W[:nnnn$\]$\]",$\] ]$[<process1>]$[[, <process2> [... , <processN>$\]$\]])$[]
+
+$~Random()
+Random($[[<min>, <max>[, <integer>$\]$\]])$[]
+
+$~RegDelete()
+RegDelete($[["~[/K$\]",$\] ]$[<key>]$[[, <param>$\]])$[]
+
+$~RegExpGet()
+RegExpGet($[<str>], $[<regexp>], $[<template>]$[[, <occurence>[, <offset>$\]$\]])$[]
+
+$~RegExpPos()
+RegExpPos($[<str>], $[<regexp>]$[[, <occurence>[, <offset>$\]$\]])$[]
+
+$~RegExpReplace()
+RegExpReplace($[<str>], $[<regexp>]$[[, <template>[, <count>[, <offset>$\]$\]$\]])$[]
+
+$~RegisterCommand()
+RegisterCommand($[<command>], $[<function>]$[[, <param1>[, <paramN>$\]$\]])$[]
+
+$~RegRead()
+RegRead($[["~[/HEX$\]",$\] ]$[<key>]$[[, <param>[, <default>$\]$\]])$[]
+
+$~RegWrite()
+RegWrite($[<key>], $[<param>], $[<type>], $[<value>]$[[, <value2> .. <valueN>$\]])$[]
+
+$~RequestCopyDataInfo()
+RequestCopyDataInfo($[<command>])$[]
+
+$~RequestInfo()
+RequestInfo($[<index>])$[]
+
+$~RestartScript()
+RestartScript($[[<delay>[, <flag>$\]$\]])$[]
+
+$~Round()
+Round($[<value>]$[[, <round>$\]])$[]
+
+$~RunThread()
+RunThread($[<funcname>]$[[, <param1>[, .. <paramN>$\]$\]])$[]
+
+$~SendCommand()
+SendCommand($[<command>]$[[, <param>[, <wait>$\]$\]])$[]
+
+$~SendMessage()
+SendMessage($[<hwnd>], $[<msg>]$[[, <wparam>[, <lparam>[, <retindex>$\]$\]$\]])$[]
+
+$~Set()
+Set($[["~[/C$\] [/EV-$\] [/EE$\]", $\]]$[<text>])$[]
+
+$~SetEnv()
+SetEnv($[["~[/{A|AD}$\] [/EE$\]",$\] ]$[<varname>]$[[, <text>$\]])$[]
+
+$~SetError()
+SetError($[<errcode>]$[[, <extcode>[, <retvalue>$\]$\]])$[]
+
+$~SetExtended()
+SetExtended($[<extcode>]$[[, <retvalue>$\]])$[]
+
+$~SetFieldsParam()
+SetFieldsParam($[<id>], $[<param1>]$[[, <param2>$\]])$[]
+
+$~SetHintParam()
+SetHintParam($[<func>], $[<id>], $[<param1>]$[[, <param2> .. , <param5>$\]])$[]
+
+$~SetHotkeyAction()
+SetHotkeyAction("~/H:$[<key>] $[[/V:nnn$\]] $[[/K:{S|C|A|W}$\]] $[[/R$\]] $[[/{D|DM}$\]] $[[/S$\]] $[[/CM$\]]"$[[, "<funcname>"[, <param1> .. [, <paramN>$\]$\]$\]])$[]
+
+$~SetMessageAction()
+SetMessageAction($[["~[/P$\] [/D|/DM$\] [/S$\] [/CM$\]",$\] ]$[<msg/msgname>], "$[<funcname>]"$[[, <param1> .. [, <paramN>$\]$\]])$[]
+
+$~ShellExec()
+ShellExec($[["~[/{SW_HIDE|SW_SHOWNORMAL|SW_MINIMIZE|SW_MAXIMIZE}$\] [/T$\] [/W[:nnnn$\]$\] [/WAIT[:nnnn$\]$\]",$\] ]$[<file>]$[[, <params>[, <workdir>$\]$\]])$[]
+
+$~ShowHint()
+ShowHint($[<text>]$[[, <x>, <y>[, <delay>[, <flags$\]$\]$\]])$[]
+
+$~ShowPopupMenu()
+ShowPopupMenu($[["~[/I:nn$\] [/A:n1[:nn$\]$\] [/F$\] [/D$\]",$\] ]$[<menu>]$[[, <x>, <y>$\]])$[]
+
+$~SizeFormat()
+SizeFormat($[<size>]$[[, <style>[, <unit>[, <precision>[, <flags>[, <override1>..<overrideN>$\]$\]$\]$\]$\]])$[]
+
+$~Sleep()
+Sleep($[<delay>])$[]
+
+$~StrCompare()
+StrCompare($[<str1>], $[<str2>]$[[, <casesense>$\]])$[]
+
+$~StrFormat()
+StrFormat($[<format>]$[[, <param1>[, <param2>[, .. <paramN>$\]$\]$\]])$[]
+
+$~StrLeft()
+StrLeft($[<str>], $[<count>])$[]
+
+$~StrLen()
+StrLen($[<str>])$[]
+
+$~StrLower()
+StrLower($[<str>])$[]
+
+$~StrMid()
+StrMid($[<str>], $[<pos>]$[[, <count>$\]])$[]
+
+$~StrPart()
+StrPart($[<str>], $[<delim>], $[<index>]$[[, <casesense>$\]])$[]
+
+$~StrPos()
+StrPos($[<str>], $[<substr>]$[[, <occurence>[, <offset>[, <casesense>$\]$\]$\]])$[]
+
+$~StrRepeat()
+StrRepeat($[<pattern>], $[<count>])$[]
+
+$~StrReplace()
+StrReplace($[<str>], $[<oldstr>]$[[, <newstr>[, <casesense>$\]$\]])$[]
+
+$~StrReverse()
+StrReverse($[<str>])$[]
+
+$~StrRight()
+StrRight($[<str>], $[<count>])$[]
+
+$~StrTrim()
+StrTrim($[<str>])$[]
+
+$~StrUpper()
+StrUpper($[<str>])$[]
+
+$~SystemParametersInfo()
+SystemParametersInfo($[<index>]$[[, <structindex>$\]])$[]
+
+$~Time()
+Time($[[<format>[, <datetime>$\]$\]])$[]
+
+$~ToDateTime()
+ToDateTime($[<datetime_string>])$[]
+
+$~WinAlign()
+WinAlign($[<handle>]$[[, <point>[, <basehandle>[, <basepoint>[, <dx>[, <dy>$\]$\]$\]$\]$\]])$[]
+
+$~WinFind()
+WinFind($[<hwnd>]$[[, <class>[, <instance/title>[, <flags>$\]$\]$\]])$[]
+
+$~WinFromPoint()
+WinFromPoint($[[<x>, <y>$\]])$[]
+
+$~WinGetClass()
+WinGetClass($[<winhandle>])$[]
+
+$~WinGetFocusedCtrl()
+WinGetFocusedCtrl($[[<winhandle>$\]])$[]
+
+$~WinGetHandleByPID()
+WinGetHandleByPID($[<processId>]$[[, <class>$\]])$[]
+
+$~WinGetPID()
+WinGetPID($[<winhandle>])$[]
+
+$~WinGetPos()
+WinGetPos($[[<X>[, <Y>[, <W>[, <H>[, <winhandle>$\]$\]$\]$\]$\]])$[]
+
+$~WinGetState()
+WinGetState($[<index>]$[[, <winhandle>$\]])$[]
+
+$~WinGetStyle()
+WinGetStyle($[[<flags>[, <winhandle>$\]$\]])$[]
+
+$~WinGetText()
+WinGetText($[[<winhandle>$\]])$[]
+
+$~WinHasStyle()
+WinHasStyle($[<value>]$[[, <flags>[, <winhandle>$\]$\]])$[]
+
+$~WinRedraw()
+WinRedraw($[[<flags>[, <winhandle>$\]$\]])$[]
+
+$~WinSetCtrlFocus()
+WinSetCtrlFocus($[<ctrlhandle>])$[]
+
+$~WinSetPos()
+WinSetPos($[[<X>[, <Y>[, <W>[, <H>[, <flags>[, <winhandle>$\]$\]$\]$\]$\]$\]])$[]
+
+$~WinSetState()
+WinSetState($[<state>]$[[, <winhandle>$\]$\]])$[]
+
+$~WinSetStyle()
+WinSetStyle($[<value>]$[[, <flags>[, <winhandle>$\]$\]])$[]
+
+$~WinSetText()
+WinSetText($[<newtext>]$[[, <winhandle>$\]])$[]
+
+$;--функции в командной записи--
+$~Abs...
+Abs $[<VAR>] $[<value>]
+
+$~AddCondition...
+AddCondition $[[/PARENT$\]] $[<ConditionType>] $[<class>] $[<instance>]$[[ <searchtext>$\]]
+
+$~AddControl...
+AddControl $[[/X:value$\]] $[[/Y:value$\]] $[[/W:value$\]] $[[/H:value$\]] $[[/I:nn$\]] $[<class>] $[<instance>]$[[ <text/icon>$\]]
+
+$~AddDialog...
+AddDialog $[[/NOSCALE$\]] $[[/X:value$\]] $[[/Y:value$\]] $[[/W:value$\]] $[[/H:value$\]] $[[/SAVE:value$\]] $[[/CENTER:value$\]] $[[/WAIT:value$\]] $[<name/class>]$[[ <text>$\]]
+
+$~Args...
+Args $[<VAR>]$[[ <index>$\]]
+
+$~Asc...
+Asc $[<VAR>] $[<symbol>]
+
+$~BitAND...
+BitAND $[<VAR>] $[<value1>] $[<value2>]$[[ <valueN>$\]]
+
+$~BitNOT...
+BitNOT $[<VAR>] $[<value>]
+
+$~BitOR...
+BitOR $[<VAR>] $[<value1>] $[<value2>]$[[ <valueN>$\]]
+
+$~BitShift...
+BitShift $[<VAR>] $[<value>] $[<shift>]
+
+$~BitXOR...
+BitXOR $[<VAR>] $[<value1>] $[<value2>]$[[ <valueN>$\]]
+
+$~Call...
+Call $[<VAR>] "$[FuncName]"$[[ <param1>[ <param2> .. [ <paramN>$\]$\]$\]]
+
+$~Ceil...
+Ceil $[<VAR>] $[<value>]
+
+$~Chr...
+Chr $[<VAR>] $[<code>]
+
+$~ClipGet...
+ClipGet $[<VAR>]
+
+$~ClipPut...
+ClipPut $[<text>]
+
+$~CommandExec...
+CommandExec $[<command>]$[[ <params>$\]]
+
+$~CommandExec...paths
+CommandExec /CD$[[:{T|S|TS}$\]] $[<path1>]$[[ <path2>$\]]
+
+$~ControlSetHint...
+ControlSetHint $[[/B:<1..7>$\]] $[[/H:<area>$\]] $[[/F$\]] $[[/O$\]] $[[/R$\]] $[[/D:nnnn$\]] $[<controlid>] $[<hint>]
+
+$~ControlSetMouseAction...controlid
+ControlSetMouseAction $[</R[:U|:D$\]|/M[:U|:D$\]|/L[:U|:D$\]|/W[:F|:B$\]|/X1[:U|:D$\]/X2[:U|:D$\]$\]>] $[[/K:<S|C|A|R|M|L|X1|X2>$\]] $[[/B:button$\]] $[[/CM$\]] /H:$[<area>] $[<controlid>]$[[ "<funcname>"[ <param1> .. [ <paramN>$\]$\]]
+
+$~ControlSetMouseAction...instance
+ControlSetMouseAction $[</R[:U|:D$\]|/M[:U|:D$\]|/L[:U|:D$\]|/W[:F|:B$\]|/X1[:U|:D$\]/X2[:U|:D$\]$\]>] $[[/K:<S|C|A|R|M|L|X1|X2>$\]] $[[/B:button$\]] $[[/CM$\]] /C:$[<class>] $[<instance>]$[[ "<funcname>"[ <param1> .. [ <paramN>$\]$\]$\]]
+
+$~Date...
+Date $[<VAR>]$[[ <format>[ <datetime>$\]$\]]
+
+$~DirCopy...
+DirCopy $[<source>] $[<dest>] $[[ <overwrite>$\]]
+
+$~DirCreate...
+DirCreate $[<dirname>]
+
+$~DirDelete...
+DirDelete $[<dir>]$[[ <recursive>$\]]
+
+$~DirMove...
+DirMove $[<source>] $[<dest>] $[[ <overwrite>$\]]
+
+$~DisableMarkedMenuItems...
+DisableMarkedMenuItems $[<marker>]
+
+$~DllCall...
+DllCall $[<VAR>] "$[[Lib\$\]Func]" $[[<Type1> <Param1>[ <TypeN> <ParamN>[ <ResultType[:cdecl$\]>$\]$\]$\]]
+
+$~DllCall...Address
+DllCall $[<VAR>] $[<Address>]$[[ <Type1> <Param1>[ <TypeN> <ParamN>[ <ResultType[:cdecl$\]>$\]$\]$\]]
+
+$~Eval...
+Eval $[<VAR>] $[<expression>]
+
+$~FileAppend...
+FileAppend $[<filename>] $[<data>]$[[ <encoding>$\]]
+
+$~FileChangeExt...
+FileChangeExt $[<VAR>] $[<filepath>] $[<newext>]
+
+$~FileCopy...
+FileCopy $[<source>] $[<dest>] $[[ <overwrite>$\]]
+
+$~FileDelete...
+FileDelete $[<path>]
+
+$~FileExist...
+FileExist $[<VAR>] $[<file>]
+
+$~FileFind...
+FileFind $[<VAR>] $[<path>]$[[ <pattern>[ <recurse>[ <type>[ <mode>[ <option1>..<optionN>$\]$\]$\]$\]$\]]
+
+$~FileFindEv...
+FileFindEv $[<VAR>] $[<query>]$[[ <mode>[ <option1>..<optionN>$\]$\]$\]$\]]
+
+$~FileGetAttr...
+FileGetAttr $[<VAR>] $[<file>]
+
+$~FileGetBaseName...
+FileGetBaseName $[<VAR>] $[<filepath>]
+
+$~FileGetDir...
+FileGetDir $[<VAR>] $[<filepath>]
+
+$~FileGetExt...
+FileGetExt $[<VAR>] $[<filepath>]
+
+$~FileGetName...
+FileGetName $[<VAR>] $[<filepath>]
+
+$~FileGetSize...
+FileGetSize $[<VAR>] $[<file>]
+
+$~FileGetTime...
+FileGetTime $[<VAR>] $[<file>]$[[ <kind>$\]]
+
+$~FileGetVersion...
+FileGetVersion $[<VAR>] $[<file>]$[[ <info>$\]]
+
+$~FileMatchMask...
+FileMatchMask $[<VAR>] $[<filename>] $[<pattern>]
+
+$~FileMove...
+FileMove $[<source>] $[<dest>] $[[ <overwrite>$\]]
+
+$~FileRead...
+FileRead $[<VAR>] $[<filename>]$[[ <count> [ <encoding>$\]$\]]
+
+$~FileSetAttr...
+FileSetAttr $[<pattern>] $[<newattr>]$[[ mode$\]]
+
+$~FileSetTime...
+FileSetTime $[<pattern>] $[<newdatetime>]$[[ <kind>[ <mode>$\]$\]]
+
+$~FileWrite...
+FileWrite $[<filename>] $[<data>]$[[ <encoding>$\]]
+
+$~Floor...
+Floor $[<VAR>] $[<value>]
+
+$~Free...
+Free $[<obj1>]$[[ <obj2>[ <objN>$\]$\]]
+
+$~GetCoreTempInfo...
+GetCoreTempInfo $[<VAR>] $[<id>]$[[ <index>$\]]
+
+$~GetCPUInfo...
+GetCPUInfo $[[/S$\]] $[<VAR>] $[<id>]$[[ <index>$\]]
+
+$~GetCPUUsage...
+GetCPUUsage $[<VAR>]
+
+$~GetCurrentItem...
+GetCurrentItem $[<VAR>]$[[ <panel>[ <id>$\]$\]]
+
+$~GetCurrentPath...
+GetCurrentPath $[<VAR>]$[[ <panel>[ <id>$\]$\]]
+
+$~GetDriveSpace...
+GetDriveSpace $[<VAR>] $[<path>]$[[ <flag>$\]]
+
+$~GetEnv...
+GetEnv $[<VAR>] $[<envvar>]
+
+$~GetKnownFolderPath...
+GetKnownFolderPath $[<VAR>] $[<folderid>]$[[ <flags>$\]]
+
+$~GetMemStats...
+GetMemStats $[<VAR>]$[[ <flag>$\]]
+
+$~GetNetInterface...
+GetNetInterface $[<VAR>]$[[ <MAC>$\]]
+
+$~GetNetInterfaceInfo...
+GetNetInterfaceInfo $[<VAR>] $[<interface>] $[<id>]
+
+$~GetSelectedItems...
+GetSelectedItems $[<VAR>]$[[ <panel>[ <info>$\]$\]]
+
+$~GetState...
+GetState $[<VAR>] $[<info>]$[[ <flags>$\]]
+
+$~GetSysColor...
+GetSysColor $[<VAR>] $[<colorindex>]
+
+$~GetSystemMetrics...
+GetSystemMetrics $[<VAR>] $[<index>]
+
+$~GetUptime...
+GetUptime $[<VAR>]
+
+$~GetWMIValue...
+GetWMIValue $[<VAR>] $[<name>] $[<request>]$[[ <namespace>[ <index>[ <arrayindex>$\]$\]$\]]
+
+$~Hex...
+Hex $[<VAR>] $[<number>]$[[ <minlen>$\]]
+
+$~IniDelete...
+IniDelete $[[/R$\]] $[<ini>] $[<section>]$[[ <key>$\]]
+
+$~IniGetSectionLocation...
+IniGetSectionLocation $[<VAR>] $[<ini>] $[<section>]
+
+$~IniRead...
+IniRead $[[/R$\]] $[<VAR>] $[<ini>] $[<section>] $[<key>]$[[ <default>$\]]
+
+$~IniReadSection...
+IniReadSection $[[/R$\]] $[<VAR>] $[<ini>] $[<section>]
+
+$~IniReadSectionNames...
+IniReadSectionNames $[<VAR>] $[<ini>]
+
+$~IniRenameSection...
+IniRenameSection $[<ini>] $[<section>] $[<newsection>]
+
+$~IniWrite...
+IniWrite $[[/EV-$\]] $[[/R$\]] $[<ini>] $[<section>] $[<key>]$[[ <value>$\]]
+
+$~IniWriteSection...
+IniWriteSection $[[/R$\]] $[<ini>] $[<section>]$[[ <data>$\]]
+
+$~IsFloat...
+IsFloat $[<VAR>] $[<value>]
+
+$~IsInt...
+IsInt $[<VAR>] $[<value>]
+
+$~IsNumber...
+IsNumber $[<VAR>] $[<value>]
+
+$~IsObject...
+IsObject $[<VAR>] $[<value>]
+
+$~IsPressed...
+IsPressed $[<VAR>] $[<vkey>]
+
+$~ItemAtCursor...
+ItemAtCursor $[<VAR>] $[<infotype>]
+
+$~JoinPath...
+JoinPath $[<VAR>] $[<part1>]$[[ <part2>[ <partN>$\]$\]]
+
+$~LngRead...
+LngRead $[<VAR>] $[<ident>]$[[ <filename>$\]]
+
+$~LoadFont...
+LoadFont $[[/N$\]] $[<font>]
+
+$~LoadLibrary...
+LoadLibrary $[[/U$\]] $[<dll>]$[[ <function>$\]]
+
+$~MakeInt...
+MakeInt $[<VAR>] $[<L>] $[<H>]$[[ <type>$\]]
+
+$~Mod...
+Mod $[<VAR>] $[<value1>] $[<value2>]
+
+$~ModifyDialogs...
+ModifyDialogs $[[/VER:version$\]]
+
+$~MouseClick...
+MouseClick $[[<button>[ <clicks>$\]$\]]
+
+$~MouseGetPos...
+MouseGetPos $[[<X>[ <Y>$\]$\]]
+
+$~MouseSetPos...
+MouseSetPos $[<x>] $[<y>]
+
+$~MsgBox...
+MsgBox $[<text>]$[[ <title>[ <flags>$\]$\]]
+
+$~Now...
+Now $[<VAR>]
+
+$~OutputDebugString...
+OutputDebugString $[<text>]
+
+$~PostMessage...
+PostMessage $[<hwnd>] $[<msg>]$[[ <wparam>[ <lparam>[ <retindex>$\]$\]$\]]
+
+$~ProcessCount...
+ProcessCount $[[/F$\]] $[[/EV-$\]] $[<VAR>] $[<process>]
+
+$~ProcessExecGetOutput...
+ProcessExecGetOutput $[[/EV-$\]] $[[/OEM$\]] $[[/C:nnnn$\]] $[<VAR>] $[<file>]$[[ <params>[ <path>$\]$\]]
+
+$~ProcessExist...
+ProcessExist $[[/F$\]] $[[/EV-$\]] $[<VAR>] $[<process>]
+
+$~ProcessGetId...
+ProcessGetId $[[/F$\]] $[[/EV-$\]] $[<VAR>] $[<process>]$[[ <index>$\]]
+
+$~ProcessGetPath...
+ProcessGetPath $[<VAR>] $[<process>]
+
+$~ProcessTerminate...
+ProcessTerminate $[[/F$\]] $[[/EV-$\]] $[[/TT$\]] $[[/A$\]] $[[/W[:nnnn$\]$\]] $[<process 1>]$[[ <process 2>[ ... <process N>$\]$\]]
+
+$~Random...
+Random $[<VAR>] $[[<min> <max>[ <integer>$\]$\]]
+
+$~RegDelete...
+RegDelete $[[/K$\]] $[<key>]$[[ <param>$\]]
+
+$~RegExpGet...
+RegExpGet $[<VAR>] $[<str>] $[<regexp>] $[<template>]$[[ <occurence>[ <offset>$\]$\]]
+
+$~RegExpPos...
+RegExpPos $[<VAR>] $[<str>] $[<regexp>]$[[ <occurence>[ <offset>$\]$\]]
+
+$~RegExpReplace...
+RegExpReplace $[<VAR>] $[<str>] $[<regexp>]$[[ <template>[ <count>[ <offset>$\]$\]$\]]
+
+$~RegisterCommand...
+RegisterCommand $[<command>] $[<function>]$[[ <param1>[ <paramN>$\]$\]]
+
+$~RegRead...
+RegRead $[[/HEX$\]] $[<VAR>] $[<key>]$[[ <param>[ <default>$\]$\]]
+
+$~RegWrite...
+RegWrite $[<key>] $[<param>] $[<type>] $[<value>]$[[ <value2> .. <valueN>$\]]
+
+$~RequestCopyDataInfo...
+RequestCopyDataInfo $[<VAR>] $[<command>]
+
+$~RequestInfo...
+RequestInfo $[<VAR>] $[<index>]
+
+$~RestartScript...
+RestartScript $[[<delay>[ <flag>$\]$\]]
+
+$~Round...
+Round $[<VAR>] $[<value>]$[[ <round>$\]]
+
+$~RunThread...
+RunThread $[<funcname>]$[[ <param1>[ .. <paramN>$\]$\]]
+
+$~Set...
+Set $[[/C$\]] $[[/EV-$\]] $[[/EE$\]] $[<VAR>] $[<text>]
+
+$~SendCommand...
+SendCommand $[<command>]$[[ <param>[ <wait>$\]$\]]
+
+$~SendMessage...
+SendMessage $[<VAR>] $[<hwnd>] $[<msg>]$[[ <wparam>[ <lparam>[ <retindex>$\]$\]$\]]
+
+$~SetEnv...
+SetEnv $[[/{A|AD}$\]] $[[/EV-$\]] $[[/EE$\]] $[<varname>]$[[ <text>$\]]
+
+$~SetError...
+SetError $[<VAR>] $[<errcode>]$[[ <extcode>[ <retvalue>$\]$\]]
+
+$~SetExtended...
+SetExtended $[<VAR>] $[<extcode>]$[[ <retvalue>$\]]
+
+$~SetFieldsParam...
+SetFieldsParam $[<id>] $[<param1>]$[[ <param2>$\]]
+
+$~SetHintParam...
+SetHintParam $[<func>] $[<id>] $[<param1>]$[[ <param2> .. <param5>$\]]
+
+$~SetHotkeyAction...
+SetHotkeyAction $[</H:key>] $[[/V:nnn$\]] $[[/K:{S|C|A|W}$\]] $[[/R$\]] $[[/{D|DM}$\]] $[[/S$\]] $[[/CM$\]] $[["<funcname>"[ <param1> .. [ <paramN>$\]$\]$\]]
+
+$~SetMessageAction...
+SetMessageAction $[[/P$\]] $[[/D|/DM$\]] $[[/S$\]] $[[/CM$\]] $[<msg/msgname>] "$[<funcname>]"$[[ <param1> .. [ <paramN>$\]$\]]
+
+$~ShellExec...
+ShellExec $[[/EV-$\]] $[[/{SW_HIDE|SW_SHOWNORMAL|SW_MINIMIZE|SW_MAXIMIZE}$\]] $[[/T$\]] $[[/W[:nnnn$\]$\]] $[[/WAIT[:nnnn$\]$\]] $[<file>]$[[ <params>[ <workdir>$\]$\]]
+
+$~ShowHint...
+ShowHint $[<text>]$[[ <x> <y>[ <delay>[ <flags$\]$\]$\]]
+
+$~ShowPopupMenu...
+ShowPopupMenu $[[/I:nn$\]] $[[/A:n1[:nn$\]$\]] $[[/F$\]] $[[/D$\]] $[<menu>]$[[ <x> <y>$\]]
+
+$~SizeFormat...
+SizeFormat $[<VAR>] $[<size>]$[[ <style>[ <unit>[ <precision>[ <flags>[ <override1>..<overrideN>$\]$\]$\]$\]$\]]
+
+$~Sleep...
+Sleep $[<delay>]
+
+$~StrCompare...
+StrCompare $[<VAR>] $[<str1>] $[<str2>]$[[ <casesense>$\]]
+
+$~StrFormat...
+StrFormat $[<VAR>] $[<format>]$[[ <param1>[ <param2>[ .. <paramN>$\]$\]$\]]
+
+$~StrLeft...
+StrLeft $[<VAR>] $[<str>] $[<count>]
+
+$~StrLen...
+StrLen $[<VAR>] $[<str>]
+
+$~StrLower...
+StrLower $[<VAR>] $[<str>]
+
+$~StrMid...
+StrMid $[<VAR>] $[<str>] $[<pos>]$[[ <count>$\]]
+
+$~StrPart...
+StrPart $[[/S$\]] $[<VAR>] $[<str>] $[<delim>] $[<index>]
+
+$~StrPos...
+StrPos $[[/S$\]] $[<VAR>] $[<str>] $[<substr>]$[[ <occurence>[ <offset>$\]$\]]
+
+$~StrRepeat...
+StrRepeat $[<VAR>] $[<pattern>] $[<count>]
+
+$~StrReplace...
+StrReplace $[[/S$\]] $[<VAR>] $[<str>] $[<oldstr>]$[[ <newstr>$\]]
+
+$~StrReverse...
+StrReverse $[<VAR>] $[<str>]
+
+$~StrRight...
+StrRight $[<VAR>] $[<str>] $[<count>]
+
+$~StrTrim...
+StrTrim $[<VAR>] $[<str>]
+
+$~StrUpper...
+StrUpper $[<VAR>] $[<str>]
+
+$~SystemParametersInfo...
+SystemParametersInfo $[<VAR>] $[<index>]$[[ <structindex>$\]]
+
+$~Time...
+Time $[<VAR>]$[[ <format>[ <datetime>$\]$\]]
+
+$~ToDateTime...
+ToDateTime $[<VAR>] $[<datetime_string>]
+
+$~WinAlign...
+WinAlign $[<handle>]$[[ <point>[ <basehandle>[ <basepoint>[ <dx>[ <dy>$\]$\]$\]$\]$\]]
+
+$~WinFind...
+WinFind $[<VAR>] $[<hwnd>]$[[ <class>[ <instance/title>[ <flags>$\]$\]$\]]
+
+$~WinFromPoint...
+WinFromPoint $[<VAR>]$[[ <x> <y>$\]]
+
+$~WinGetClass...
+WinGetClass $[<VAR>] $[<winhandle>]
+
+$~WinGetFocusedCtrl...
+WinGetFocusedCtrl $[<VAR>]$[[ <winhandle>$\]]
+
+$~WinGetHandleByPID...
+WinGetHandleByPID $[<VAR>] $[<processId>]$[[ <class>$\]]
+
+$~WinGetPID...
+WinGetPID $[<VAR>] $[<winhandle>]
+
+$~WinGetPos...
+WinGetPos $[[<X>[ <Y>[ <W>[ <H>[ <winhandle>$\]$\]$\]$\]$\]]
+
+$~WinGetState...
+WinGetState $[<VAR>] $[<index>]$[[ <winhandle>$\]]
+
+$~WinGetStyle...
+WinGetStyle $[<VAR>]$[[ <flags>[ <winhandle>$\]$\]]
+
+$~WinGetText...
+WinGetText $[<VAR>]$[[ <winhandle>$\]]
+
+$~WinHasStyle...
+WinHasStyle $[<VAR>] $[<value>]$[[ <flags>[ <winhandle>$\]$\]]
+
+$~WinRedraw...
+WinRedraw $[[<flags>[ <winhandle>$\]$\]]
+
+$~WinSetCtrlFocus...
+WinSetCtrlFocus $[<ctrlhandle>]
+
+$~WinSetPos...
+WinSetPos $[[<X>[ <Y>[ <W>[ <H>[ <flags>[ <winhandle>$\]$\]$\]$\]$\]$\]$\]]
+
+$~WinSetState...
+WinSetState $[<state>]$[[ <winhandle>$\]$\]]
+
+$~WinSetStyle...
+WinSetStyle $[<value>]$[[ <flags>[ <winhandle>$\]$\]]
+
+$~WinSetText...
+WinSetText $[<newtext>]$[[ <winhandle>$\]]
+
+$;--объекты--
+$~BinaryFile()
+BinaryFile($[<FileName>]$[[, <OpenMode>$\]])$[]
+
+$~Buffer()
+Buffer($[<InitialSize>]$[[, <BaseAddress>$\]])$[]
+
+$~Callback()
+Callback($[<FuncName>]$[[, <TypeString>[, <ResultConv>$\]$\]])$[]
+
+$~List()
+List($[[item1, .. [itemN$\]$\]])$[]
+
+$~Map()
+Map()$[]
+
+$~Plugin()
+Plugin($[<PluginName>]$[[, <Flags>$\]])$[]
+
+$~RegExp()
+RegExp($[[<RegExpr>, [<Text>$\]$\]])$[]
+
+$~TextFile()
+TextFile($[<FileName>]$[[, <OpenMode> [, <Encoding>$\]$\]])$[]
+
+$~WMIQuery()
+WMIQuery()$[]
+
+$;--info в FileGetVersion--
+$~FileGetVersion_info_FFileVersion $~_info_FGV_FFileVersion
+"FFileVersion"
+
+$~FileGetVersion_info_FProductVersion $~_info_FGV_FProductVersion
+"FProductVersion"
+
+$~FileGetVersion_info_FPrivateBuild $~_info_FGV_FPrivateBuild
+"FPrivateBuild"
+
+$~FileGetVersion_info_FSpecialBuild $~_info_FGV_FSpecialBuild
+"FSpecialBuild"
+
+$~FileGetVersion_info_FDebugBuild $~_info_FGV_FDebugBuild
+"FDebugBuild"
+
+$~FileGetVersion_info_FPrereleaseBuild $~_info_FGV_FPrereleaseBuild
+"FPrereleaseBuild"
+
+$~FileGetVersion_info_CompanyName $~_info_FGV_CompanyName
+"CompanyName"
+
+$~FileGetVersion_info_FileDescription $~_info_FGV_FileDescription
+"FileDescription"
+
+$~FileGetVersion_info_FileVersion $~_info_FGV_FileVersion
+"FileVersion"
+
+$~FileGetVersion_info_InternalName $~_info_FGV_InternalName
+"InternalName"
+
+$~FileGetVersion_info_LegalCopyright $~_info_FGV_LegalCopyright
+"LegalCopyright"
+
+$~FileGetVersion_info_LegalTradeMark $~_info_FGV_LegalTradeMark
+"LegalTradeMark"
+
+$~FileGetVersion_info_OriginalFileName $~_info_FGV_OriginalFileName
+"OriginalFileName"
+
+$~FileGetVersion_info_ProductName $~_info_FGV_ProductName
+"ProductName"
+
+$~FileGetVersion_info_ProductVersion $~_info_FGV_ProductVersion
+"ProductVersion"
+
+$~FileGetVersion_info_Comments $~_info_FGV_Comments
+"Comments"
+
+$~FileGetVersion_info_PrivateBuild $~_info_FGV_PrivateBuild
+"PrivateBuild"
+
+$~FileGetVersion_info_SpecialBuild $~_info_FGV_SpecialBuild
+"SpecialBuild"
+
+$;--mode в FileFind и FileFindEv--
+$~FileFind_mode_PathList $~_mode_FF_PathList
+"PathList"
+
+$~FileFind_mode_NameList $~_mode_FF_NameList
+"NameList"
+
+$~FileFind_mode_IsFound $~_mode_FF_IsFound
+"IsFound"
+
+$~FileFind_mode_TotalCount $~_mode_FF_TotalCount
+"TotalCount"
+
+$~FileFind_mode_FileCount $~_mode_FF_FileCount
+"FileCount"
+
+$~FileFind_mode_DirCount $~_mode_FF_DirCount
+"DirCount"
+
+$~FileFind_mode_TotalSize $~_mode_FF_TotalSize
+"TotalSize"
+
+$~FileFind_mode_MinSize $~_mode_FF_MinSize
+"MinSize"
+
+$~FileFind_mode_MaxSize $~_mode_FF_MaxSize
+"MaxSize"
+
+$~FileFind_mode_MinTime $~_mode_FF_MinTime
+"MinTime"
+
+$~FileFind_mode_MaxTime $~_mode_FF_MaxTime
+"MaxTime"
+
+$~FileFind_mode_CustomList $~_mode_FF_CustomList
+"CustomList"
+
+$~FileFind_mode_CustomValue $~_mode_FF_CustomValue
+"CustomValue"
+
+$;--идентификаторы GetState--
+$~GetState_info_vars $~_info_GS_vars $~_id_GS_vars
+"vars"
+
+$~GetState_info_envvars $~_info_GS_envvars $~_id_GS_envvars
+"envvars"
+
+$~GetState_info_libs $~_info_GS_libs $~_id_GS_libs
+"libs"
+
+$~GetState_info_procs $~_info_GS_procs $~_id_GS_procs
+"procs"
+
+$~GetState_info_threads $~_info_GS_threads $~_id_GS_threads
+"threads"
+
+$~GetState_info_fonts $~_info_GS_fonts $~_id_GS_fonts
+"fonts"
+
+$~GetState_info_paths $~_info_GS_paths $~_id_GS_paths
+"paths"
+
+$;--идентификаторы GetCoreTempInfo--
+$~GetCoreTempInfo_id_Temp $~_id_GCTi_Temp
+"Temp"
+
+$~GetCoreTempInfo_id_Load $~_id_GCTi_Load
+"Load"
+
+$~GetCoreTempInfo_id_TDP $~_id_GCTi_TDP
+"TDP"
+
+$~GetCoreTempInfo_id_Power $~_id_GCTi_Power
+"Power"
+
+$~GetCoreTempInfo_id_Multipliers $~_id_GCTi_Multipliers
+"Multipliers"
+
+$~GetCoreTempInfo_id_TjMax $~_id_GCTi_TjMax
+"TjMax"
+
+$~GetCoreTempInfo_id_CoreCnt $~_id_GCTi_CoreCnt
+"CoreCnt"
+
+$~GetCoreTempInfo_id_CPUCnt $~_id_GCTi_CPUCnt
+"CPUCnt"
+
+$~GetCoreTempInfo_id_VID $~_id_GCTi_VID
+"VID"
+
+$~GetCoreTempInfo_id_CPUSpeed $~_id_GCTi_CPUSpeed
+"CPUSpeed"
+
+$~GetCoreTempInfo_id_fFSBSpeed $~_id_GCTi_fFSBSpeed
+"fFSBSpeed"
+
+$~GetCoreTempInfo_id_Multiplier $~_id_GCTi_Multiplier
+"Multiplier"
+
+$~GetCoreTempInfo_id_Fahrenheit $~_id_GCTi_Fahrenheit
+"Fahrenheit"
+
+$~GetCoreTempInfo_id_DeltaToTjMax $~_id_GCTi_DeltaToTjMax
+"DeltaToTjMax"
+
+$;--идентификаторы GetCPUInfo--
+$~GetCPUInfo_id_CPUString $~_id_GCPUi_CPUString
+"CPUString"
+
+$~GetCPUInfo_id_CPUBrandString $~_id_GCPUi_CPUBrandString
+"CPUBrandString"
+
+$~GetCPUInfo_id_Model $~_id_GCPUi_Model
+"Model"
+
+$~GetCPUInfo_id_Family $~_id_GCPUi_Family
+"Family"
+
+$~GetCPUInfo_id_SteppingID $~_id_GCPUi_SteppingID
+"SteppingID"
+
+$~GetCPUInfo_id_ProcessorType $~_id_GCPUi_ProcessorType
+"ProcessorType"
+
+$~GetCPUInfo_id_ExtendedModel $~_id_GCPUi_ExtendedModel
+"ExtendedModel"
+
+$~GetCPUInfo_id_ExtendedFamily $~_id_GCPUi_ExtendedFamily
+"ExtendedFamily"
+
+$~GetCPUInfo_id_BrandIndex $~_id_GCPUi_BrandIndex
+"BrandIndex"
+
+$~GetCPUInfo_id_CLFLUSHcachelinesize $~_id_GCPUi_CLFLUSHcachelinesize
+"CLFLUSHcachelinesize"
+
+$~GetCPUInfo_id_APICPhysicalID $~_id_GCPUi_APICPhysicalID
+"APICPhysicalID"
+
+$~GetCPUInfo_id_SSE3NewInstructions $~_id_GCPUi_SSE3NewInstructions
+"SSE3NewInstructions"
+
+$~GetCPUInfo_id_MONITOR_MWAIT $~_id_GCPUi_MONITOR_MWAIT
+"MONITOR_MWAIT"
+
+$~GetCPUInfo_id_CPLQualifiedDebugStore $~_id_GCPUi_CPLQualifiedDebugStore
+"CPLQualifiedDebugStore"
+
+$~GetCPUInfo_id_ThermalMonitor2 $~_id_GCPUi_ThermalMonitor2
+"ThermalMonitor2"
+
+$~GetCPUInfo_id_CacheLineSize $~_id_GCPUi_CacheLineSize
+"CacheLineSize"
+
+$~GetCPUInfo_id_L2Associativity $~_id_GCPUi_L2Associativity
+"L2Associativity"
+
+$~GetCPUInfo_id_CacheSizeK $~_id_GCPUi_CacheSizeK
+"CacheSizeK"
+
+$~GetCPUInfo_id_ProcessorFeatures $~_id_GCPUi_ProcessorFeatures
+"ProcessorFeatures"
+
+$;--идентификаторы GetKnownFolderPath--
+$~GetKnownFolderPath_id_AccountPictures $~_folderid_AccountPictures
+"AccountPictures"
+
+$~GetKnownFolderPath_id_AdminTools $~_folderid_AdminTools
+"AdminTools"
+
+$~GetKnownFolderPath_id_CameraRoll $~_folderid_CameraRoll
+"CameraRoll"
+
+$~GetKnownFolderPath_id_CDBurning $~_folderid_CDBurning
+"CDBurning"
+
+$~GetKnownFolderPath_id_CommonAdminTools $~_folderid_CommonAdminTools
+"CommonAdminTools"
+
+$~GetKnownFolderPath_id_CommonOEMLinks $~_folderid_CommonOEMLinks
+"CommonOEMLinks"
+
+$~GetKnownFolderPath_id_CommonPrograms $~_folderid_CommonPrograms
+"CommonPrograms"
+
+$~GetKnownFolderPath_id_CommonStartMenu $~_folderid_CommonStartMenu
+"CommonStartMenu"
+
+$~GetKnownFolderPath_id_CommonStartup $~_folderid_CommonStartup
+"CommonStartup"
+
+$~GetKnownFolderPath_id_CommonTemplates $~_folderid_CommonTemplates
+"CommonTemplates"
+
+$~GetKnownFolderPath_id_Contacts $~_folderid_Contacts
+"Contacts"
+
+$~GetKnownFolderPath_id_Cookies $~_folderid_Cookies
+"Cookies"
+
+$~GetKnownFolderPath_id_Desktop $~_folderid_Desktop
+"Desktop"
+
+$~GetKnownFolderPath_id_DeviceMetadataStore $~_folderid_DeviceMetadataStore
+"DeviceMetadataStore"
+
+$~GetKnownFolderPath_id_Documents $~_folderid_Documents
+"Documents"
+
+$~GetKnownFolderPath_id_Downloads $~_folderid_Downloads
+"Downloads"
+
+$~GetKnownFolderPath_id_Favorites $~_folderid_Favorites
+"Favorites"
+
+$~GetKnownFolderPath_id_Fonts $~_folderid_Fonts
+"Fonts"
+
+$~GetKnownFolderPath_id_GameTasks $~_folderid_GameTasks
+"GameTasks"
+
+$~GetKnownFolderPath_id_History $~_folderid_History
+"History"
+
+$~GetKnownFolderPath_id_ImplicitAppShortcuts $~_folderid_ImplicitAppShortcuts
+"ImplicitAppShortcuts"
+
+$~GetKnownFolderPath_id_InternetCache $~_folderid_InternetCache
+"InternetCache"
+
+$~GetKnownFolderPath_id_Libraries $~_folderid_Libraries
+"Libraries"
+
+$~GetKnownFolderPath_id_Links $~_folderid_Links
+"Links"
+
+$~GetKnownFolderPath_id_LocalAppData $~_folderid_LocalAppData
+"LocalAppData"
+
+$~GetKnownFolderPath_id_LocalAppDataLow $~_folderid_LocalAppDataLow
+"LocalAppDataLow"
+
+$~GetKnownFolderPath_id_LocalizedResourcesDir $~_folderid_LocalizedResourcesDir
+"LocalizedResourcesDir"
+
+$~GetKnownFolderPath_id_Music $~_folderid_Music
+"Music"
+
+$~GetKnownFolderPath_id_NetHood $~_folderid_NetHood
+"NetHood"
+
+$~GetKnownFolderPath_id_OriginalImages $~_folderid_OriginalImages
+"OriginalImages"
+
+$~GetKnownFolderPath_id_PhotoAlbums $~_folderid_PhotoAlbums
+"PhotoAlbums"
+
+$~GetKnownFolderPath_id_Pictures $~_folderid_Pictures
+"Pictures"
+
+$~GetKnownFolderPath_id_Playlists $~_folderid_Playlists
+"Playlists"
+
+$~GetKnownFolderPath_id_PrintHood $~_folderid_PrintHood
+"PrintHood"
+
+$~GetKnownFolderPath_id_Profile $~_folderid_Profile
+"Profile"
+
+$~GetKnownFolderPath_id_Programs $~_folderid_Programs
+"Programs"
+
+$~GetKnownFolderPath_id_ProgramData $~_folderid_ProgramData
+"ProgramData"
+
+$~GetKnownFolderPath_id_ProgramFiles $~_folderid_ProgramFiles
+"ProgramFiles"
+
+$~GetKnownFolderPath_id_ProgramFilesX64 $~_folderid_ProgramFilesX64
+"ProgramFilesX64"
+
+$~GetKnownFolderPath_id_ProgramFilesX86 $~_folderid_ProgramFilesX86
+"ProgramFilesX86"
+
+$~GetKnownFolderPath_id_ProgramFilesCommon $~_folderid_ProgramFilesCommon
+"ProgramFilesCommon"
+
+$~GetKnownFolderPath_id_ProgramFilesCommonX64 $~_folderid_ProgramFilesCommonX64
+"ProgramFilesCommonX64"
+
+$~GetKnownFolderPath_id_ProgramFilesCommonX86 $~_folderid_ProgramFilesCommonX86
+"ProgramFilesCommonX86"
+
+$~GetKnownFolderPath_id_Public $~_folderid_Public
+"Public"
+
+$~GetKnownFolderPath_id_PublicDesktop $~_folderid_PublicDesktop
+"PublicDesktop"
+
+$~GetKnownFolderPath_id_PublicDocuments $~_folderid_PublicDocuments
+"PublicDocuments"
+
+$~GetKnownFolderPath_id_PublicDownloads $~_folderid_PublicDownloads
+"PublicDownloads"
+
+$~GetKnownFolderPath_id_PublicGameTasks $~_folderid_PublicGameTasks
+"PublicGameTasks"
+
+$~GetKnownFolderPath_id_PublicLibraries $~_folderid_PublicLibraries
+"PublicLibraries"
+
+$~GetKnownFolderPath_id_PublicMusic $~_folderid_PublicMusic
+"PublicMusic"
+
+$~GetKnownFolderPath_id_PublicPictures $~_folderid_PublicPictures
+"PublicPictures"
+
+$~GetKnownFolderPath_id_PublicRingtones $~_folderid_PublicRingtones
+"PublicRingtones"
+
+$~GetKnownFolderPath_id_PublicUserTiles $~_folderid_PublicUserTiles
+"PublicUserTiles"
+
+$~GetKnownFolderPath_id_PublicVideos $~_folderid_PublicVideos
+"PublicVideos"
+
+$~GetKnownFolderPath_id_QuickLaunch $~_folderid_QuickLaunch
+"QuickLaunch"
+
+$~GetKnownFolderPath_id_Recent $~_folderid_Recent
+"Recent"
+
+$~GetKnownFolderPath_id_ResourceDir $~_folderid_ResourceDir
+"ResourceDir"
+
+$~GetKnownFolderPath_id_Ringtones $~_folderid_Ringtones
+"Ringtones"
+
+$~GetKnownFolderPath_id_RoamingAppData $~_folderid_RoamingAppData
+"RoamingAppData"
+
+$~GetKnownFolderPath_id_RoamedTileImages $~_folderid_RoamedTileImages
+"RoamedTileImages"
+
+$~GetKnownFolderPath_id_RoamingTiles $~_folderid_RoamingTiles
+"RoamingTiles"
+
+$~GetKnownFolderPath_id_SampleMusic $~_folderid_SampleMusic
+"SampleMusic"
+
+$~GetKnownFolderPath_id_SamplePictures $~_folderid_SamplePictures
+"SamplePictures"
+
+$~GetKnownFolderPath_id_SamplePlaylists $~_folderid_SamplePlaylists
+"SamplePlaylists"
+
+$~GetKnownFolderPath_id_SampleVideos $~_folderid_SampleVideos
+"SampleVideos"
+
+$~GetKnownFolderPath_id_SavedGames $~_folderid_SavedGames
+"SavedGames"
+
+$~GetKnownFolderPath_id_SavedPictures $~_folderid_SavedPictures
+"SavedPictures"
+
+$~GetKnownFolderPath_id_SavedSearches $~_folderid_SavedSearches
+"SavedSearches"
+
+$~GetKnownFolderPath_id_Screenshots $~_folderid_Screenshots
+"Screenshots"
+
+$~GetKnownFolderPath_id_SearchHistory $~_folderid_SearchHistory
+"SearchHistory"
+
+$~GetKnownFolderPath_id_SearchTemplates $~_folderid_SearchTemplates
+"SearchTemplates"
+
+$~GetKnownFolderPath_id_SendTo $~_folderid_SendTo
+"SendTo"
+
+$~GetKnownFolderPath_id_SidebarDefaultParts $~_folderid_SidebarDefaultParts
+"SidebarDefaultParts"
+
+$~GetKnownFolderPath_id_SidebarParts $~_folderid_SidebarParts
+"SidebarParts"
+
+$~GetKnownFolderPath_id_SkyDrive $~_folderid_SkyDrive
+"SkyDrive"
+
+$~GetKnownFolderPath_id_SkyDriveCameraRoll $~_folderid_SkyDriveCameraRoll
+"SkyDriveCameraRoll"
+
+$~GetKnownFolderPath_id_SkyDriveDocuments $~_folderid_SkyDriveDocuments
+"SkyDriveDocuments"
+
+$~GetKnownFolderPath_id_SkyDrivePictures $~_folderid_SkyDrivePictures
+"SkyDrivePictures"
+
+$~GetKnownFolderPath_id_StartMenu $~_folderid_StartMenu
+"StartMenu"
+
+$~GetKnownFolderPath_id_Startup $~_folderid_Startup
+"Startup"
+
+$~GetKnownFolderPath_id_System $~_folderid_System
+"System"
+
+$~GetKnownFolderPath_id_SystemX86 $~_folderid_SystemX86
+"SystemX86"
+
+$~GetKnownFolderPath_id_Templates $~_folderid_Templates
+"Templates"
+
+$~GetKnownFolderPath_id_UserPinned $~_folderid_UserPinned
+"UserPinned"
+
+$~GetKnownFolderPath_id_UserProfiles $~_folderid_UserProfiles
+"UserProfiles"
+
+$~GetKnownFolderPath_id_UserProgramFiles $~_folderid_UserProgramFiles
+"UserProgramFiles"
+
+$~GetKnownFolderPath_id_UserProgramFilesCommon $~_folderid_UserProgramFilesCommon
+"UserProgramFilesCommon"
+
+$~GetKnownFolderPath_id_Videos $~_folderid_Videos
+"Videos"
+
+$~GetKnownFolderPath_id_Windows $~_folderid_Windows
+"Windows"
+
+$;--идентификаторы GetNetInterfaceInfo--
+$~GetNetInterfaceInfo_id_Recv $~_id_GNETi_Recv
+"Recv"
+
+$~GetNetInterfaceInfo_id_Send $~_id_GNETi_Send
+"Send"
+
+$~GetNetInterfaceInfo_id_Speed $~_id_GNETi_Speed
+"Speed"
+
+$~GetNetInterfaceInfo_id_MTU $~_id_GNETi_MTU
+"MTU"
+
+$~GetNetInterfaceInfo_id_Type $~_id_GNETi_Type
+"Type"
+
+$~GetNetInterfaceInfo_id_Name $~_id_GNETi_Name
+"Name"
+
+$~GetNetInterfaceInfo_id_Descr $~_id_GNETi_Descr
+"Descr"
+
+$~GetNetInterfaceInfo_id_MAC $~_id_GNETi_MAC
+"MAC"
+
+$;--идентификаторы SetHintParam--
+$~SetHintParam_id_Reload $~_id_SHP_Reload
+"Reload"
+
+$~SetHintParam_id_Delay $~_id_SHP_Delay
+"Delay"
+
+$~SetHintParam_id_Font $~_id_SHP_Font
+"Font"
+
+$~SetHintParam_id_Frame $~_id_SHP_Frame
+"Frame"
+
+$~SetHintParam_id_BackColor $~_id_SHP_BackColor
+"BackColor"
+
+$~SetHintParam_id_Text $~_id_SHP_Text
+"Text"
+
+$~SetHintParam_id_DarkBorder $~_id_SHP_DarkBorder
+"DarkBorder"
+
+$~SetHintParam_id_DarkBackColor $~_id_SHP_DarkBackColor
+"DarkBackColor"
+
+$~SetHintParam_id_Darktext $~_id_SHP_Darktext
+"Darktext"
+
+$;--infotype для ItemAtCursor--
+$~ItemAtCursor_info_index $~_infotype_IAC_index
+"index"
+
+$~ItemAtCursor_info_selected $~_infotype_IAC_selected
+"selected"
+
+$~ItemAtCursor_info_focused $~_infotype_IAC_focused
+"focused"
+
+$~ItemAtCursor_info_panel $~_infotype_IAC_panel
+"panel"
+
+$~ItemAtCursor_info_name $~_infotype_IAC_name
+"name"
+
+$~ItemAtCursor_info_text $~_infotype_IAC_text
+"text"
+
+$;--состояния для WinSetState с 0 по 11--
+$~WinSetState_SW_HIDE $~_state_SW_HIDE
+0
+
+$~WinSetState_SW_SHOWNORMAL $~_state_SW_SHOWNORMAL
+1
+
+$~WinSetState_SW_SHOWMINIMIZED $~_state_SW_SHOWMINIMIZED
+2
+
+$~WinSetState_SW_SHOWMAXIMIZED $~_state_SW_SHOWMAXIMIZED
+3
+
+$~WinSetState_SW_SHOWNOACTIVATE $~_state_SW_SHOWNOACTIVATE
+4
+
+$~WinSetState_SW_SHOW $~_state_SW_SHOW
+5
+
+$~WinSetState_SW_MINIMIZE $~_state_SW_MINIMIZE
+6
+
+$~WinSetState_SW_SHOWMINNOACTIVE $~_state_SW_SHOWMINNOACTIVE
+7
+
+$~WinSetState_SW_SHOWNA $~_state_SW_SHOWNA
+8
+
+$~WinSetState_SW_RESTORE $~_state_SW_RESTORE
+9
+
+$~WinSetState_SW_SHOWDEFAULT $~_state_SW_SHOWDEFAULT
+10
+
+$~WinSetState_SW_FORCEMINIMIZE $~_state_SW_FORCEMINIMIZE
+11
+

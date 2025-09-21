@@ -1,0 +1,224 @@
+﻿;=================== This file must be encoded in UTF-16 LE ===================;
+;------------------------------------------------------------------------------;
+;                           CODER PLUGIN SYNTAX FILE                           ;
+;             for comfort file viewing/editing set TAB size to 8               ;
+;------------------------------------------------------------------------------;
+; Target.....: usercmd.ini, *.bar (файлы Total Commander)                      ;
+; Version....: 0.10.0                                                          ;
+; Author.....: yozhic                                                          ;
+; Created....: 08.10.2022                                                      ;
+; Modified...: 21.09.2025                                                      ;
+;------------------------------------------------------------------------------;
+
+
+Files:
+;==========
+;File types
+;==========
+usercmd.ini
+*.bar
+
+
+;----------------------------------------------;
+;                  HighLight                   ;
+;----------------------------------------------;
+
+
+Font:
+;=================================================================
+;FontStyle             FontSize              FaceName
+;=================================================================
+${HighLight_FontStyle} ${HighLight_FontSize} ${HighLight_FaceName}
+
+
+Colors:
+;=============================================================================================================================================================================================================================================================================================================================================================================================================================
+;BasicTextColor             BasicBkColor              SelTextColor              SelBkColor              LineTextColor              LineBkColor              LineBorderColor              AltTextColor              AltBkColor              AltBorderColor              ColumnColor              MarkerColor              CaretColor              UrlColor              ActiveUrlColor              VisitUrlColor
+;=============================================================================================================================================================================================================================================================================================================================================================================================================================
+${HighLight_BasicTextColor} ${HighLight_BasicBkColor} ${HighLight_SelTextColor} ${HighLight_SelBkColor} ${HighLight_LineTextColor} ${HighLight_LineBkColor} ${HighLight_LineBorderColor} ${HighLight_AltTextColor} ${HighLight_AltBkColor} ${HighLight_AltBorderColor} ${HighLight_ColumnColor} ${HighLight_MarkerColor} ${HighLight_CaretColor} ${HighLight_UrlColor} ${HighLight_ActiveUrlColor} ${HighLight_VisitUrlColor}
+
+
+BkImage:
+;==================================================
+;BkImageFile              BkImageAlpha
+;==================================================
+${HighLight_BkImageFile}  ${HighLight_BkImageAlpha}
+
+
+AutoMark:
+;====================================================================================================================
+;AutoMarkFlags             AutoMarkFontStyle              AutoMarkTextColor              AutoMarkBkColor
+;====================================================================================================================
+${HighLight_AutoMarkFlags} ${HighLight_AutoMarkFontStyle} ${HighLight_AutoMarkTextColor} ${HighLight_AutoMarkBkColor}
+
+
+Quotes:
+;===================================================================================
+;Flags  Font    Color   Color   Quote   Quote   Escape  Quote   Quote   Parent  Rule
+;       style   text    bkgrnd  start   end     char    include exclude ID      ID
+;===================================================================================
+517	2	0	0	"["	"]"	""	""	""	0	0
+513	3	${COMM}	0	";"	""	""	""	""	0	0
+513	3	${COMM}	0	"#"	""	""	""	""	0	0
+773	0	${OP}	0	""	"="	""	""	""	0	0
+5	0	${STR}	0	'"'	'"'	"\"	""	""	32	10
+5	0	${STR}	0	'"'	'"'	"\"	""	""	33	12
+5	0	${STR}	0	'"'	'"'	"\"	""	""	0	11
+
+
+
+QuotesRE:
+;===========================================================================================
+;Flags  Pattern         \BackRef=(FontStyle,ColorText,ColorBk) \BackRef=...  ParentID RuleID
+;===========================================================================================
+;--встроенные команды TC--
+0	`(?<=\W)cm_[a-z0-9]++`     `\0=(4,${OP},0)`
+;--пользовательские команды TC--
+0	`(?<=\W)em_[a-z0-9_]++`    `\0=(3,${TYPE},0)`
+;--переменные в cmd--
+0	`(%++)[\-a-z0-9_]+\1`                               `\0=(0,${VAR},0)`	30
+0	`(%++)[a-z0-9]+`                                    `\0=(0,${VAR},0)`	30
+;--операторы в cmd--
+0	`/[\w\-]+(:\w+|=\w+)?`                              `\0=(0,0,0)`	30	20
+0	`(?<=\W)-{1,2}\w+`                                  `\0=(0,${TAG},0)`	30
+0 `((?<=cmd=)|(?<=cmd\d=)|(?<=cmd\d\d=)|(?<=cmd\d\d\d=)|(?<=cmd1000=))\*`    `\0=(2,#FF0000,0)`	30
+;--переменные в path--
+0	`%[\-a-z0-9_]+%`                                    `\0=(0,${VAR},0)`	31
+;--переменные в button--
+0	`%[\-a-z0-9_]+%`                                    `\0=(0,${VAR},0)`	34
+;--переменные в param--
+0	`((%%)+)~?[\-a-z0-9_]+\2`                           `\0=(0,${VAR},0)`	32
+0	`(%%)+~?[\-a-z0-9_]++`                              `\0=(0,${VAR},0)`	32
+0	`%[ACDEFLMNOPQRSTUVWXYZ]([0-9]|[FL])*`              `\0=(2,${VAR},0)`	32
+0	`(%)(\|)([\-a-z0-9_]++)(\|)`                        `\1=(2,${VAR},0) \2=(0,${VAR},0) \3=(2,${VAR},0) \4=(0,${VAR},0)`	32
+0	`((%%)+)~?[\-a-z0-9_]+\2`                           `\0=(0,${VAR},0)`	10
+0	`(%%)+~?[\-a-z0-9_]++`                              `\0=(0,${VAR},0)`	10
+0	`%[ACDEFLMNOPQRSTUVWXYZ]([0-9]|[FL])*`              `\0=(2,${VAR},0)`	10
+0	`(%)(\|)([\-a-z0-9_]++)(\|)`                        `\1=(2,${VAR},0) \2=(0,0,0) \3=(2,${VAR},0) \4=(0,0,0)`	10
+;--операторы в param--
+0	`/[\w\-]+(:\w+|=\w+)?`                              `\0=(0,0,0)`	32	20
+0	`(?<=\W)-{1,2}\w+`                                  `\0=(0,${TAG},0)`	32
+;--операторы в cmd, param -> подсветка (захват выше)--
+0	`[/\w]`                                             `\0=(0,${TAG},0)`	20
+;--в menu--
+0	`(?<!menu)=`                  `\0=(1,0,0)`	33
+1	`(?-s)(?<==)п»ї.++`           `\0=(0,${AREA},0)`	33	21
+1	`\|`                          `\0=(2,${DEL1},0)`	12
+1	`(?<=")п»ї[^"\n]++`           `\0=(0,${AREA},0)`	12	21
+1	`\|`                          `\0=(2,${DEL1},0)`	21
+
+
+Delimiters:
+;===============================================
+;Flags  Font    Color   Color   Char(s)   Parent
+;       style   text    bkgrnd            ID
+;===============================================
+1	0	0	0	" "
+1	0	0	0	"	"
+1	0	${DEL1}	0	=
+1	0	${DEL1}	0	\
+1	0	${DEL1}	0	,	30
+1	0	${DEL1}	0	,	32
+1	2	${DEL1}	0	,	34
+1	0	${DEL1}	0	:	30
+1	0	${DEL1}	0	:	32
+1	2	${DEL1}	0	&	32
+1	0	${DEL1}	0	$	32
+1	0	${DEL1}	0	~	32
+1	0	${DEL1}	0	<	32
+1	0	${DEL1}	0	>	32
+1	0	${DEL1}	0	(	32
+1	0	${DEL1}	0	)	32
+1	2	${DEL1}	0	|	33
+
+
+Words:
+;===========================================
+;Flags  Font    Color   Color   Word  Parent
+;       style   text    bkgrnd        ID
+;===========================================
+2	0	${NUM}	0	"0123456789"
+0	0	0	0	cmd=
+0	0	0	0	param=
+0	0	0	0	path=
+0	0	0	0	menu=
+0	0	0	0	button=
+0	0	0	0	iconic=
+
+
+;----------------------------------------------;
+;                   CodeFold                   ;
+;----------------------------------------------;
+
+
+FoldPanel:
+;=================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+;PanelFirstBkColor            PanelSecondBkColor             PanelNormalFoldColor             PanelActiveFoldColor             PanelNormalNodeOpenBkColor             PanelNormalNodeCloseBkColor             PanelActiveNodeOpenBkColor             PanelActiveNodeCloseBkColor             PanelNormalNodeOpenSignColor             PanelNormalNodeCloseSignColor             PanelActiveNodeOpenSignColor             PanelActiveNodeCloseSignColor
+;=================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+${CodeFold_PanelFirstBkColor} ${CodeFold_PanelSecondBkColor} ${CodeFold_PanelNormalFoldColor} ${CodeFold_PanelActiveFoldColor} ${CodeFold_PanelNormalNodeOpenBkColor} ${CodeFold_PanelNormalNodeCloseBkColor} ${CodeFold_PanelActiveNodeOpenBkColor} ${CodeFold_PanelActiveNodeCloseBkColor} ${CodeFold_PanelNormalNodeOpenSignColor} ${CodeFold_PanelNormalNodeCloseSignColor} ${CodeFold_PanelActiveNodeOpenSignColor} ${CodeFold_PanelActiveNodeCloseSignColor}
+
+
+FoldList:
+;================================================
+;ListTextColor            ListBkColor
+;================================================
+${CodeFold_ListTextColor} ${CodeFold_ListBkColor}
+
+
+TagMark:
+;============================================================================================================
+;TagMarkFlags            TagMarkFontStyle             TagMarkTextColor             TagMarkBkColor
+;============================================================================================================
+${CodeFold_TagMarkFlags} ${CodeFold_TagMarkFontStyle} ${CodeFold_TagMarkTextColor} ${CodeFold_TagMarkBkColor}
+
+
+Skips:
+;=============================
+;Flags  Skip    Skip    Escape
+;       start   end     char
+;=============================
+
+
+Folds:
+;===========================================================================
+;Flags  Font    Color   Color   Fold    Fold   Deli     Parent  Rule    Rule
+;       style   text    bkgrnd  start   end    miters   ID      ID      file
+;===========================================================================
+173	0	0	0	"["           "[" ""	0	0
+1310728	0	0	0	"cmd\d*="     ""  ""	0	30
+1310728	0	0	0	"path\d*="    ""  ""	0	31
+1310728	0	0	0	"param\d*="   ""  ""	0	32
+1310728	0	0	0	"menu\d*="    ""  ""	0	33
+;1310728	0	0	0	"button\d*="    ""  ""	0	34
+;--костыль для работоспособности сворачивания в bar-файлах--
+;  если не нужен, след. 2 строки удалить, а предыдущую раскомментировать
+1310720	0	0	0	"(?<=b)utton\d*="  ""  ""	0	34
+3146156	0	0	0	"b(?=utton\d)"  "b(?=utton\d)"  ""
+
+
+;----------------------------------------------;
+;                 AutoComplete                 ;
+;----------------------------------------------;
+
+
+CompleteList:
+;=====================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+;ListFontStyle                ListFontSize                 ListFaceName                 ListLineGap                 ListBlockIcon `"C:\1.dll", 0` ListBlockIconMargins "left;right"    ListHlBaseIcon `"C:\1.dll", 0` ListHlBaseIconMargins "left;right"    ListDocWordIcon `"C:\1.dll", 0` ListDocWordIconMargins "left;right"    ListBasicTextColor                 ListBasicBkColor                 ListSelTextColor                 ListSelBkColor
+;=====================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+${AutoComplete_ListFontStyle} ${AutoComplete_ListFontSize} ${AutoComplete_ListFaceName} ${AutoComplete_ListLineGap} ${AutoComplete_ListBlockIcon} ${AutoComplete_ListBlockIconMargins} ${AutoComplete_ListHlBaseIcon} ${AutoComplete_ListHlBaseIconMargins} ${AutoComplete_ListDocWordIcon} ${AutoComplete_ListDocWordIconMargins} ${AutoComplete_ListBasicTextColor} ${AutoComplete_ListBasicBkColor} ${AutoComplete_ListSelTextColor} ${AutoComplete_ListSelBkColor}
+
+
+Blocks:
+;========================
+;Abbreviations and blocks
+;========================
+$~em_
+[em_$[]]
+cmd=$[]
+param=$[]
+path=$[]
+menu=$[]
+button=$[]
+
+$~_unicode_marker
+п»ї

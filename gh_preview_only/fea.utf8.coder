@@ -1,0 +1,287 @@
+﻿;=================== This file must be encoded in UTF-16 LE ===================;
+;------------------------------------------------------------------------------;
+;                           CODER PLUGIN SYNTAX FILE                           ;
+;             for comfort file viewing/editing set TAB size to 8               ;
+;------------------------------------------------------------------------------;
+; Target.....: OpenType feature files                                          ;
+; Version....: 0.0.2                                                           ;
+; Author.....: yozhic                                                          ;
+; Created....: 20.09.2019                                                      ;
+; Modified...: 21.09.2025                                                      ;
+;------------------------------------------------------------------------------;
+
+
+Files:
+;==========
+;File types
+;==========
+*.fea
+
+
+;----------------------------------------------;
+;                  HighLight                   ;
+;----------------------------------------------;
+
+
+Font:
+;=================================================================
+;FontStyle             FontSize              FaceName
+;=================================================================
+${HighLight_FontStyle}	${HighLight_FontSize}	${HighLight_FaceName}
+
+
+Colors:
+;=============================================================================================================================================================================================================================================================================================================================================================================================================================
+;BasicTextColor             BasicBkColor              SelTextColor              SelBkColor              LineTextColor              LineBkColor              LineBorderColor              AltTextColor              AltBkColor              AltBorderColor              ColumnColor              MarkerColor              CaretColor              UrlColor              ActiveUrlColor              VisitUrlColor
+;=============================================================================================================================================================================================================================================================================================================================================================================================================================
+${HighLight_BasicTextColor} ${HighLight_BasicBkColor} ${HighLight_SelTextColor} ${HighLight_SelBkColor} ${HighLight_LineTextColor} ${HighLight_LineBkColor} ${HighLight_LineBorderColor} ${HighLight_AltTextColor} ${HighLight_AltBkColor} ${HighLight_AltBorderColor} ${HighLight_ColumnColor} ${HighLight_MarkerColor} ${HighLight_CaretColor} ${HighLight_UrlColor} ${HighLight_ActiveUrlColor} ${HighLight_VisitUrlColor}
+
+
+BkImage:
+;==================================================
+;BkImageFile              BkImageAlpha
+;==================================================
+${HighLight_BkImageFile}  ${HighLight_BkImageAlpha}
+
+
+AutoMark:
+;====================================================================================================================
+;AutoMarkFlags             AutoMarkFontStyle              AutoMarkTextColor              AutoMarkBkColor
+;====================================================================================================================
+${HighLight_AutoMarkFlags} ${HighLight_AutoMarkFontStyle} ${HighLight_AutoMarkTextColor} ${HighLight_AutoMarkBkColor}
+
+
+Quotes:
+;===================================================================================
+;Flags  Font    Color   Color   Quote   Quote   Escape  Quote   Quote   Parent  Rule
+;       style   text    bkgrnd  start   end     char    include exclude ID      ID
+;===================================================================================
+5	3	${STR}	0	`"`	`"`	""	""	""	0	0
+5	3	${STR}	0	"'"	"'"	""	""	""	0	0
+0	3	${COMM}	0	"#"	""	""	""	""	0	0
+
+
+QuotesRE:
+;========================================================================================================
+;Flags  Pattern                      \BackRef=(FontStyle,ColorText,ColorBk) \BackRef=...  ParentID RuleID
+;========================================================================================================
+;--parent for features: begin--
+1	'(?<=feature)\x20+[a-z0-9]{4}\x20*(?=\{)'	'\0=(0,0,0)'	-3	71
+;--parent for features: end--
+1	'(?<=\})\x20*[a-z0-9]{4}\x20*(?=;)'	'\0=(0,0,0)'	-3	71
+;--Character Variants--
+1	'\bcv(0[1-9]|[1-9][0-9])\b'	'\0=(3,${TYPE},0)'	71
+;--Stylistic Set--
+1	'\bss(0[1-9]|1[0-9]|20)\b'	'\0=(3,${TYPE},0)'	71
+;--suffixes--
+0	'(?<=[a-z0-9_]\.)[a-z0-9]+'	'\0=(1,${AREA},0)'
+;--classes--
+0	'@\w+'	'\0=(1,${VAR},0)'
+
+
+Delimiters:
+;===============================================
+;Flags  Font    Color   Color   Char(s)   Parent
+;       style   text    bkgrnd            ID
+;===============================================
+1	0	0	0	" "
+1	0	0	0	"	"
+1	0	${DEL2}	0	{
+1	0	${DEL2}	0	}
+1	2	${DEL1}	0	.
+1	2	${DEL1}	0	;
+
+
+Words:
+;===========================================
+;Flags  Font    Color   Color   Word  Parent
+;       style   text    bkgrnd        ID
+;===========================================
+513	2	${TYPE}	0	languagesystem
+513	2	${TYPE}	0	feature
+513	2	${TYPE}	0	featureNames
+;--keywords--
+513	2	${ATTR}	0	name
+513	2	${ATTR}	0	sub
+1	2	${ATTR}	0	by
+1	2	${ATTR}	0	from
+;--Registered Feature Tags--
+1	3	${TYPE}	0	aalt	71
+1	3	${TYPE}	0	abvf	71
+1	3	${TYPE}	0	abvm	71
+1	3	${TYPE}	0	abvs	71
+1	3	${TYPE}	0	afrc	71
+1	3	${TYPE}	0	akhn	71
+1	3	${TYPE}	0	blwf	71
+1	3	${TYPE}	0	blwm	71
+1	3	${TYPE}	0	blws	71
+1	3	${TYPE}	0	calt	71
+1	3	${TYPE}	0	case	71
+1	3	${TYPE}	0	ccmp	71
+1	3	${TYPE}	0	cfar	71
+1	3	${TYPE}	0	cjct	71
+1	3	${TYPE}	0	clig	71
+1	3	${TYPE}	0	cpct	71
+1	3	${TYPE}	0	cpsp	71
+1	3	${TYPE}	0	cswh	71
+1	3	${TYPE}	0	curs	71
+1	3	${TYPE}	0	c2pc	71
+1	3	${TYPE}	0	c2sc	71
+1	3	${TYPE}	0	dist	71
+1	3	${TYPE}	0	dlig	71
+1	3	${TYPE}	0	dnom	71
+1	3	${TYPE}	0	dtls	71
+1	3	${TYPE}	0	expt	71
+1	3	${TYPE}	0	falt	71
+1	3	${TYPE}	0	fin2	71
+1	3	${TYPE}	0	fin3	71
+1	3	${TYPE}	0	fina	71
+1	3	${TYPE}	0	flac	71
+1	3	${TYPE}	0	frac	71
+1	3	${TYPE}	0	fwid	71
+1	3	${TYPE}	0	half	71
+1	3	${TYPE}	0	haln	71
+1	3	${TYPE}	0	halt	71
+1	3	${TYPE}	0	hist	71
+1	3	${TYPE}	0	hkna	71
+1	3	${TYPE}	0	hlig	71
+1	3	${TYPE}	0	hngl	71
+1	3	${TYPE}	0	hojo	71
+1	3	${TYPE}	0	hwid	71
+1	3	${TYPE}	0	init	71
+1	3	${TYPE}	0	isol	71
+1	3	${TYPE}	0	ital	71
+1	3	${TYPE}	0	jalt	71
+1	3	${TYPE}	0	jp78	71
+1	3	${TYPE}	0	jp83	71
+1	3	${TYPE}	0	jp90	71
+1	3	${TYPE}	0	jp04	71
+1	3	${TYPE}	0	kern	71
+1	3	${TYPE}	0	lfbd	71
+1	3	${TYPE}	0	liga	71
+1	3	${TYPE}	0	ljmo	71
+1	3	${TYPE}	0	lnum	71
+1	3	${TYPE}	0	locl	71
+1	3	${TYPE}	0	ltra	71
+1	3	${TYPE}	0	ltrm	71
+1	3	${TYPE}	0	mark	71
+1	3	${TYPE}	0	med2	71
+1	3	${TYPE}	0	medi	71
+1	3	${TYPE}	0	mgrk	71
+1	3	${TYPE}	0	mkmk	71
+1	3	${TYPE}	0	mset	71
+1	3	${TYPE}	0	nalt	71
+1	3	${TYPE}	0	nlck	71
+1	3	${TYPE}	0	nukt	71
+1	3	${TYPE}	0	numr	71
+1	3	${TYPE}	0	onum	71
+1	3	${TYPE}	0	opbd	71
+1	3	${TYPE}	0	ordn	71
+1	3	${TYPE}	0	ornm	71
+1	3	${TYPE}	0	palt	71
+1	3	${TYPE}	0	pcap	71
+1	3	${TYPE}	0	pkna	71
+1	3	${TYPE}	0	pnum	71
+1	3	${TYPE}	0	pref	71
+1	3	${TYPE}	0	pres	71
+1	3	${TYPE}	0	pstf	71
+1	3	${TYPE}	0	psts	71
+1	3	${TYPE}	0	pwid	71
+1	3	${TYPE}	0	qwid	71
+1	3	${TYPE}	0	rand	71
+1	3	${TYPE}	0	rclt	71
+1	3	${TYPE}	0	rkrf	71
+1	3	${TYPE}	0	rlig	71
+1	3	${TYPE}	0	rphf	71
+1	3	${TYPE}	0	rtbd	71
+1	3	${TYPE}	0	rtla	71
+1	3	${TYPE}	0	rtlm	71
+1	3	${TYPE}	0	ruby	71
+1	3	${TYPE}	0	rvrn	71
+1	3	${TYPE}	0	salt	71
+1	3	${TYPE}	0	sinf	71
+1	3	${TYPE}	0	size	71
+1	3	${TYPE}	0	smcp	71
+1	3	${TYPE}	0	smpl	71
+1	3	${TYPE}	0	ssty	71
+1	3	${TYPE}	0	stch	71
+1	3	${TYPE}	0	subs	71
+1	3	${TYPE}	0	sups	71
+1	3	${TYPE}	0	swsh	71
+1	3	${TYPE}	0	titl	71
+1	3	${TYPE}	0	tjmo	71
+1	3	${TYPE}	0	tnam	71
+1	3	${TYPE}	0	tnum	71
+1	3	${TYPE}	0	trad	71
+1	3	${TYPE}	0	twid	71
+1	3	${TYPE}	0	unic	71
+1	3	${TYPE}	0	valt	71
+1	3	${TYPE}	0	vatu	71
+1	3	${TYPE}	0	vert	71
+1	3	${TYPE}	0	vhal	71
+1	3	${TYPE}	0	vjmo	71
+1	3	${TYPE}	0	vkna	71
+1	3	${TYPE}	0	vkrn	71
+1	3	${TYPE}	0	vpal	71
+1	3	${TYPE}	0	vrt2	71
+1	3	${TYPE}	0	vrtr	71
+1	3	${TYPE}	0	zero	71
+
+
+;----------------------------------------------;
+;                   CodeFold                   ;
+;----------------------------------------------;
+
+
+FoldPanel:
+;=================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+;PanelFirstBkColor            PanelSecondBkColor             PanelNormalFoldColor             PanelActiveFoldColor             PanelNormalNodeOpenBkColor             PanelNormalNodeCloseBkColor             PanelActiveNodeOpenBkColor             PanelActiveNodeCloseBkColor             PanelNormalNodeOpenSignColor             PanelNormalNodeCloseSignColor             PanelActiveNodeOpenSignColor             PanelActiveNodeCloseSignColor
+;=================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+${CodeFold_PanelFirstBkColor} ${CodeFold_PanelSecondBkColor} ${CodeFold_PanelNormalFoldColor} ${CodeFold_PanelActiveFoldColor} ${CodeFold_PanelNormalNodeOpenBkColor} ${CodeFold_PanelNormalNodeCloseBkColor} ${CodeFold_PanelActiveNodeOpenBkColor} ${CodeFold_PanelActiveNodeCloseBkColor} ${CodeFold_PanelNormalNodeOpenSignColor} ${CodeFold_PanelNormalNodeCloseSignColor} ${CodeFold_PanelActiveNodeOpenSignColor} ${CodeFold_PanelActiveNodeCloseSignColor}
+
+
+FoldList:
+;================================================
+;ListTextColor            ListBkColor
+;================================================
+${CodeFold_ListTextColor} ${CodeFold_ListBkColor}
+
+
+TagMark:
+;============================================================================================================
+;TagMarkFlags            TagMarkFontStyle             TagMarkTextColor             TagMarkBkColor
+;============================================================================================================
+${CodeFold_TagMarkFlags} ${CodeFold_TagMarkFontStyle} ${CodeFold_TagMarkTextColor} ${CodeFold_TagMarkBkColor}
+
+
+Skips:
+;=============================
+;Flags  Skip    Skip    Escape
+;       start   end     char
+;=============================
+
+
+Folds:
+;===================================================================================================
+;Flags  Font    Color   Color   Fold            Fold            Deli            Parent  Rule    Rule
+;       style   text    bkgrnd  start           end             miters          ID      ID      file
+;===================================================================================================
+1	0	0	0	"{"       "}"       ""          0	0
+
+
+;----------------------------------------------;
+;                 AutoComplete                 ;
+;----------------------------------------------;
+
+
+CompleteList:
+;=====================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+;ListFontStyle                ListFontSize                 ListFaceName                 ListLineGap                 ListBlockIcon `"C:\1.dll", 0` ListBlockIconMargins "left;right"    ListHlBaseIcon `"C:\1.dll", 0` ListHlBaseIconMargins "left;right"    ListDocWordIcon `"C:\1.dll", 0` ListDocWordIconMargins "left;right"    ListBasicTextColor                 ListBasicBkColor                 ListSelTextColor                 ListSelBkColor
+;=====================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+${AutoComplete_ListFontStyle} ${AutoComplete_ListFontSize} ${AutoComplete_ListFaceName} ${AutoComplete_ListLineGap} ${AutoComplete_ListBlockIcon} ${AutoComplete_ListBlockIconMargins} ${AutoComplete_ListHlBaseIcon} ${AutoComplete_ListHlBaseIconMargins} ${AutoComplete_ListDocWordIcon} ${AutoComplete_ListDocWordIconMargins} ${AutoComplete_ListBasicTextColor} ${AutoComplete_ListBasicBkColor} ${AutoComplete_ListSelTextColor} ${AutoComplete_ListSelBkColor}
+
+
+Blocks:
+;========================
+;Abbreviations and blocks
+;========================
