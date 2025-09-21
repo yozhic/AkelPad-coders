@@ -3,11 +3,11 @@
 ;                           CODER PLUGIN SYNTAX FILE                           ;
 ;             for comfort file viewing/editing set TAB size to 8               ;
 ;------------------------------------------------------------------------------;
-; Target.....: OpenType features files                                         ;
-; Version....: 0.0.1                                                           ;
+; Target.....: OpenType feature files                                          ;
+; Version....: 0.0.2                                                           ;
 ; Author.....: yozhic                                                          ;
 ; Created....: 20.09.2019                                                      ;
-; Modified...:                                                                 ;
+; Modified...: 21.09.2025                                                      ;
 ;------------------------------------------------------------------------------;
 
 
@@ -56,11 +56,8 @@ Quotes:
 ;Flags  Font    Color   Color   Quote   Quote   Escape  Quote   Quote   Parent  Rule
 ;       style   text    bkgrnd  start   end     char    include exclude ID      ID
 ;===================================================================================
-;5=1+4
 5	3	${STR}	0	`"`	`"`	""	""	""	0	0
-;5=1+4
 5	3	${STR}	0	"'"	"'"	""	""	""	0	0
-;513=1+512
 0	3	${COMM}	0	"#"	""	""	""	""	0	0
 
 
@@ -68,17 +65,17 @@ QuotesRE:
 ;========================================================================================================
 ;Flags  Pattern                      \BackRef=(FontStyle,ColorText,ColorBk) \BackRef=...  ParentID RuleID
 ;========================================================================================================
-; родительское правило для подсветки features: начало
+;--parent for features: begin--
 1	'(?<=feature)\x20+[a-z0-9]{4}\x20*(?=\{)'	'\0=(0,0,0)'	-3	71
-; родительское правило для подсветки features: окончание
+;--parent for features: end--
 1	'(?<=\})\x20*[a-z0-9]{4}\x20*(?=;)'	'\0=(0,0,0)'	-3	71
-; подсветка для Character Variants
+;--Character Variants--
 1	'\bcv(0[1-9]|[1-9][0-9])\b'	'\0=(3,${TYPE},0)'	71
-; подсветка для Stylistic Set
+;--Stylistic Set--
 1	'\bss(0[1-9]|1[0-9]|20)\b'	'\0=(3,${TYPE},0)'	71
-; суффиксы
+;--suffixes--
 0	'(?<=[a-z0-9_]\.)[a-z0-9]+'	'\0=(1,${AREA},0)'
-; classes
+;--classes--
 0	'@\w+'	'\0=(1,${VAR},0)'
 
 
@@ -103,12 +100,12 @@ Words:
 513	2	${TYPE}	0	languagesystem
 513	2	${TYPE}	0	feature
 513	2	${TYPE}	0	featureNames
-;~ ключевые слова
-513	2	#5B71D7	0	name
-513	2	#5B71D7	0	sub
-1	2	#5B71D7	0	by
-1	2	#5B71D7	0	from
-;~ Registered Feature Tags
+;--keywords--
+513	2	${ATTR}	0	name
+513	2	${ATTR}	0	sub
+1	2	${ATTR}	0	by
+1	2	${ATTR}	0	from
+;--Registered Feature Tags--
 1	3	${TYPE}	0	aalt	71
 1	3	${TYPE}	0	abvf	71
 1	3	${TYPE}	0	abvm	71
