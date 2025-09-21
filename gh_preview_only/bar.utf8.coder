@@ -3,7 +3,8 @@
 ;                           CODER PLUGIN SYNTAX FILE                           ;
 ;             for comfort file viewing/editing set TAB size to 8               ;
 ;------------------------------------------------------------------------------;
-; Target.....: usercmd.ini, *.bar (файлы Total Commander)                      ;
+; Target.....: usercmd.ini, *.bar                                              ;
+;              (Total Commander extended commands & button bars)               ;
 ; Version....: 0.10.0                                                          ;
 ; Author.....: yozhic                                                          ;
 ; Created....: 08.10.2022                                                      ;
@@ -71,22 +72,22 @@ QuotesRE:
 ;===========================================================================================
 ;Flags  Pattern         \BackRef=(FontStyle,ColorText,ColorBk) \BackRef=...  ParentID RuleID
 ;===========================================================================================
-;--встроенные команды TC--
+;--TC internal commands--
 0	`(?<=\W)cm_[a-z0-9]++`     `\0=(4,${OP},0)`
-;--пользовательские команды TC--
+;--TC extended commands--
 0	`(?<=\W)em_[a-z0-9_]++`    `\0=(3,${TYPE},0)`
-;--переменные в cmd--
+;--variables in cmd--
 0	`(%++)[\-a-z0-9_]+\1`                               `\0=(0,${VAR},0)`	30
 0	`(%++)[a-z0-9]+`                                    `\0=(0,${VAR},0)`	30
-;--операторы в cmd--
+;--operators in cmd--
 0	`/[\w\-]+(:\w+|=\w+)?`                              `\0=(0,0,0)`	30	20
 0	`(?<=\W)-{1,2}\w+`                                  `\0=(0,${TAG},0)`	30
 0 `((?<=cmd=)|(?<=cmd\d=)|(?<=cmd\d\d=)|(?<=cmd\d\d\d=)|(?<=cmd1000=))\*`    `\0=(2,#FF0000,0)`	30
-;--переменные в path--
+;--variables in path--
 0	`%[\-a-z0-9_]+%`                                    `\0=(0,${VAR},0)`	31
-;--переменные в button--
+;--variables in button--
 0	`%[\-a-z0-9_]+%`                                    `\0=(0,${VAR},0)`	34
-;--переменные в param--
+;--variables in param--
 0	`((%%)+)~?[\-a-z0-9_]+\2`                           `\0=(0,${VAR},0)`	32
 0	`(%%)+~?[\-a-z0-9_]++`                              `\0=(0,${VAR},0)`	32
 0	`%[ACDEFLMNOPQRSTUVWXYZ]([0-9]|[FL])*`              `\0=(2,${VAR},0)`	32
@@ -95,12 +96,12 @@ QuotesRE:
 0	`(%%)+~?[\-a-z0-9_]++`                              `\0=(0,${VAR},0)`	10
 0	`%[ACDEFLMNOPQRSTUVWXYZ]([0-9]|[FL])*`              `\0=(2,${VAR},0)`	10
 0	`(%)(\|)([\-a-z0-9_]++)(\|)`                        `\1=(2,${VAR},0) \2=(0,0,0) \3=(2,${VAR},0) \4=(0,0,0)`	10
-;--операторы в param--
+;--operators in param--
 0	`/[\w\-]+(:\w+|=\w+)?`                              `\0=(0,0,0)`	32	20
 0	`(?<=\W)-{1,2}\w+`                                  `\0=(0,${TAG},0)`	32
-;--операторы в cmd, param -> подсветка (захват выше)--
+;--operators in cmd, param -> format only (see above for catch)--
 0	`[/\w]`                                             `\0=(0,${TAG},0)`	20
-;--в menu--
+;--menu--
 0	`(?<!menu)=`                  `\0=(1,0,0)`	33
 1	`(?-s)(?<==)п»ї.++`           `\0=(0,${AREA},0)`	33	21
 1	`\|`                          `\0=(2,${DEL1},0)`	12
