@@ -127,6 +127,7 @@ Words:
 ;Flags  Font    Color   Color   Word  Parent
 ;       style   text    bkgrnd        ID
 ;===========================================
+2	0	${NUM}	0	"0123456789"
 0	0	0	0	cmd=
 0	0	0	0	param=
 0	0	0	0	path=
