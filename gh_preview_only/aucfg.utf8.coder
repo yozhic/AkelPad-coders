@@ -109,7 +109,7 @@ QuotesRE:
 ;--стандартные переменные Total Commander--
 0 `%?COMMANDER_(DRIVE|EXE|INI_PATH|INI|PATH|INSTANCE|SESSIONNAME|OPEN)%?`    `\0=(0,${VAR},0)`	0	11
 ;--объекты--
-0 `(?<!\\)(?<!\w)(\w++)(\.)(?=\w)`   `\1=(2,${AREA},0) \2=(1,${AREA},0)`
+0 `(?<!\\)(?<!\w)(\w++)(\.)(?=\w)`   `\1=(2,${AREA},0) \2=(1,${DEL1},0)`
 ;--методы объектов (родительское)--
 0 `(?<=\w\.)[a-z_]+\x20*(?=\x28)`   `\0=(0,0,0)`	0	13
 ;--свойства объектов (родительское)--
@@ -458,30 +458,30 @@ Words:
 0	2	${AREA}	0	Map
 0	2	${AREA}	0	Plugin
 0	2	${AREA}	0	TextFile
-;  не объект, но освобождает объекты: поэтому добавляем к жирному наклонный
+;  не объект, но освобождает объекты
 0	4	${AREA}	0	Free
 ;  -> BinaryFile: свойства
 0	0	${AREA}	0	Size	12
 0	0	${AREA}	0	Pos	12
 ;  -> BinaryFile: методы
-0	2	${AREA}	0	ReadNum	13
-0	2	${AREA}	0	ReadRaw	13
-0	2	${AREA}	0	ReadStr	13
-0	2	${AREA}	0	Seek	13
-0	2	${AREA}	0	WriteNum	13
-0	2	${AREA}	0	WriteRaw	13
-0	2	${AREA}	0	WriteStr	13
+0	4	${AREA}	0	ReadNum	13
+0	4	${AREA}	0	ReadRaw	13
+0	4	${AREA}	0	ReadStr	13
+0	4	${AREA}	0	Seek	13
+0	4	${AREA}	0	WriteNum	13
+0	4	${AREA}	0	WriteRaw	13
+0	4	${AREA}	0	WriteStr	13
 ;  -> Buffer: свойства
 ;0	0	${AREA}	0	Size	12
 0	0	${AREA}	0	Ptr	12
 ;  -> Buffer: методы
-0	2	${AREA}	0	GetNum	13
-0	2	${AREA}	0	SetNum	13
-0	2	${AREA}	0	GetStr	13
-0	2	${AREA}	0	SetStr	13
-0	2	${AREA}	0	GetRaw	13
-0	2	${AREA}	0	SetRaw	13
-0	2	${AREA}	0	Zero	13
+0	4	${AREA}	0	GetNum	13
+0	4	${AREA}	0	SetNum	13
+0	4	${AREA}	0	GetStr	13
+0	4	${AREA}	0	SetStr	13
+0	4	${AREA}	0	GetRaw	13
+0	4	${AREA}	0	SetRaw	13
+0	4	${AREA}	0	Zero	13
 ;  -> Callback: свойства
 ;0	0	${AREA}	0	Ptr	12
 ;  -> List: свойства
@@ -490,52 +490,52 @@ Words:
 0	0	${AREA}	0	Text	12
 0	0	${AREA}	0	_Item	12
 ;  -> List: методы
-0	2	${AREA}	0	Add	13
-0	2	${AREA}	0	Clone	13
-0	2	${AREA}	0	Insert	13
-0	2	${AREA}	0	Remove	13
-0	2	${AREA}	0	Pop	13
-0	2	${AREA}	0	Split	13
-0	2	${AREA}	0	Join	13
-0	2	${AREA}	0	Sort	13
-0	2	${AREA}	0	Reverse	13
-0	2	${AREA}	0	IndexOf	13
-0	2	${AREA}	0	LoadFromFile	13
-0	2	${AREA}	0	SaveToFile	13
+0	4	${AREA}	0	Add	13
+0	4	${AREA}	0	Clone	13
+0	4	${AREA}	0	Insert	13
+0	4	${AREA}	0	Remove	13
+0	4	${AREA}	0	Pop	13
+0	4	${AREA}	0	Split	13
+0	4	${AREA}	0	Join	13
+0	4	${AREA}	0	Sort	13
+0	4	${AREA}	0	Reverse	13
+0	4	${AREA}	0	IndexOf	13
+0	4	${AREA}	0	LoadFromFile	13
+0	4	${AREA}	0	SaveToFile	13
 ;  -> Map: свойства
 0	0	${AREA}	0	CaseSense	12
 ;0	0	${AREA}	0	_Item	12
 ;  -> Map: методы
-0	2	${AREA}	0	Clear	13
-0	2	${AREA}	0	Get	13
-0	2	${AREA}	0	Keys	13
-0	2	${AREA}	0	Has	13
-;0	2	${AREA}	0	Remove	13
-0	2	${AREA}	0	Set	13
+0	4	${AREA}	0	Clear	13
+0	4	${AREA}	0	Get	13
+0	4	${AREA}	0	Keys	13
+0	4	${AREA}	0	Has	13
+;0	4	${AREA}	0	Remove	13
+0	4	${AREA}	0	Set	13
 ;  -> Plugin: свойства
 0	0	${AREA}	0	FieldCount	12
 0	0	${AREA}	0	UnitCount	12
 0	0	${AREA}	0	FileName	12
 ;  -> Plugin: методы
-0	2	${AREA}	0	GetValue	13
-0	2	${AREA}	0	FieldName	13
-0	2	${AREA}	0	FieldType	13
-0	2	${AREA}	0	UnitName	13
-0	2	${AREA}	0	IndexOfField	13
-0	2	${AREA}	0	IndexOfUnit	13
+0	4	${AREA}	0	GetValue	13
+0	4	${AREA}	0	FieldName	13
+0	4	${AREA}	0	FieldType	13
+0	4	${AREA}	0	UnitName	13
+0	4	${AREA}	0	IndexOfField	13
+0	4	${AREA}	0	IndexOfUnit	13
 ;  -> TextFile: свойства
 0	0	${AREA}	0	AtEOF	12
 0	0	${AREA}	0	Encoding	12
 0	0	${AREA}	0	HasBOM	12
 0	0	${AREA}	0	NewLine	12
 ;  -> TextFile: методы
-0	2	${AREA}	0	Begin	13
-0	2	${AREA}	0	End	13
-0	2	${AREA}	0	Read	13
-0	2	${AREA}	0	ReadLine	13
-0	2	${AREA}	0	Trim	13
-0	2	${AREA}	0	Write	13
-0	2	${AREA}	0	WriteLine	13
+0	4	${AREA}	0	Begin	13
+0	4	${AREA}	0	End	13
+0	4	${AREA}	0	Read	13
+0	4	${AREA}	0	ReadLine	13
+0	4	${AREA}	0	Trim	13
+0	4	${AREA}	0	Write	13
+0	4	${AREA}	0	WriteLine	13
 ;  -> FileFind: свойства (в ф-ции обратного вызова)
 0	0	${AREA}	0	Attr	12
 0	0	${AREA}	0	AttrNum	12
@@ -597,11 +597,11 @@ Words:
 0	0	${AREA}	0	Namespace	12
 0	0	${AREA}	0	State	12
 ;     ->-> WMIQuery: методы
-0	0	${AREA}	0	Query	13
-;0	0	${AREA}	0	GetValue	13
-0	0	${AREA}	0	Next	13
-0	0	${AREA}	0	Reset	13
-0	0	${AREA}	0	Last	13
+0	4	${AREA}	0	Query	13
+;0	4	${AREA}	0	GetValue	13
+0	4	${AREA}	0	Next	13
+0	4	${AREA}	0	Reset	13
+0	4	${AREA}	0	Last	13
 ;--Process--
 ;  -> константы (см. QuotesRE)
 0	0	0	0	PROCESS_USERISADMIN
@@ -642,11 +642,11 @@ Words:
 0	0	${AREA}	0	MatchPos	12
 0	0	${AREA}	0	MatchLen	12
 ;     ->-> RegExp: методы
-0	0	${AREA}	0	Exec	13
-0	0	${AREA}	0	ExecPos	13
-0	0	${AREA}	0	ExecNext	13
-0	0	${AREA}	0	GroupIndexByName	13
-0	0	${AREA}	0	Substitute	13
+0	4	${AREA}	0	Exec	13
+0	4	${AREA}	0	ExecPos	13
+0	4	${AREA}	0	ExecNext	13
+0	4	${AREA}	0	GroupIndexByName	13
+0	4	${AREA}	0	Substitute	13
 ;--Runtime--
 ;  -> макросы (см. QuotesRE)
 0	0	0	0	ACTIVE_WINDOW
