@@ -61,6 +61,15 @@ Quotes:
 517	2	0	0	"["	"]"	""	""	""	0	0
 513	3	${COMM}	0	";"	""	""	""	""	0	0
 513	3	${COMM}	0	"#"	""	""	""	""	0	0
+773	0	${OP}	${CodeFold_TagMarkBkColor}	"button1"	"="	""	""	""	0	0
+773	0	${OP}	${CodeFold_TagMarkBkColor}	"button2"	"="	""	""	""	0	0
+773	0	${OP}	${CodeFold_TagMarkBkColor}	"button3"	"="	""	""	""	0	0
+773	0	${OP}	${CodeFold_TagMarkBkColor}	"button4"	"="	""	""	""	0	0
+773	0	${OP}	${CodeFold_TagMarkBkColor}	"button5"	"="	""	""	""	0	0
+773	0	${OP}	${CodeFold_TagMarkBkColor}	"button6"	"="	""	""	""	0	0
+773	0	${OP}	${CodeFold_TagMarkBkColor}	"button7"	"="	""	""	""	0	0
+773	0	${OP}	${CodeFold_TagMarkBkColor}	"button8"	"="	""	""	""	0	0
+773	0	${OP}	${CodeFold_TagMarkBkColor}	"button9"	"="	""	""	""	0	0
 773	0	${OP}	0	""	"="	""	""	""	0	0
 5	0	${STR}	0	'"'	'"'	"\"	""	""	32	10
 5	0	${STR}	0	'"'	'"'	"\"	""	""	33	12
