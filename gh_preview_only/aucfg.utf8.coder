@@ -3,12 +3,13 @@
 ;                           CODER PLUGIN SYNTAX FILE                           ;
 ;             for comfort file viewing/editing set TAB size to 8               ;
 ;------------------------------------------------------------------------------;
-; Target.....: autorun.wdx configuration files (Total Commander plugin)        ;
-; Version....: 0.14.1                                                          ;
-; Author.....: yozhic                                                          ;
-; Created....: 27.09.2022                                                      ;
-; Modified...: 27.09.2025                                                      ;
-; Credits....: Loopback                                                        ;
+; Target......: Autorun.wdx configuration files (Total Commander plugin)       ;
+; Version.....: 0.15.0                                                         ;
+; Author......: yozhic                                                         ;
+; Created.....: 27.09.2022                                                     ;
+; Modified....: 29.09.2025                                                     ;
+; Compatible..: Autorun.wdx 2.2.21 beta                                        ;
+; Credits.....: Dmitry Yudin (aka Loopback)                                    ;
 ;------------------------------------------------------------------------------;
 
 
@@ -295,21 +296,13 @@ Words:
 ;--КОМАНДЫ И ФУНКЦИИ--
 ;  Args подсвечивается только в Func..EndFunc
 0	2	${OP}	0	Args	30
-0	2	${OP}	0	Asc
 0	2	${OP}	0	Call
-0	2	${OP}	0	Chr
 0	2	${OP}	0	DllCall
 0	2	${OP}	0	CommandExec
 0	2	${OP}	0	Eval
-0	2	${OP}	0	IsInt
-0	2	${OP}	0	IsFloat
-0	2	${OP}	0	IsNumber
-0	2	${OP}	0	IsObject
 0	2	${OP}	0	GetEnv
-0	2	${OP}	0	Hex
 0	2	${OP}	0	LoadFont
 0	2	${OP}	0	LoadLibrary
-0	2	${OP}	0	MakeInt
 0	2	${OP}	0	RegisterCommand
 0	2	${OP}	0	RunThread
 0	2	${OP}	0	SendCommand
@@ -398,14 +391,28 @@ Words:
 0	2	${OP}	0	JoinPath
 ;  -> Работа с реестром
 0	2	${OP}	0	RegRead
+0	2	${OP}	0	RegEnumKey
+0	2	${OP}	0	RegEnumVal
 0	2	${OP}	0	RegWrite
 0	2	${OP}	0	RegDelete
 ;     ->-> типы значений RegWrite
 0	1	${TYPE}	0	REG_DWORD
+0	1	${TYPE}	0	REG_QWORD
 0	1	${TYPE}	0	REG_SZ
 0	1	${TYPE}	0	REG_EXPAND_SZ
 0	1	${TYPE}	0	REG_MULTI_SZ
 0	1	${TYPE}	0	REG_BINARY
+;  -> Преобразования и типы
+0	2	${OP}	0	Asc
+0	2	${OP}	0	Chr
+0	2	${OP}	0	Hex
+0	2	${OP}	0	HexToStr
+0	2	${OP}	0	IsInt
+0	2	${OP}	0	IsFloat
+0	2	${OP}	0	IsNumber
+0	2	${OP}	0	IsObject
+0	2	${OP}	0	MakeInt
+0	2	${OP}	0	StrToHex
 ;  -> Дата и время
 0	2	${OP}	0	Date
 0	2	${OP}	0	GetUptime
@@ -421,6 +428,8 @@ Words:
 0	2	${OP}	0	BitXOR
 0	2	${OP}	0	Ceil
 0	2	${OP}	0	Floor
+0	2	${OP}	0	Max
+0	2	${OP}	0	Min
 0	2	${OP}	0	Mod
 0	2	${OP}	0	Random
 0	2	${OP}	0	Round
@@ -1177,6 +1186,9 @@ GetWMIValue($[<name>], $[<request>]$[[, <namespace>[, <index>[, <arrayindex>$\]$
 $~Hex()
 Hex($[<number>]$[[, <minlen>$\]])$[]
 
+$~HexToStr()
+HexToStr($[<hexstr>]$[[, <encoding>$\]])$[]
+
 $~IniDelete()
 IniDelete($[["~[/R$\]",$\] ]$[<ini>], $[<section>]$[[, <key>$\]])$[]
 
@@ -1234,6 +1246,12 @@ LoadLibrary($[["~[/U$\]",$\] ]$[<dll>]$[[, <function>$\]])$[]
 $~MakeInt()
 MakeInt($[<L>], $[<H>]$[[, <type>$\]])$[]
 
+$~Max()
+Max($[<value1>], $[<value2>]$[[, <valueN>$\]])$[]
+
+$~Min()
+Min($[<value1>], $[<value2>]$[[, <valueN>$\]])$[]
+
 $~Mod()
 Mod($[<value1>], $[<value2>])$[]
 
@@ -1284,6 +1302,12 @@ Random($[[<min>, <max>[, <integer>$\]$\]])$[]
 
 $~RegDelete()
 RegDelete($[["~[/K$\]",$\] ]$[<key>]$[[, <param>$\]])$[]
+
+$~RegEnumKey()
+RegEnumKey($[<key>], $[<index>])$[]
+
+$~RegEnumVal()
+RegEnumVal($[<key>], $[<index>])$[]
 
 $~RegExpGet()
 RegExpGet($[<str>], $[<regexp>], $[<template>]$[[, <occurence>[, <offset>$\]$\]])$[]
@@ -1398,6 +1422,9 @@ StrReverse($[<str>])$[]
 
 $~StrRight()
 StrRight($[<str>], $[<count>])$[]
+
+$~StrToHex()
+StrToHex($[<str>]$[[, <encoding>$\]])$[]
 
 $~StrTrim()
 StrTrim($[<str>])$[]
@@ -1682,6 +1709,9 @@ GetWMIValue $[<VAR>] $[<name>] $[<request>]$[[ <namespace>[ <index>[ <arrayindex
 $~Hex...
 Hex $[<VAR>] $[<number>]$[[ <minlen>$\]]
 
+$~HexToStr...
+HexToStr $[<VAR>] $[<hexstr>]$[[ <encoding>$\]]
+
 $~IniDelete...
 IniDelete $[[/R$\]] $[<ini>] $[<section>]$[[ <key>$\]]
 
@@ -1739,6 +1769,12 @@ LoadLibrary $[[/U$\]] $[<dll>]$[[ <function>$\]]
 $~MakeInt...
 MakeInt $[<VAR>] $[<L>] $[<H>]$[[ <type>$\]]
 
+$~Max...
+Max $[<VAR>] $[<value1>] $[<value2>]$[[ <valueN>$\]]
+
+$~Min...
+Min $[<VAR>] $[<value1>] $[<value2>]$[[ <valueN>$\]]
+
 $~Mod...
 Mod $[<VAR>] $[<value1>] $[<value2>]
 
@@ -1789,6 +1825,12 @@ Random $[<VAR>] $[[<min> <max>[ <integer>$\]$\]]
 
 $~RegDelete...
 RegDelete $[[/K$\]] $[<key>]$[[ <param>$\]]
+
+$~RegEnumKey...
+RegEnumKey $[<VAR>] $[<key>] $[<index>]
+
+$~RegEnumVal...
+RegEnumVal $[<VAR>] $[<key>] $[<index>]
 
 $~RegExpGet...
 RegExpGet $[<VAR>] $[<str>] $[<regexp>] $[<template>]$[[ <occurence>[ <offset>$\]$\]]
@@ -1903,6 +1945,9 @@ StrReverse $[<VAR>] $[<str>]
 
 $~StrRight...
 StrRight $[<VAR>] $[<str>] $[<count>]
+
+$~StrToHex...
+StrToHex $[<VAR>] $[<str>]$[[ <encoding>$\]]
 
 $~StrTrim...
 StrTrim $[<VAR>] $[<str>]
