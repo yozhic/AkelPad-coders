@@ -4,10 +4,10 @@
 ;             for comfort file viewing/editing set TAB size to 8               ;
 ;------------------------------------------------------------------------------;
 ; Target.....: Total Commander menu file                                       ;
-; Version....: 1.0.1                                                           ;
+; Version....: 1.1.0                                                           ;
 ; Author.....: yozhic                                                          ;
 ; Created....: 02.09.2018                                                      ;
-; Modified...: 20.09.2025                                                      ;
+; Modified...: 05.10.2025                                                      ;
 ;------------------------------------------------------------------------------;
 
 
@@ -56,16 +56,38 @@ Quotes:
 ;Flags  Font    Color   Color   Quote   Quote   Escape  Quote   Quote   Parent  Rule
 ;       style   text    bkgrnd  start   end     char    include exclude ID      ID
 ;===================================================================================
-4	3	${STR}	0	`"`	`"`	""	""	""	0	10
-1	3	${COMM}	0	";"	""	""	""	""
+;--кавычки поддерживаются только двойные--
+4	3	${STR}	0	`"`	`"`	``	``	``	20	10
+4	3	${STR}	0	`"`	`"`	``	``	``	21	10
+;1540	2	${OP}	0	"MENUITEM"  "SEPARATOR"	""	" "	""
+1540	2	${XNUM}	0	"MENUITEM"  "SEPARATOR"	""	" "	""
 
 
 QuotesRE:
 ;===========================================================================================
 ;Flags  Pattern         \BackRef=(FontStyle,ColorText,ColorBk) \BackRef=...  ParentID RuleID
 ;===========================================================================================
-0	`(?m)(\$[0-9a-f]+|-?[0-9]+|cm_[0-9a-z_]+|em_[0-9a-z_]+) *$`	"\0=(1,${VAR},0)"
-1	"\\t|&."	"\0=(2,${DEL1},0)"	10
+;--родительское для строк MENUITEM--
+1536  `MENUITEM\x20++"[^"\n]++",\x20*(?:\$[a-f\d]++|-?\d++|(?-i)[ce]m_(?i)[a-z\d_]++)`   `\0=(0,0,0)`	0	20
+;  MENUITEM: десятичные id встроенных команд
+1	`(?<=\W)(?:-\d{1,2}|\d{2,5})(?=\W)`	`\0=(0,${NUM},0)`	20
+;  MENUITEM: шестнадцатиричные id встроенных команд
+0	`\$[a-f\d]{2,4}(?=\W)`	`\0=(0,${ATTR},0)`	20
+;  MENUITEM: встроенные команды
+0	`(?<=\W)(?-i:cm_)(?i:[a-z\d_]++)`	`\0=(4,${VAR},0)`	20
+;  MENUITEM: пользовательские команды
+0	`(?<=\W)(?-i:em_)(?i:[\w\.\-]++)`	`\0=(3,${VAR},0)`	20
+;--родительское для строк POPUP--
+1536	`POPUP\x20++"[^"\n]++"`	`\0=(0,0,0)`	30	21
+;--Alt-клавишы и табуляции внутри кавычек--
+;1	`\\t|&[^&\x20"]`	`\0=(4,${DEL1},0)`	10
+1	`\\t|&[^&\x20"]`	`\0=(4,${XSTR},0)`	10
+;--сигнализация--
+;  после END_POPUP, HELP_BREAK, STARTMENU только перевод строки
+0	`(?:END_POPUP|HELP_BREAK|STARTMENU)[^\n]+`	`\0=(0,#FFF,#F00)`
+;  после MENUITEM, POPUP запрещены табуляции
+0	`(?:MENUITEM|POPUP)\t[\t\x20]*`	`\0=(0,#FFF,#F00)`
+;  пока не получается придумать как сигнализировать запрет размещения STARTMENU сразу после HELP_BREAK
 
 
 Delimiters:
@@ -76,11 +98,12 @@ Delimiters:
 1	0	0	0	" "
 1	0	0	0	"	"
 1	0	${DEL1}	0	`"`
+1	0	${DEL1}	0	,	20
+1	0	0	0	,
 1	0	${DEL1}	0	(
 1	0	${DEL1}	0	)
 1	0	${DEL2}	0	{
 1	0	${DEL2}	0	}
-1	0	${DEL1}	0	,
 
 
 Words:
@@ -88,12 +111,11 @@ Words:
 ;Flags  Font    Color   Color   Word  Parent
 ;       style   text    bkgrnd        ID
 ;===========================================
-1	2	${AREA}	0	POPUP
-1	2	${AREA}	0	END_POPUP
-1	2	${DEL1}	0	SEPARATOR
-1	2	${OP}	0	STARTMENU
-1	2	${OP}	0	HELP_BREAK
-1	1	${OP}	0	MENUITEM
+0	2	${AREA}	0	POPUP	30
+0	2	${AREA}	0	END_POPUP	30
+0	1	${OP}	0	MENUITEM	20
+0	0	0	0	HELP_BREAK
+0	0	0	0	STARTMENU
 
 
 ;----------------------------------------------;
@@ -127,7 +149,7 @@ Skips:
 ;Flags  Skip            Skip    Escape
 ;       start           end     char
 ;=====================================
-1	";"	""	""
+9	";"	""	""
 
 
 Folds:
@@ -135,7 +157,11 @@ Folds:
 ;Flags  Font    Color   Color   Fold   Fold   Deli      Parent  Rule    Rule
 ;       style   text    bkgrnd  start  end    miters    ID      ID      file
 ;===========================================================================
-1	0	0	0	"POPUP"	"END_POPUP"	""
+;--комментарии (недокументированные), только в начале строки--
+262665	3	${COMM}	0	";"	""	""
+2097256	0	0	0	"POPUP"  "END_POPUP(?![\x20\t])"  ""	0	30
+139288	2	${OP}	0	"HELP_BREAK"	""	" 	"
+139288	2	${OP}	0	"STARTMENU"	""	" 	"
 
 
 ;----------------------------------------------;
@@ -154,8 +180,12 @@ Blocks:
 ;========================
 ;Abbreviations and blocks
 ;========================
+$~MENUITEM
+MENUITEM "$[Text]", $[000]
+
 $~POPUP
 POPUP "$[]"
 END_POPUP
+
 $~SEPARATOR
 MENUITEM SEPARATOR
