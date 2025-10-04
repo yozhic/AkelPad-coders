@@ -4,10 +4,10 @@
 ;             for comfort file viewing/editing set TAB size to 8               ;
 ;------------------------------------------------------------------------------;
 ; Target......: Autorun.wdx configuration files (Total Commander plugin)       ;
-; Version.....: 0.15.0                                                         ;
+; Version.....: 0.15.1                                                         ;
 ; Author......: yozhic                                                         ;
 ; Created.....: 27.09.2022                                                     ;
-; Modified....: 29.09.2025                                                     ;
+; Modified....: 05.10.2025                                                     ;
 ; Compatible..: Autorun.wdx 2.2.21 beta                                        ;
 ; Credits.....: Dmitry Yudin (aka Loopback)                                    ;
 ;------------------------------------------------------------------------------;
@@ -110,7 +110,8 @@ QuotesRE:
 ;--стандартные переменные Total Commander--
 0 `%?COMMANDER_(DRIVE|EXE|INI_PATH|INI|PATH|INSTANCE|SESSIONNAME|OPEN)%?`    `\0=(0,${VAR},0)`	0	11
 ;--объекты--
-0 `(?<!\\)(?<!\w)(\w++)(\.)(?=\w)`   `\1=(2,${AREA},0) \2=(1,${DEL1},0)`
+0 `(?<!\\)(?<!\w)(\w++)(\.)(?=add|dir|end|ext|get|has|pop|pos|ptr|set)`   `\1=(2,${AREA},0) \2=(1,${DEL1},0)`
+0 `(?<!\\)(?<!\w)(\w++)(\.)(?=\w\w\w\w)`   `\1=(2,${AREA},0) \2=(1,${DEL1},0)`
 ;--методы объектов (родительское)--
 0 `(?<=\w\.)[a-z_]+\x20*(?=\x28)`   `\0=(0,0,0)`	0	13
 ;--свойства объектов (родительское)--
