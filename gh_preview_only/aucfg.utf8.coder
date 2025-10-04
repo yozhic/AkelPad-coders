@@ -600,7 +600,7 @@ Words:
 0	1	${OP}	0	GetCoreTempInfo
 ;  -> объекты
 0	2	${AREA}	0	WMIQuery
-;     ->-> WMIQuery: cвойства
+;     ->-> WMIQuery: свойства
 ;0	0	${AREA}	0	Count	12
 0	0	${AREA}	0	Index	12
 0	0	${AREA}	0	Namespace	12
@@ -643,7 +643,7 @@ Words:
 0	2	${OP}	0	RegExpReplace
 ;  -> объекты
 0	2	${AREA}	0	RegExp
-;     ->-> RegExp: cвойства
+;     ->-> RegExp: свойства
 0	0	${AREA}	0	Expr	12
 ;0	0	${AREA}	0	Text	12
 0	0	${AREA}	0	GroupCount	12
