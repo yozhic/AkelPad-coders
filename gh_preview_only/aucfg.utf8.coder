@@ -4,10 +4,10 @@
 ;             for comfort file viewing/editing set TAB size to 8               ;
 ;------------------------------------------------------------------------------;
 ; Target......: Autorun.wdx configuration files (Total Commander plugin)       ;
-; Version.....: 0.15.2                                                         ;
+; Version.....: 0.15.3                                                         ;
 ; Author......: yozhic                                                         ;
 ; Created.....: 27.09.2022                                                     ;
-; Modified....: 05.10.2025                                                     ;
+; Modified....: 06.10.2025                                                     ;
 ; Compatible..: Autorun.wdx 2.2.21 beta                                        ;
 ; Credits.....: Dmitry Yudin (aka Loopback)                                    ;
 ;------------------------------------------------------------------------------;
@@ -83,7 +83,7 @@ QuotesRE:
 ;--обозначение переменных в заковыченных блоках--
 ;  переменные полностью пока не хочется подсвечивать
 ;  это правило блокирует правило переменных в Quotes
-0	`%`    `\0=(4,0,0)`	20
+0	`%`	`\0=(4,0,0)`	20
 ;--Func: открытый список параметров--
 0	`(?<=\()\x2E\x2E\x2E(?=\))`    `\0=(2,${ATTR},0)`
 ;--Func: имена и параметры (родительское)--
@@ -113,9 +113,9 @@ QuotesRE:
 0 `(?<!\\)(?<!\w)(\w++)(\.)(?=add|dir|end|ext|get|has|pop|pos|ptr|set)`   `\1=(2,${AREA},0) \2=(1,${DEL1},0)`
 0 `(?<!\\)(?<!\w)(\w++)(\.)(?=\w\w\w\w)`   `\1=(2,${AREA},0) \2=(1,${DEL1},0)`
 ;--методы объектов (родительское)--
-0 `(?<=\w\.)[a-z_]+\x20*(?=\x28)`   `\0=(0,0,0)`	0	13
+0	`(?<=\w\.)[a-z_]+\x20*(?=\x28)`   `\0=(0,0,0)`	0	13
 ;--свойства объектов (родительское)--
-0 `(?<=\w\.)[a-z_]+`   `\0=(0,0,0)`	0	12
+0	`(?<=\w\.)[a-z_]+`   `\0=(0,0,0)`	0	12
 ;--сигнализация на забытый знак процента во встроенных переменных и макросах--
 0 `(%)AUTORUN_(CFG|ISADMIN|OSARCH|PATH|RESTARTCOUNT|SUBPROCESS|TCARCH|TCCMDLINE|TCHANDLE|TCLANG|TCLANGFILE|TCPID|THREADID|UTCDIFF|WINDOW)(?!%)`     `\1=(2,#FFFFFF,#FF0000)`	11
 0 `(?<!%)AUTORUN_(CFG|ISADMIN|OSARCH|PATH|RESTARTCOUNT|SUBPROCESS|TCARCH|TCCMDLINE|TCHANDLE|TCLANG|TCLANGFILE|TCPID|THREADID|UTCDIFF|WINDOW)(%)`    `\2=(2,#FFFFFF,#FF0000)`	11
@@ -132,7 +132,7 @@ QuotesRE:
 0 `(?<!%)COMMANDER_(DRIVE|EXE|INI_PATH|INI|PATH|INSTANCE|SESSIONNAME|OPEN)(%)`    `\2=(2,#FFFFFF,#FF0000)`	11
 ;--названия диалогов в плагине AddDialog--
 0	`DIALOG_COPYMOVE(_(POST|PINNED))?`    `\0=(0,${OP},0)`
-;--оформление для Include, LoadLibrary, LoadFont (см. выше)--
+;--родительское для Include, LoadLibrary, LoadFont (см. выше)--
 ;  переменные
 0	`(?<!\\)%\w++%`    `\0=(3,${VAR},0)`	15
 ;  всё остальное
@@ -821,7 +821,7 @@ Folds:
 424	0	0	0	"Case"    "Case"       ""	0	0
 424	0	0	0	"Case"    "Else"       ""	0	0
 40	0	0	0	"Case"    "EndSwitch"  ""	0	0
-40	0	0	0	"Else"    "EndSwitch"  ""	0	0
+;40	0	0	0	"Else"    "EndSwitch"  ""	0	0
 ;--If...Else...EndIf--
 2120	0	0	0	"If"      "Then"       ""	0	0
 8	0	0	0	"If"      "Then"       ""	0	0
