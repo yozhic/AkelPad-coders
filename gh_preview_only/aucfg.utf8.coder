@@ -4,10 +4,10 @@
 ;             for comfort file viewing/editing set TAB size to 8               ;
 ;------------------------------------------------------------------------------;
 ; Target......: Autorun.wdx configuration files (Total Commander plugin)       ;
-; Version.....: 0.15.3                                                         ;
+; Version.....: 0.15.4                                                         ;
 ; Author......: yozhic                                                         ;
 ; Created.....: 27.09.2022                                                     ;
-; Modified....: 06.10.2025                                                     ;
+; Modified....: 13.10.2025                                                     ;
 ; Compatible..: Autorun.wdx 2.2.21 beta                                        ;
 ; Credits.....: Dmitry Yudin (aka Loopback)                                    ;
 ;------------------------------------------------------------------------------;
@@ -820,7 +820,7 @@ Folds:
 40	0	0	0	"Switch"  "EndSwitch"  ""	0	0
 424	0	0	0	"Case"    "Case"       ""	0	0
 424	0	0	0	"Case"    "Else"       ""	0	0
-40	0	0	0	"Case"    "EndSwitch"  ""	0	0
+424	0	0	0	"Case"    "EndSwitch"  ""	0	0
 ;40	0	0	0	"Else"    "EndSwitch"  ""	0	0
 ;--If...Else...EndIf--
 2120	0	0	0	"If"      "Then"       ""	0	0
