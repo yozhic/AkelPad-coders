@@ -817,7 +817,7 @@ Folds:
 40	0	0	0	"While"   "WEnd"       ""	0	0
 40	0	0	0	"Func"    "EndFunc"    ""	0	30
 ;--Switch...Case...EndSwitch--
-40	0	0	0	"Switch"  "EndSwitch"  ""	0	31
+40	0	0	0	"Switch "  "EndSwitch" ""	0	31
 424	0	0	0	"Case"    "Case"       ""	0	0
 424	0	0	0	"Case"    "Else"       ""	0	0
 424	0	0	0	"Case"    "EndSwitch"  ""	0	0
