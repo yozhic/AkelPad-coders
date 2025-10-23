@@ -811,27 +811,27 @@ Folds:
 ;===================================================================================
 ;--многострочные комменты: начало и конец в началах строк
 ;  надо ещё проверять, но пока точно — если конец на той же строке, код не обрабатывается
-553	3	${COMM}	0	"#{"      "#}"         ""	0	0
-40	0	0	0	"Do"      "Until"      ""	0	0
-40	0	0	0	"For"     "Next"       ""	0	0
-40	0	0	0	"While"   "WEnd"       ""	0	0
-40	0	0	0	"Func"    "EndFunc"    ""	0	30
+553	3	${COMM}	0	"#{"      "#}"         " "	0	0
+40	0	0	0	"Do"      "Until"      " "	0	0
+40	0	0	0	"For"     "Next"       " "	0	0
+40	0	0	0	"While"   "WEnd"       " "	0	0
+40	0	0	0	"Func"    "EndFunc"    " "	0	30
 ;--Switch...Case...EndSwitch--
-40	0	0	0	"Switch "  "EndSwitch" ""	0	31
-424	0	0	0	"Case"    "Case"       ""	0	0
-424	0	0	0	"Case"    "Else"       ""	0	0
-424	0	0	0	"Case"    "EndSwitch"  ""	0	0
-424	0	0	0	"Else"    "EndSwitch"  ""	31	0
+40	0	0	0	"Switch"  "EndSwitch"  " "	0	31
+424	0	0	0	"Case"    "Case"       " "	0	0
+424	0	0	0	"Case"    "Else"       " "	0	0
+424	0	0	0	"Case"    "EndSwitch"  " "	0	0
+424	0	0	0	"Else"    "EndSwitch"  " "	31	0
 ;--If...Else...EndIf--
-2120	0	0	0	"If"      "Then"       ""	0	0
-8	0	0	0	"If"      "Then"       ""	0	0
-40	0	0	0	"If"      "EndIf"      ""	0	0
-424	0	0	0	"If"      "ElseIf"     ""	0	0
-424	0	0	0	"If"      "Else"       ""	0	0
-40	0	0	0	"ElseIf"  "EndIf"      ""	0	0
-424	0	0	0	"ElseIf"  "ElseIf"     ""	0	0
-424	0	0	0	"ElseIf"  "Else"       ""	0	0
-40	0	0	0	"Else"    "EndIf"      ""	0	0
+2120	0	0	0	"If"      "Then"       " "	0	0
+8	0	0	0	"If"      "Then"       " "	0	0
+40	0	0	0	"If"      "EndIf"      " "	0	0
+424	0	0	0	"If"      "ElseIf"     " "	0	0
+424	0	0	0	"If"      "Else"       " "	0	0
+40	0	0	0	"ElseIf"  "EndIf"      " "	0	0
+424	0	0	0	"ElseIf"  "ElseIf"     " "	0	0
+424	0	0	0	"ElseIf"  "Else"       " "	0	0
+40	0	0	0	"Else"    "EndIf"      " "	0	0
 
 
 ;----------------------------------------------;
