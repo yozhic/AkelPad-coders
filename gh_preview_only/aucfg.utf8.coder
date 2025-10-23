@@ -825,6 +825,7 @@ Folds:
 424	0	0	0	"Else"    "EndSwitch"  " "	31	0
 ;--If...Else...EndIf--
 2120	0	0	0	"If"      "Then"       " "	0	0
+2099208	0	0	0	"If"      "Then +#"    " "	0	0
 8	0	0	0	"If"      "Then"       " "	0	0
 40	0	0	0	"If"      "EndIf"      " "	0	0
 424	0	0	0	"If"      "ElseIf"     " "	0	0
