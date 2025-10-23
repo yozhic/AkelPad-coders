@@ -19,3 +19,5 @@
 | [fea](https://github.com/yozhic/AkelPad-coders/blob/main/fea.coder) | `*.fea`                    | OpenType features (недоделан, но может пригодиться)                                                |
 | [md](https://github.com/yozhic/AkelPad-coders/blob/main/md.coder) | `*.md`                     | Markdown — ещё один из множества вариантов (недоделан, но может пригодиться)                       |
 | [mnu](https://github.com/yozhic/AkelPad-coders/blob/main/mnu.coder) | `*.mnu`                    | выпадающие меню для Total Commander                                                                |
+
+Материалы для описания синтаксиса coder-файлов см. в [CODER.TXT](https://github.com/yozhic/AkelPad-coders/blob/main/CODER.TXT)
