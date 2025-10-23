@@ -4,10 +4,10 @@
 ;             for comfort file viewing/editing set TAB size to 8               ;
 ;------------------------------------------------------------------------------;
 ; Target......: Autorun.wdx configuration files (Total Commander plugin)       ;
-; Version.....: 0.15.5                                                         ;
+; Version.....: 0.15.6                                                         ;
 ; Author......: yozhic                                                         ;
 ; Created.....: 27.09.2022                                                     ;
-; Modified....: 13.10.2025                                                     ;
+; Modified....: 23.10.2025                                                     ;
 ; Compatible..: Autorun.wdx 2.2.21 beta                                        ;
 ; Credits.....: Dmitry Yudin (aka Loopback)                                    ;
 ;------------------------------------------------------------------------------;
